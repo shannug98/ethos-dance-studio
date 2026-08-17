@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..900;1,9..40,400..900&family=Encode+Sans+Condensed:wght@600;700;800;900&family=Encode+Sans+Expanded:wght@400;600;700&family=Encode+Sans+Semi+Condensed:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Encode Sans Semi Condensed', 'DM Sans', sans-serif;
+  color-scheme: dark;
+}
+
+body {
+  background-color: #000000;
+  color: #FFFFFF;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #1F41FF;
+}
+
+/* Figma Site Design Utilities */
+.font-display-giant {
+  font-family: 'Encode Sans Condensed', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+/* Block Buttons matching Figma site */
+.btn-cyan {
+  background-color: #D0FBF9;
+  color: #000000;
+  font-family: 'Encode Sans Expanded', sans-serif;
+  font-weight: 700;
+  padding: 18px 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  letter-spacing: -0.02em;
+}
+.btn-cyan:hover {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-blue {
+  background-color: #1F41FF;
+  color: #FFFFFF;
+  font-family: 'Encode Sans Expanded', sans-serif;
+  font-weight: 700;
+  padding: 16px 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.btn-blue:hover {
+  background-color: #3b5cff;
+  transform: translateY(-2px);
+}
+
+.btn-magenta {
+  background-color: #D900FF;
+  color: #000000;
+  font-family: 'Encode Sans Expanded', sans-serif;
+  font-weight: 700;
+  padding: 16px 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.btn-magenta:hover {
+  background-color: #e540ff;
+  transform: translateY(-2px);
+}
+
+/* Grid Borders */
+.border-figma {
+  border: 1px solid #333333;
+}
