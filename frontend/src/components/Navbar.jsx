@@ -1,38 +1,80 @@
 import React, { useState } from 'react';
 import { Lock, Menu, X, ExternalLink } from 'lucide-react';
 
-export default function Navbar({ onOpenAdmin, onQuickBook, onNavigateGallery }) {
+export default function Navbar({ onOpenAdmin, onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleGalleryClick = (e) => {
-    if (onNavigateGallery) {
-      e.preventDefault();
-      onNavigateGallery();
-    }
-  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#000000] border-b border-[#333333] h-[76px]">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* Left Nav Links */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-semibold tracking-tight text-white uppercase">
-          <a href="#classes" className="hover:text-[#D0FBF9] transition-colors">Classes</a>
-          <a href="#about" className="hover:text-[#D0FBF9] transition-colors">About Ethos</a>
-          <a href="#schedule" className="hover:text-[#D0FBF9] transition-colors">Schedule</a>
+        {/* Left Nav Links - Open Dedicated Pages in New Tab */}
+        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-xs lg:text-sm font-semibold tracking-tight text-white uppercase">
           
-          {/* Gallery Link -> Navigates to Communities Gallery Page */}
+          <a
+            href="classes.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+          >
+            <span>Classes</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+
+          <a href="#about" className="hover:text-[#D0FBF9] transition-colors">About Ethos</a>
+          
+          <a
+            href="schedule.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+          >
+            <span>Schedule</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+
           <a
             href="gallery.html"
-            onClick={handleGalleryClick}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hover:text-[#D0FBF9] transition-colors text-[#FF0044] font-bold flex items-center gap-1"
           >
             <span>Gallery</span>
+            <ExternalLink className="w-3 h-3 text-[#FF0044]" />
           </a>
 
-          <a href="#sangeet" className="hover:text-[#D0FBF9] transition-colors">Sangeet Hub</a>
+          <a
+            href="sangeet.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+          >
+            <span>Sangeet Hub</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+
           <a href="#workshops" className="hover:text-[#D0FBF9] transition-colors">Workshops</a>
-          <a href="#contact" className="hover:text-[#D0FBF9] transition-colors">Location</a>
+
+          <a
+            href="packages.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+          >
+            <span>Passes</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+
+          <a
+            href="location.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+          >
+            <span>Location</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+
         </div>
 
         {/* Right Brand Text & Actions */}
@@ -78,21 +120,77 @@ export default function Navbar({ onOpenAdmin, onQuickBook, onNavigateGallery }) 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#000000] border-b border-[#333333] px-6 py-6 space-y-4 font-semibold text-base text-white">
-          <a href="#classes" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Classes</a>
-          <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">About Ethos</a>
-          <a href="#schedule" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Schedule</a>
           
           <a
-            href="gallery.html"
-            onClick={(e) => { setMobileMenuOpen(false); handleGalleryClick(e); }}
-            className="block text-[#FF0044] font-bold"
+            href="classes.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between hover:text-[#D0FBF9]"
           >
-            <span>Gallery</span>
+            <span>Classes</span>
+            <ExternalLink className="w-4 h-4 text-slate-400" />
           </a>
 
-          <a href="#sangeet" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Sangeet Hub</a>
+          <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">About Ethos</a>
+          
+          <a
+            href="schedule.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between hover:text-[#D0FBF9]"
+          >
+            <span>Schedule</span>
+            <ExternalLink className="w-4 h-4 text-slate-400" />
+          </a>
+
+          <a
+            href="gallery.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between text-[#FF0044] font-bold"
+          >
+            <span>Gallery</span>
+            <ExternalLink className="w-4 h-4 text-[#FF0044]" />
+          </a>
+
+          <a
+            href="sangeet.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between hover:text-[#D0FBF9]"
+          >
+            <span>Sangeet Hub</span>
+            <ExternalLink className="w-4 h-4 text-slate-400" />
+          </a>
+
           <a href="#workshops" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Workshops</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Location</a>
+
+          <a
+            href="packages.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between hover:text-[#D0FBF9]"
+          >
+            <span>Passes</span>
+            <ExternalLink className="w-4 h-4 text-slate-400" />
+          </a>
+
+          <a
+            href="location.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between hover:text-[#D0FBF9]"
+          >
+            <span>Location</span>
+            <ExternalLink className="w-4 h-4 text-slate-400" />
+          </a>
+
           <button
             onClick={() => { setMobileMenuOpen(false); onQuickBook && onQuickBook({ id: 99, title: 'Ethos Pass', price: 699 }); }}
             className="w-full btn-cyan text-xs py-3 text-center uppercase tracking-wider block"

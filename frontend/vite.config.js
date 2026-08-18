@@ -10,7 +10,12 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        classes: resolve(__dirname, 'classes.html'),
+        schedule: resolve(__dirname, 'schedule.html'),
         gallery: resolve(__dirname, 'gallery.html'),
+        sangeet: resolve(__dirname, 'sangeet.html'),
+        packages: resolve(__dirname, 'packages.html'),
+        location: resolve(__dirname, 'location.html'),
       },
     },
   },
