@@ -6,7 +6,6 @@ import AboutSection from './components/AboutSection';
 import WorkshopsSection from './components/WorkshopsSection';
 import InstructorsSection from './components/InstructorsSection';
 import TestimonialsSection from './components/TestimonialsSection';
-import UnifiedCheckoutSection from './components/UnifiedCheckoutSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
@@ -51,7 +50,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans relative">
+    <div className="min-h-screen bg-[#090A0F] text-white font-sans relative">
       
       {/* 1. Global Navigation Header */}
       <Navbar
@@ -87,23 +86,21 @@ export default function App() {
         {/* STUDENT TESTIMONIALS & REVIEWS */}
         <TestimonialsSection />
 
-        {/* REAL ONLINE CLASS BOOKING & CHECKOUT HUB */}
-        <UnifiedCheckoutSection
-          API_URL={API_URL}
-          onSuccessPayment={handleSuccessPayment}
-        />
-
         {/* LOCATION, MAP & CONTACT FORM */}
         <ContactSection />
       </main>
 
       {/* FOOTER */}
-      <Footer onQuickBook={handleSelectItemForBooking} />
+      <Footer
+        onOpenAdmin={() => setAdminLoginOpen(true)}
+        onOpenStudentPortal={() => setStudentPortalOpen(true)}
+        onQuickBook={handleSelectItemForBooking}
+      />
 
-      {/* FLOATING WHATSAPP BUTTON */}
+      {/* FLOATING WHATSAPP CHAT BUTTON */}
       <FloatingWhatsApp />
 
-      {/* MODAL 1: CHECKOUT OVERLAY */}
+      {/* MODALS */}
       {selectedItemForBooking && (
         <BookingPaymentModal
           item={selectedItemForBooking}
@@ -113,7 +110,6 @@ export default function App() {
         />
       )}
 
-      {/* MODAL 2: TICKET RECEIPT VOUCHER */}
       {confirmedRegistration && (
         <ConfirmationReceiptModal
           registration={confirmedRegistration}
@@ -121,26 +117,24 @@ export default function App() {
         />
       )}
 
-      {/* MODAL 3: SEPARATE ADMIN LOGIN */}
       {adminLoginOpen && (
         <AdminLoginModal
+          API_URL={API_URL}
           onClose={() => setAdminLoginOpen(false)}
-          onLoginSuccess={handleAdminLoginSuccess}
+          onSuccessLogin={handleAdminLoginSuccess}
         />
       )}
 
-      {/* MODAL 4: PROTECTED ADMIN DASHBOARD (.NET API persistence) */}
       {adminDashboardOpen && (
         <AdminDashboard
           API_URL={API_URL}
           onClose={() => setAdminDashboardOpen(false)}
-          onLogout={() => setAdminDashboardOpen(false)}
         />
       )}
 
-      {/* MODAL 5: STUDENT & PARENT MONTHLY PACKAGE MEMBER PORTAL */}
       {studentPortalOpen && (
         <StudentPortalModal
+          API_URL={API_URL}
           onClose={() => setStudentPortalOpen(false)}
         />
       )}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import PackagesSection from '../components/PackagesSection';
-import UnifiedCheckoutSection from '../components/UnifiedCheckoutSection';
 import Footer from '../components/Footer';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
@@ -35,7 +34,6 @@ export default function PackagesPage() {
         </div>
 
         <PackagesSection packages={packages} onSelectPackage={(item) => setSelectedItemForBooking(item)} />
-        <UnifiedCheckoutSection API_URL={API_URL} onSuccessPayment={(data) => setConfirmedRegistration(data)} />
       </main>
 
       <Footer onQuickBook={(item) => setSelectedItemForBooking(item)} />
