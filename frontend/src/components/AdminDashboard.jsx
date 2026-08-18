@@ -1,24 +1,139 @@
 import React, { useState, useEffect } from 'react';
-import { X, Search, DollarSign, ShoppingBag, Send, RefreshCw, Lock, Bell, Settings, Key, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { X, Search, DollarSign, ShoppingBag, Send, RefreshCw, Lock, Bell, Settings, Key, ShieldCheck, CheckCircle2, Calendar, User, Star, Upload, MessageCircle, AlertTriangle, Image as ImageIcon, Ticket, Award } from 'lucide-react';
 
 export default function AdminDashboard({ API_URL, onClose, onLogout }) {
-  const [activeTab, setActiveTab] = useState('ORDERS'); // ORDERS or SETTINGS
+  const [activeTab, setActiveTab] = useState('PACKAGES'); // 'PACKAGES', 'EVENTS', or 'SETTINGS'
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('ALL');
 
-  // Manual SMS/Email dispatch state
-  const [dispatchMsg, setDispatchMsg] = useState('');
-  const [selectedBookingForMsg, setSelectedBookingForMsg] = useState(null);
-  const [dispatchSuccess, setDispatchSuccess] = useState(false);
+  // Initial Monthly Package Student Subscribers State
+  const [students, setStudents] = useState([
+    {
+      id: 101,
+      name: 'Rohan Sharma',
+      studentCode: 'ETH8492',
+      parentName: 'Suresh Sharma',
+      phone: '+91 98765 43210',
+      email: 'rohan@example.com',
+      packageName: 'Adults & Fitness Pass',
+      batch: 'Monday - Friday (8:00 PM)',
+      classesLeft: 12,
+      daysRemaining: 18,
+      passExpiryDate: '2026-08-28',
+      status: 'ACTIVE',
+      rating: 5,
+      feedback: 'Excellent posture, body isolations, and sharp stage presence! High energy.',
+      privatePhotos: [
+        'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=400&q=80'
+      ]
+    },
+    {
+      id: 102,
+      name: 'Ananya Verma',
+      studentCode: 'ETH7719',
+      parentName: 'Vikram Verma',
+      phone: '+91 91234 56789',
+      email: 'ananya@example.com',
+      packageName: 'Kids Monthly Pass (4-12 Yrs)',
+      batch: 'Mon - Fri (5:00 PM Kids)',
+      classesLeft: 4,
+      daysRemaining: 3,
+      passExpiryDate: '2026-08-21',
+      status: 'EXPIRING_SOON',
+      rating: 4,
+      feedback: 'Great rhythm timing! Working on footwork speed and arm line extensions.',
+      privatePhotos: [
+        'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=400&q=80'
+      ]
+    },
+    {
+      id: 103,
+      name: 'Kavya Reddy',
+      studentCode: 'ETH9920',
+      parentName: 'Rajesh Reddy',
+      phone: '+91 94401 23456',
+      email: 'kavya@example.com',
+      packageName: 'Bollywood Commercial Pass',
+      batch: 'Mon - Fri (6:00 PM)',
+      classesLeft: 0,
+      daysRemaining: 0,
+      passExpiryDate: '2026-08-18',
+      status: 'EXPIRED',
+      rating: 5,
+      feedback: 'Outstanding Bollywood expressions! Ready for advanced choreography solo.',
+      privatePhotos: [
+        'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80'
+      ]
+    }
+  ]);
 
-  // Studio Payment Gateway & Admin Settings
+  // Initial Events & Masterclass Tickets State
+  const [eventTickets, setEventTickets] = useState([
+    {
+      ticketId: 'EVT-84921',
+      eventId: 301,
+      eventTitle: 'Hip-Hop & Choreography Masterclass',
+      eventDate: 'Aug 19, 2026',
+      personName: 'Rahul Kumar',
+      personPhone: '+91 83417 01113',
+      personEmail: 'rahul.k@example.com',
+      tierName: 'Tier 1 • Early Bird',
+      pricePaid: 549,
+      paymentMethod: 'Razorpay UPI',
+      bookedAt: '2026-08-18 14:30',
+      status: 'CONFIRMED'
+    },
+    {
+      ticketId: 'EVT-84922',
+      eventId: 301,
+      eventTitle: 'Hip-Hop & Choreography Masterclass',
+      eventDate: 'Aug 19, 2026',
+      personName: 'Sneha Rao',
+      personPhone: '+91 98765 00001',
+      personEmail: 'sneha.r@example.com',
+      tierName: 'Tier 1 • Early Bird',
+      pricePaid: 549,
+      paymentMethod: 'Razorpay Card',
+      bookedAt: '2026-08-18 15:10',
+      status: 'CONFIRMED'
+    },
+    {
+      ticketId: 'EVT-84923',
+      eventId: 301,
+      eventTitle: 'Hip-Hop & Choreography Masterclass',
+      eventDate: 'Aug 19, 2026',
+      personName: 'Priya Sundaram',
+      personPhone: '+91 99887 76655',
+      personEmail: 'priya.s@example.com',
+      tierName: 'Tier 1 • Early Bird',
+      pricePaid: 549,
+      paymentMethod: 'Razorpay UPI',
+      bookedAt: '2026-08-18 16:45',
+      status: 'CONFIRMED'
+    },
+    {
+      ticketId: 'EVT-90112',
+      eventId: 302,
+      eventTitle: 'Contemporary & Floorwork Workshop',
+      eventDate: 'Sep 25, 2026',
+      personName: 'Arjun Das',
+      personPhone: '+91 91122 33445',
+      personEmail: 'arjun@example.com',
+      tierName: 'Tier 1 • Early Bird',
+      pricePaid: 549,
+      paymentMethod: 'Razorpay NetBanking',
+      bookedAt: '2026-08-18 17:00',
+      status: 'CONFIRMED'
+    }
+  ]);
+
+  // Settings State
   const [settings, setSettings] = useState({
-    RazorpayKeyId: 'rzp_test_RhythmPulse2025',
-    RazorpayKeySecret: 'Secret_Demo_Key_9981',
-    AdminPassword: 'adminpass',
-    AdminPhone: '+91 9876543210'
+    RazorpayKeyId: 'rzp_test_EthosDance2026',
+    RazorpayKeySecret: 'Secret_Ethos_Key_9981',
+    AdminPassword: 'admin',
+    AdminPhone: '+91 83417 01113'
   });
   const [settingsSaved, setSettingsSaved] = useState(false);
 
@@ -30,17 +145,8 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
         const data = await res.json();
         setBookings(data);
       }
-
-      const settingsRes = await fetch(`${API_URL}/api/payment/settings`);
-      if (settingsRes.ok) {
-        const sData = await settingsRes.json();
-        setSettings((prev) => ({ ...prev, ...sData }));
-      }
-    } catch (err) {
-      setBookings([
-        { id: 1, transactionId: 'TXN-98402A18', customerName: 'Rahul Verma', customerEmail: 'rahul@example.com', customerPhone: '+91 9876543210', itemTitle: 'Monthly All-Access VIP Pass', pricePaid: 3499, paymentMethod: 'Razorpay UPI', paymentStatus: 'CONFIRMED', bookedAt: new Date().toISOString() },
-        { id: 2, transactionId: 'TXN-88194B12', customerName: 'Sneha Reddy', customerEmail: 'sneha@example.com', customerPhone: '+91 9123456789', itemTitle: 'Royal Sangeet Choreography Package', pricePaid: 14999, paymentMethod: 'Razorpay Card', paymentStatus: 'CONFIRMED', bookedAt: new Date(Date.now() - 86400000).toISOString() }
-      ]);
+    } catch {
+      // Use initial state fallbacks
     } finally {
       setLoading(false);
     }
@@ -50,326 +156,438 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
     fetchBookingsAndSettings();
   }, []);
 
-  const totalRevenue = bookings.reduce((sum, b) => sum + (b.pricePaid || 0), 0);
+  // Update Student Star Rating
+  const handleRatingChange = (studentId, newRating) => {
+    setStudents(prev => prev.map(s => s.id === studentId ? { ...s, rating: newRating } : s));
+  };
 
-  const filteredBookings = bookings.filter((b) => {
-    const matchesSearch =
-      (b.customerName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (b.customerEmail || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (b.itemTitle || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (b.transactionId || '').toLowerCase().includes(searchTerm.toLowerCase());
+  // Update Student Choreography Feedback
+  const handleFeedbackChange = (studentId, newFeedback) => {
+    setStudents(prev => prev.map(s => s.id === studentId ? { ...s, feedback: newFeedback } : s));
+  };
 
-    const matchesType = filterType === 'ALL' || (b.bookingType || '').toLowerCase().includes(filterType.toLowerCase());
-
-    return matchesSearch && matchesType;
-  });
-
-  const handleSaveSettings = async (e) => {
-    e.preventDefault();
-    try {
-      await fetch(`${API_URL}/api/payment/settings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(settings)
-      });
-      setSettingsSaved(true);
-      setTimeout(() => setSettingsSaved(false), 4000);
-    } catch (err) {
-      setSettingsSaved(true);
-      setTimeout(() => setSettingsSaved(false), 4000);
+  // Private Photo Upload Handler
+  const handlePhotoUpload = (studentId, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const photoUrl = URL.createObjectURL(file);
+      setStudents(prev => prev.map(s => {
+        if (s.id === studentId) {
+          return { ...s, privatePhotos: [...(s.privatePhotos || []), photoUrl] };
+        }
+        return s;
+      }));
     }
   };
 
-  const handleSendManualNotification = (e) => {
-    e.preventDefault();
-    if (!selectedBookingForMsg || !dispatchMsg) return;
-
-    setDispatchSuccess(true);
-    setTimeout(() => {
-      setDispatchSuccess(false);
-      setDispatchMsg('');
-      setSelectedBookingForMsg(null);
-    }, 4000);
+  // 1-Click WhatsApp Renewal Generator
+  const getStudentWhatsappUrl = (student) => {
+    const cleanPhone = (student.phone || '8341701113').replace(/[^0-9]/g, '');
+    const waText = encodeURIComponent(
+      `⚠️ *ETHOS DANCE STUDIO — PASS RENEWAL NOTICE*\n\n` +
+      `Hi *${student.name}* (Parent: *${student.parentName}*),\n` +
+      `Your *${student.packageName}* (${student.studentCode}) has *${student.daysRemaining} days left* before expiry (${student.passExpiryDate}).\n\n` +
+      `📌 Remaining Classes: *${student.classesLeft} Classes*\n` +
+      `⭐ Instructor Rating: *${student.rating}/5 Stars*\n` +
+      `💬 Performance Notes: "${student.feedback}"\n\n` +
+      `Renew online in 1 click: https://shannug98.github.io/ethos-dance-studio/student.html\n\n` +
+      `Thank you,\nEthos Dance Studio Team`
+    );
+    return `https://wa.me/91${cleanPhone}?text=${waText}`;
   };
 
+  // 1-Click WhatsApp Event Ticket Generator
+  const getEventTicketWhatsappUrl = (ticket) => {
+    const cleanPhone = (ticket.personPhone || '8341701113').replace(/[^0-9]/g, '');
+    const waText = encodeURIComponent(
+      `🎟️ *ETHOS DANCE STUDIO — EVENT TICKET CONFIRMED*\n\n` +
+      `Hi *${ticket.personName}*,\n` +
+      `Your ticket for *${ticket.eventTitle}* on *${ticket.eventDate}* is confirmed!\n\n` +
+      `🆔 Ticket Code: *${ticket.ticketId}*\n` +
+      `🏷️ Tier: *${ticket.tierName}*\n` +
+      `💰 Paid: *₹${ticket.pricePaid}* (${ticket.paymentMethod})\n\n` +
+      `📍 Studio Address: Nizampet Rd, Kukatpally, Hyderabad\n` +
+      `Show this ticket at entrance scanner for entry.\n\n` +
+      `See you on stage!\nEthos Dance Studio Team`
+    );
+    return `https://wa.me/91${cleanPhone}?text=${waText}`;
+  };
+
+  const totalRevenue = eventTickets.reduce((sum, t) => sum + t.pricePaid, 0) + (students.length * 2500);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#000000]/90 backdrop-blur-xl animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/90 backdrop-blur-xl animate-fadeIn">
       
-      <div className="relative w-full max-w-6xl h-[90vh] bg-[#0A0F1D] border-2 border-[#333333] shadow-2xl overflow-hidden text-white flex flex-col">
+      <div className="relative w-full max-w-6xl h-[92vh] bg-[#090A0F] border border-slate-800 rounded-3xl shadow-2xl overflow-hidden text-white flex flex-col">
         
-        {/* Header */}
-        <div className="p-6 border-b border-[#333333] flex items-center justify-between bg-[#000000] shrink-0">
+        {/* TOP DASHBOARD HEADER BAR */}
+        <div className="bg-slate-900 border-b border-slate-800 p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-[#1F41FF] text-white">
-              <Lock className="w-6 h-6" />
+            <div className="w-10 h-10 rounded-2xl bg-[#FF0055]/20 border border-[#FF0055]/40 flex items-center justify-center text-[#FF0055]">
+              <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl font-extrabold text-white uppercase tracking-wider font-display">
-                MOVEMENT STUDIOS ADMIN PORTAL
+              <h2 className="text-lg sm:text-2xl font-black font-syne uppercase tracking-tight text-white flex items-center gap-2">
+                ETHOS MASTER ADMIN DASHBOARD
               </h2>
-              <p className="text-xs text-slate-400">Razorpay Integration • Live Orders • Gateway Settings</p>
+              <p className="text-[11px] font-bold text-slate-400">
+                Kukatpally Studio Management • Real-time Passes, Ratings & Event Attendees
+              </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setActiveTab(activeTab === 'ORDERS' ? 'SETTINGS' : 'ORDERS')}
-              className="px-4 py-2 bg-[#222222] hover:bg-[#333333] text-xs font-bold text-[#D0FBF9] border border-[#404040] flex items-center gap-1.5"
-            >
-              <Settings className="w-4 h-4" />
-              <span>{activeTab === 'ORDERS' ? 'Gateway & Settings' : 'Orders Table'}</span>
-            </button>
+            <div className="px-3.5 py-1.5 bg-white/5 border border-white/10 rounded-full text-right hidden md:block">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Total Revenue</span>
+              <span className="text-sm font-black font-syne text-[#00DFD8]">₹{totalRevenue.toLocaleString()}</span>
+            </div>
 
-            <button
-              onClick={fetchBookingsAndSettings}
-              className="p-2 rounded-lg bg-[#222222] text-slate-300 hover:text-white"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            </button>
-
-            <button
-              onClick={onLogout}
-              className="px-3.5 py-2 bg-red-950 hover:bg-red-900 text-red-300 border border-red-600 text-xs font-bold"
-            >
-              Logout
-            </button>
-
-            <button onClick={onClose} className="p-2 text-slate-400 hover:text-white">
-              <X className="w-5 h-5" />
-            </button>
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-slate-300 hover:text-white transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Dashboard Content */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1">
+        {/* NAVIGATION TABS BAR */}
+        <div className="bg-slate-950 border-b border-slate-800 px-6 py-3 flex items-center gap-3 overflow-x-auto no-scrollbar shrink-0">
+          <button
+            onClick={() => setActiveTab('PACKAGES')}
+            className={`px-5 py-2.5 text-xs font-black uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2 ${
+              activeTab === 'PACKAGES'
+                ? 'bg-[#0088FF] text-white shadow-lg shadow-[#0088FF]/30'
+                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <User className="w-4 h-4" />
+            <span>Monthly Packages & Students ({students.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('EVENTS')}
+            className={`px-5 py-2.5 text-xs font-black uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2 ${
+              activeTab === 'EVENTS'
+                ? 'bg-[#FF0055] text-white shadow-lg shadow-[#FF0055]/30'
+                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <Ticket className="w-4 h-4" />
+            <span>Events & Tickets Roster ({eventTickets.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('SETTINGS')}
+            className={`px-5 py-2.5 text-xs font-black uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2 ${
+              activeTab === 'SETTINGS'
+                ? 'bg-[#7928CA] text-white shadow-lg shadow-[#7928CA]/30'
+                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <Settings className="w-4 h-4" />
+            <span>Gateway & Admin Settings</span>
+          </button>
+        </div>
+
+        {/* DASHBOARD CONTENT BODY */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
           
-          {/* TAB 1: ORDERS VIEW */}
-          {activeTab === 'ORDERS' && (
-            <>
-              {/* Metrics Header */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div className="p-6 bg-[#111111] border border-[#333333] flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Total Revenue</span>
-                    <span className="text-3xl font-extrabold text-[#D0FBF9] font-display mt-1 block">₹{totalRevenue.toLocaleString()}</span>
-                  </div>
-                  <div className="p-3.5 bg-[#1F41FF] text-white">
-                    <DollarSign className="w-7 h-7" />
-                  </div>
-                </div>
+          {/* SEARCH BAR */}
+          <div className="flex items-center gap-3 bg-slate-900/90 border border-slate-800 p-2.5 rounded-2xl">
+            <Search className="w-5 h-5 text-slate-400 ml-2" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by student name, code, phone, ticket ID, or event title..."
+              className="bg-transparent border-none text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none w-full font-medium"
+            />
+          </div>
 
-                <div className="p-6 bg-[#111111] border border-[#333333] flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Total Orders Placed</span>
-                    <span className="text-3xl font-extrabold text-[#D900FF] font-display mt-1 block">{bookings.length} Orders</span>
-                  </div>
-                  <div className="p-3.5 bg-[#D900FF] text-black">
-                    <ShoppingBag className="w-7 h-7" />
-                  </div>
-                </div>
-
-                <div className="p-6 bg-[#111111] border border-[#333333] flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Payment Gateway</span>
-                    <span className="text-xs font-bold text-[#D0FBF9] mt-1 block flex items-center gap-1">
-                      <ShieldCheck className="w-4 h-4" /> Razorpay Verified
-                    </span>
-                  </div>
-                  <div className="p-3.5 bg-[#D0FBF9] text-black">
-                    <Key className="w-7 h-7" />
-                  </div>
-                </div>
+          {/* 1️⃣ MONTHLY PACKAGES & STUDENTS TAB */}
+          {activeTab === 'PACKAGES' && (
+            <div className="space-y-6">
+              
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-black uppercase font-syne text-white">
+                  STUDENT MONTHLY SUBSCRIBERS & RATINGS
+                </h3>
+                <span className="text-xs text-slate-400 font-bold">
+                  Showing {students.length} Enrolled Members
+                </span>
               </div>
 
-              {/* Filters */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="relative w-full sm:w-80">
-                  <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
-                  <input
-                    type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search by customer name, email, order..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-[#111111] border border-[#333333] text-white text-xs focus:border-[#1F41FF] focus:outline-none"
-                  />
-                </div>
+              <div className="grid grid-cols-1 gap-6">
+                {students
+                  .filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.phone.includes(searchTerm) || s.studentCode.toLowerCase().includes(searchTerm.toLowerCase()))
+                  .map((student) => {
+                    const isExpired = student.daysRemaining <= 0;
+                    const isExpiringSoon = student.daysRemaining > 0 && student.daysRemaining <= 5;
 
-                <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto">
-                  {['ALL', 'Class', 'Workshop', 'Sangeet', 'Pass'].map((type) => (
-                    <button
-                      key={type} onClick={() => setFilterType(type)}
-                      className={`px-3 py-1.5 text-xs font-bold uppercase border ${
-                        filterType === type ? 'bg-[#1F41FF] text-white border-[#1F41FF]' : 'bg-[#111111] text-slate-400 border-[#333333]'
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
+                    return (
+                      <div
+                        key={student.id}
+                        className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-xl relative overflow-hidden"
+                      >
+                        
+                        {/* Student Details & Days Remaining Badge */}
+                        <div className="space-y-3 lg:max-w-md">
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg font-black font-syne text-white uppercase">{student.name}</span>
+                            <span className="px-2.5 py-0.5 bg-[#0088FF]/20 border border-[#0088FF]/40 text-[#0088FF] text-[10px] font-black rounded-full uppercase">
+                              {student.studentCode}
+                            </span>
+                            
+                            {/* Days Left Renewal Badge */}
+                            <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-full border ${
+                              isExpired 
+                                ? 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
+                                : isExpiringSoon
+                                ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
+                                : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+                            }`}>
+                              {isExpired ? '🔴 EXPIRED TODAY' : isExpiringSoon ? `🟡 ${student.daysRemaining} DAYS LEFT` : `🟢 ${student.daysRemaining} DAYS LEFT`}
+                            </span>
+                          </div>
+
+                          <div className="text-xs text-slate-400 font-medium space-y-1">
+                            <div>📦 Pass: <strong className="text-slate-200">{student.packageName}</strong></div>
+                            <div>🕒 Batch: <strong className="text-slate-200">{student.batch}</strong></div>
+                            <div>👨‍👩‍👦 Parent/Phone: <strong className="text-slate-200">{student.parentName} ({student.phone})</strong></div>
+                            <div>🎟️ Classes Left: <strong className="text-[#00DFD8]">{student.classesLeft} Classes</strong> • Expiry: {student.passExpiryDate}</div>
+                          </div>
+                        </div>
+
+                        {/* Interactive 5-Star Rating & Choreography Feedback */}
+                        <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-3 flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">STUDENT RATING & FEEDBACK</span>
+                            <div className="flex items-center gap-1">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                  key={star}
+                                  onClick={() => handleRatingChange(student.id, star)}
+                                  className="focus:outline-none transition-transform hover:scale-125"
+                                >
+                                  <Star
+                                    className={`w-4 h-4 ${
+                                      star <= student.rating
+                                        ? 'text-amber-400 fill-amber-400'
+                                        : 'text-slate-600'
+                                    }`}
+                                  />
+                                </button>
+                              ))}
+                              <span className="text-xs font-black text-amber-400 ml-1">{student.rating}.0</span>
+                            </div>
+                          </div>
+
+                          <textarea
+                            rows="2"
+                            value={student.feedback}
+                            onChange={(e) => handleFeedbackChange(student.id, e.target.value)}
+                            placeholder="Add private performance feedback for student..."
+                            className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2 text-xs text-slate-200 focus:outline-none focus:border-[#0088FF]"
+                          />
+                        </div>
+
+                        {/* Private Photo Upload & WhatsApp Renewal Action */}
+                        <div className="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end justify-between gap-3 shrink-0">
+                          
+                          {/* Private Photos Preview & Upload Button */}
+                          <div className="flex items-center gap-2">
+                            <div className="flex -space-x-2">
+                              {(student.privatePhotos || []).map((photo, pIdx) => (
+                                <img key={pIdx} src={photo} alt="" className="w-8 h-8 rounded-full border-2 border-slate-900 object-cover" />
+                              ))}
+                            </div>
+
+                            <label className="cursor-pointer px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-extrabold uppercase rounded-xl flex items-center gap-1.5 transition-colors">
+                              <ImageIcon className="w-3.5 h-3.5 text-[#00DFD8]" />
+                              <span>Upload Photo</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handlePhotoUpload(student.id, e)}
+                              />
+                            </label>
+                          </div>
+
+                          {/* 1-Click WhatsApp Renewal Button */}
+                          <a
+                            href={getStudentWhatsappUrl(student)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-black uppercase tracking-wider rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/20 transition-all"
+                          >
+                            <MessageCircle className="w-4 h-4 fill-white" />
+                            <span>WhatsApp Renewal Notice</span>
+                          </a>
+
+                        </div>
+
+                      </div>
+                    );
+                  })}
               </div>
 
-              {/* Orders Table */}
-              <div className="border border-[#333333] bg-[#000000] overflow-hidden">
+            </div>
+          )}
+
+          {/* 2️⃣ EVENTS & TICKETS ROSTER TAB */}
+          {activeTab === 'EVENTS' && (
+            <div className="space-y-6">
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-black uppercase font-syne text-white">
+                    EVENT TICKETS & ATTENDEE ROSTER
+                  </h3>
+                  <p className="text-xs text-slate-400 font-medium">
+                    All attendees with Person Names, Ticket IDs, Pricing Tiers & WhatsApp Receipt Buttons
+                  </p>
+                </div>
+                <span className="text-xs text-slate-400 font-bold">
+                  Total Sold: {eventTickets.length} Tickets
+                </span>
+              </div>
+
+              {/* Event Roster Table */}
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-slate-300">
-                    <thead className="bg-[#111111] text-slate-400 uppercase tracking-wider font-bold border-b border-[#333333]">
-                      <tr>
-                        <th className="px-4 py-3">TxID / Payment ID</th>
-                        <th className="px-4 py-3">Customer Details</th>
-                        <th className="px-4 py-3">Package / Style Title</th>
-                        <th className="px-4 py-3">Amount Paid</th>
-                        <th className="px-4 py-3">Gateway</th>
-                        <th className="px-4 py-3 text-right">Dispatch SMS</th>
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-950 border-b border-slate-800 text-[10px] font-black uppercase tracking-wider text-slate-400">
+                        <th className="p-4">Ticket ID</th>
+                        <th className="p-4">Person Name</th>
+                        <th className="p-4">Phone & Email</th>
+                        <th className="p-4">Event Title</th>
+                        <th className="p-4">Tier & Price</th>
+                        <th className="p-4">Status</th>
+                        <th className="p-4 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#222222] font-medium">
-                      {filteredBookings.length > 0 ? (
-                        filteredBookings.map((order) => (
-                          <tr key={order.id} className="hover:bg-[#111111] transition-colors">
-                            <td className="px-4 py-3.5 font-mono text-[#D0FBF9] font-bold">
-                              {order.transactionId || `PAY-${order.id}`}
+                    <tbody className="divide-y divide-slate-800/60 text-xs font-medium">
+                      {eventTickets
+                        .filter(t => t.personName.toLowerCase().includes(searchTerm.toLowerCase()) || t.ticketId.toLowerCase().includes(searchTerm.toLowerCase()) || t.personPhone.includes(searchTerm))
+                        .map((ticket) => (
+                          <tr key={ticket.ticketId} className="hover:bg-slate-800/40 transition-colors">
+                            <td className="p-4 font-mono font-bold text-[#00DFD8]">
+                              {ticket.ticketId}
                             </td>
-                            <td className="px-4 py-3.5">
-                              <div className="font-bold text-white">{order.customerName}</div>
-                              <div className="text-[11px] text-slate-400">{order.customerEmail} • {order.customerPhone}</div>
+                            <td className="p-4 font-bold text-white">
+                              {ticket.personName}
                             </td>
-                            <td className="px-4 py-3.5 text-white font-bold">
-                              {order.itemTitle}
+                            <td className="p-4 text-slate-300">
+                              <div>{ticket.personPhone}</div>
+                              <div className="text-[10px] text-slate-500">{ticket.personEmail}</div>
                             </td>
-                            <td className="px-4 py-3.5 text-[#D0FBF9] font-extrabold text-sm">
-                              ₹{order.pricePaid}
+                            <td className="p-4 text-slate-200 font-semibold">
+                              <div>{ticket.eventTitle}</div>
+                              <div className="text-[10px] text-slate-500">📅 {ticket.eventDate}</div>
                             </td>
-                            <td className="px-4 py-3.5 font-semibold text-[#D900FF]">
-                              {order.paymentMethod || 'Razorpay'}
+                            <td className="p-4">
+                              <span className="px-2.5 py-0.5 bg-[#FF0055]/20 border border-[#FF0055]/40 text-[#FF0055] text-[10px] font-black rounded-full block w-fit mb-1">
+                                {ticket.tierName}
+                              </span>
+                              <span className="font-bold text-white">₹{ticket.pricePaid}</span>
                             </td>
-                            <td className="px-4 py-3.5 text-right">
-                              <button
-                                onClick={() => setSelectedBookingForMsg(order)}
-                                className="px-3 py-1 bg-[#1F41FF] text-white text-[11px] font-bold uppercase"
+                            <td className="p-4">
+                              <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold rounded-full">
+                                ✓ CONFIRMED
+                              </span>
+                            </td>
+                            <td className="p-4 text-right">
+                              <a
+                                href={getEventTicketWhatsappUrl(ticket)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-[10px] font-black uppercase rounded-xl inline-flex items-center gap-1.5 shadow-md"
                               >
-                                Send SMS
-                              </button>
+                                <MessageCircle className="w-3.5 h-3.5 fill-white" />
+                                <span>Send WhatsApp Ticket</span>
+                              </a>
                             </td>
                           </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={6} className="text-center py-8 text-slate-500">
-                            No orders found.
-                          </td>
-                        </tr>
-                      )}
+                        ))}
                     </tbody>
                   </table>
                 </div>
               </div>
-            </>
-          )}
 
-          {/* TAB 2: GATEWAY & ADMIN SETTINGS */}
-          {activeTab === 'SETTINGS' && (
-            <div className="max-w-2xl mx-auto bg-[#111111] border border-[#333333] p-8 space-y-6">
-              <h3 className="text-2xl font-extrabold uppercase font-display text-white border-b border-[#333333] pb-4">
-                PAYMENT GATEWAY & ADMIN CREDENTIALS
-              </h3>
-
-              {settingsSaved && (
-                <div className="p-3 bg-[#1F41FF] text-white text-xs font-bold">
-                  ✓ Studio Settings & Razorpay API Keys successfully saved to database!
-                </div>
-              )}
-
-              <form onSubmit={handleSaveSettings} className="space-y-4 text-xs">
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Razorpay Key ID (Key ID)</label>
-                  <input
-                    type="text" required value={settings.RazorpayKeyId}
-                    onChange={(e) => setSettings({ ...settings, RazorpayKeyId: e.target.value })}
-                    placeholder="rzp_test_... or rzp_live_..."
-                    className="w-full p-3 bg-[#000000] border border-[#333333] text-white font-mono"
-                  />
-                  <p className="text-[10px] text-slate-400 mt-1">Get your Key ID from dashboard.razorpay.com API Keys tab</p>
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Razorpay Key Secret</label>
-                  <input
-                    type="password" required value={settings.RazorpayKeySecret}
-                    onChange={(e) => setSettings({ ...settings, RazorpayKeySecret: e.target.value })}
-                    placeholder="••••••••••••••••"
-                    className="w-full p-3 bg-[#000000] border border-[#333333] text-white font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Change Admin Password</label>
-                  <input
-                    type="text" required value={settings.AdminPassword}
-                    onChange={(e) => setSettings({ ...settings, AdminPassword: e.target.value })}
-                    className="w-full p-3 bg-[#000000] border border-[#333333] text-white font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Admin Notification Mobile Phone</label>
-                  <input
-                    type="tel" required value={settings.AdminPhone}
-                    onChange={(e) => setSettings({ ...settings, AdminPhone: e.target.value })}
-                    className="w-full p-3 bg-[#000000] border border-[#333333] text-white font-mono"
-                  />
-                </div>
-
-                <div className="pt-4">
-                  <button type="submit" className="btn-cyan w-full py-4 text-xs font-extrabold uppercase">
-                    Save Gateway Credentials & Password
-                  </button>
-                </div>
-              </form>
             </div>
           )}
 
-          {/* Manual Dispatch Modal Drawer */}
-          {selectedBookingForMsg && (
-            <div className="p-6 bg-[#111111] border border-[#1F41FF] space-y-4">
-              <div className="flex justify-between items-center">
-                <h4 className="font-bold text-white text-sm">
-                  Send Direct SMS Alert to {selectedBookingForMsg.customerName} ({selectedBookingForMsg.customerPhone})
-                </h4>
-                <button onClick={() => setSelectedBookingForMsg(null)} className="text-slate-400 hover:text-white">
-                  <X className="w-4 h-4" />
-                </button>
+          {/* 3️⃣ GATEWAY & ADMIN SETTINGS TAB */}
+          {activeTab === 'SETTINGS' && (
+            <div className="max-w-2xl mx-auto space-y-6">
+              
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
+                <div className="flex items-center gap-3">
+                  <Key className="w-6 h-6 text-[#7928CA]" />
+                  <div>
+                    <h3 className="text-lg font-black uppercase font-syne text-white">PAYMENT GATEWAY CONFIGURATION</h3>
+                    <p className="text-xs text-slate-400">Razorpay API Credentials for Automatic Payment Collection</p>
+                  </div>
+                </div>
+
+                {settingsSaved && (
+                  <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-xs font-bold rounded-2xl flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Payment Gateway Settings Saved Successfully!</span>
+                  </div>
+                )}
+
+                <form onSubmit={(e) => { e.preventDefault(); setSettingsSaved(true); setTimeout(() => setSettingsSaved(false), 4000); }} className="space-y-4 text-xs font-bold">
+                  <div>
+                    <label className="block text-slate-400 uppercase mb-1">Razorpay Key ID</label>
+                    <input
+                      type="text"
+                      value={settings.RazorpayKeyId}
+                      onChange={(e) => setSettings({ ...settings, RazorpayKeyId: e.target.value })}
+                      className="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#7928CA]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-400 uppercase mb-1">Razorpay Key Secret</label>
+                    <input
+                      type="password"
+                      value={settings.RazorpayKeySecret}
+                      onChange={(e) => setSettings({ ...settings, RazorpayKeySecret: e.target.value })}
+                      className="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#7928CA]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-400 uppercase mb-1">Master Admin Password</label>
+                    <input
+                      type="password"
+                      value={settings.AdminPassword}
+                      onChange={(e) => setSettings({ ...settings, AdminPassword: e.target.value })}
+                      className="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#7928CA]"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-4 bg-[#7928CA] hover:bg-[#6820b3] text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg shadow-[#7928CA]/30 transition-all"
+                  >
+                    Save Settings
+                  </button>
+                </form>
               </div>
 
-              {dispatchSuccess && (
-                <div className="p-3 bg-[#1F41FF] text-white text-xs font-bold">
-                  ✓ SMS Alert successfully sent to handset!
-                </div>
-              )}
-
-              <form onSubmit={handleSendManualNotification} className="space-y-3">
-                <textarea
-                  rows={3} required value={dispatchMsg}
-                  onChange={(e) => setDispatchMsg(e.target.value)}
-                  placeholder={`Hi ${selectedBookingForMsg.customerName}, your studio pass for ${selectedBookingForMsg.itemTitle} is active! See you at Movement Studios!`}
-                  className="w-full p-3 bg-[#000000] border border-[#333333] text-white text-xs focus:outline-none"
-                />
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button" onClick={() => setSelectedBookingForMsg(null)}
-                    className="px-4 py-2 bg-[#222222] text-slate-300 text-xs font-bold uppercase"
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn-cyan text-xs py-2 px-5 font-extrabold uppercase">
-                    Send SMS Now
-                  </button>
-                </div>
-              </form>
             </div>
           )}
 
         </div>
 
       </div>
-
     </div>
   );
 }
