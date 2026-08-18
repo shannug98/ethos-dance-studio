@@ -12,30 +12,32 @@ export default function HeroSection({ onBookWorkshop }) {
       <div className="max-w-7xl mx-auto w-full py-8 sm:py-16 px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* 1. HERO IMAGE CARD (FOR MOBILE: RENDERED ON TOP) */}
+          {/* 1. HERO LOGO EMBLEM CARD (REPLACED DANCER IMAGE WITH ETHOS LOGO - IMG 3) */}
           <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center">
-            <div className="relative w-full max-w-lg rounded-3xl overflow-hidden glass-card p-3 group border border-white/15 shadow-2xl">
-              <div className="relative h-[260px] sm:h-[380px] lg:h-[440px] rounded-2xl overflow-hidden bg-black/60">
-                <img
-                  src="https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1000&q=80"
-                  alt="Ethos Dance Studio Masterclass"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-black/30"></div>
+            <div className="relative w-full max-w-lg rounded-3xl overflow-hidden glass-card p-6 group border border-white/15 shadow-2xl bg-gradient-to-b from-[#161722] to-[#0C0D12]">
+              <div className="relative h-[280px] sm:h-[380px] lg:h-[420px] rounded-2xl overflow-hidden bg-black/40 border border-white/10 flex flex-col items-center justify-center p-8 text-center group-hover:border-[#FF0055]/50 transition-colors duration-500">
                 
-                {/* Logo Badge Overlay on Image */}
-                <div className="absolute top-4 left-4 p-2 bg-black/50 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-2">
-                  <img src={ethosPureLogo} alt="Ethos" className="h-8 w-auto object-contain" />
-                  <span className="text-xs font-black text-white font-syne uppercase tracking-wider pr-2">Kukatpally</span>
+                {/* Ambient Radial Glow */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#FF0055]/20 via-transparent to-[#00DFD8]/20 blur-xl"></div>
+                
+                {/* Official Ethos Emblem Logo (img 3) */}
+                <div className="relative z-10 w-48 sm:w-64 lg:w-72 max-h-[260px] flex items-center justify-center filter drop-shadow-[0_0_30px_rgba(255,0,85,0.4)] group-hover:scale-105 transition-transform duration-500">
+                  <img
+                    src={ethosPureLogo}
+                    alt="Ethos Dance Studio Official Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
 
-                <div className="absolute bottom-4 left-4 right-4 p-4 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-extrabold text-[#00DFD8] uppercase tracking-wider block">Weekly Batches Live</span>
+                {/* Bottom Live Sessions Bar */}
+                <div className="absolute bottom-4 left-4 right-4 p-3.5 bg-black/60 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-between z-20">
+                  <div className="text-left">
+                    <span className="text-[10px] font-extrabold text-[#00DFD8] uppercase tracking-wider block">WEEKLY BATCHES LIVE</span>
                     <strong className="text-xs font-bold text-white">Mon-Fri Morning & Evening Sessions</strong>
                   </div>
                   <span className="w-2.5 h-2.5 rounded-full bg-[#00DFD8] animate-ping"></span>
                 </div>
+
               </div>
             </div>
           </div>

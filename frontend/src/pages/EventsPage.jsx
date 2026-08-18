@@ -96,41 +96,46 @@ export default function EventsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans">
       
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
       <main className="pt-[76px] pb-24">
         
-        {/* HEADER SECTION MATCHING IMG 2 */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-8 pt-16 pb-12 text-center space-y-4">
-          <h1 className="text-4xl sm:text-6xl font-black font-syne uppercase tracking-tight text-white">
+        {/* HEADER SECTION MATCHING ORIGINAL SCREENSHOT */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-8 pt-12 pb-10 text-center space-y-4">
+          
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FF5533]/10 border border-[#FF5533]/30 text-[#FF5533] text-[10px] font-black uppercase rounded-full tracking-wider">
+            <span>• THE 2026-27 LINE-UP</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl font-black font-syne uppercase tracking-tight text-slate-900 leading-[1.05]">
             SIX MONTHS. <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] italic">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5533] via-[#7928CA] to-[#0088FF] italic font-serif">
               Six ways to make your mark.
             </span>
           </h1>
 
-          <p className="text-slate-300 text-sm sm:text-base font-medium max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-600 text-sm sm:text-base font-medium max-w-2xl mx-auto leading-relaxed">
             Each challenge unlocks on the 1st of its month. Peek at what's coming — then jump in the moment it opens.
           </p>
 
-          {/* HORIZONTAL MONTH TIMELINE TRACK MATCHING IMG 2 */}
+          {/* HORIZONTAL MONTH TIMELINE TRACK MATCHING SCREENSHOT */}
           <div className="pt-8 pb-4 flex items-center justify-center max-w-xl mx-auto">
             <div className="flex items-center justify-between w-full relative">
               {/* Connecting Line */}
-              <div className="absolute top-3 left-6 right-6 h-0.5 bg-white/15 -z-0"></div>
+              <div className="absolute top-3 left-6 right-6 h-0.5 bg-slate-300 -z-0"></div>
 
               {monthsTimeline.map((m, i) => (
                 <div key={i} className="relative z-10 flex flex-col items-center gap-2">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
                     m.active 
-                      ? 'bg-[#FF0055] ring-4 ring-[#FF0055]/30' 
-                      : 'bg-[#12131A] border border-white/20'
+                      ? 'bg-[#FF5533] ring-4 ring-[#FF5533]/30 text-white shadow-md' 
+                      : 'bg-white border border-slate-300 text-slate-500'
                   }`}>
                     <div className={`w-2 h-2 rounded-full ${m.active ? 'bg-white' : 'bg-slate-400'}`}></div>
                   </div>
-                  <span className={`text-xs font-extrabold uppercase ${m.active ? 'text-[#FF0055]' : 'text-slate-400'}`}>
+                  <span className={`text-xs font-extrabold uppercase ${m.active ? 'text-[#FF5533]' : 'text-slate-500'}`}>
                     {m.name}
                   </span>
                 </div>
@@ -139,7 +144,7 @@ export default function EventsPage() {
           </div>
         </div>
 
-        {/* 3-COLUMN EVENT CARDS GRID MATCHING IMG 2 */}
+        {/* 3-COLUMN EVENT CARDS GRID MATCHING SCREENSHOT */}
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {eventsList.map((evt) => {
@@ -151,12 +156,12 @@ export default function EventsPage() {
               return (
                 <div
                   key={evt.id}
-                  className={`bg-[#12131A] border rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${
+                  className={`bg-[#0F1117] text-white border rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-300 shadow-xl ${
                     isOpen 
-                      ? 'border-[#00DFD8]/50 shadow-2xl shadow-[#00DFD8]/10 hover:border-[#00DFD8]' 
+                      ? 'border-[#00DFD8]/60 ring-2 ring-[#00DFD8]/20 shadow-2xl' 
                       : isUpcoming
-                      ? 'border-[#FF0055]/40 hover:border-[#FF0055]'
-                      : 'border-white/10 opacity-80 hover:opacity-100'
+                      ? 'border-[#FF5533]/50'
+                      : 'border-white/10 opacity-90'
                   }`}
                 >
                   {/* Ribbons / Status Badges */}
@@ -173,20 +178,20 @@ export default function EventsPage() {
                         isOpen 
                           ? 'bg-[#00DFD8]/20 border-[#00DFD8]/40 text-[#00DFD8]' 
                           : isUpcoming 
-                          ? 'bg-[#FF0055]/20 border-[#FF0055]/40 text-[#FF0055]'
+                          ? 'bg-[#FF5533]/20 border-[#FF5533]/40 text-[#FF5533]'
                           : 'bg-white/5 border-white/10 text-slate-400'
                       }`}>
                         {evt.pill}
                       </span>
 
                       {/* Icon Box */}
-                      <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white">
+                      <div className="w-10 h-10 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-white">
                         <IconComponent className="w-5 h-5 text-[#00DFD8]" />
                       </div>
                     </div>
 
                     {/* Month Category Header */}
-                    <span className="text-xs font-black uppercase tracking-wider text-[#FF0055] block mb-1">
+                    <span className="text-xs font-black uppercase tracking-wider text-[#FF5533] block mb-1">
                       {evt.month}
                     </span>
 
@@ -206,63 +211,64 @@ export default function EventsPage() {
                     </p>
                   </div>
 
-                  {/* Card Bottom Actions / Stats */}
+                  {/* Footer / CTA Area */}
                   <div className="pt-6 border-t border-white/10 space-y-4">
                     
-                    {/* Timer Box for Upcoming */}
-                    {evt.timer && (
-                      <div className="flex items-center justify-center gap-2 bg-black/40 border border-white/10 rounded-2xl p-2.5 mb-2">
-                        <div className="bg-white/10 px-2.5 py-1 rounded-xl text-center">
-                          <span className="text-xs font-black text-white">{evt.timer.days}</span>
-                          <span className="text-[8px] text-slate-400 block font-bold">DAYS</span>
+                    {/* Countdown box for upcoming */}
+                    {isUpcoming && evt.timer && (
+                      <div className="p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center gap-3 text-center">
+                        <div className="bg-white/10 px-2.5 py-1 rounded-lg">
+                          <div className="text-sm font-black text-white">{evt.timer.days}</div>
+                          <div className="text-[7px] text-slate-400 font-bold uppercase">DAYS</div>
                         </div>
-                        <div className="bg-white/10 px-2.5 py-1 rounded-xl text-center">
-                          <span className="text-xs font-black text-white">{evt.timer.hrs}</span>
-                          <span className="text-[8px] text-slate-400 block font-bold">HRS</span>
+                        <div className="bg-white/10 px-2.5 py-1 rounded-lg">
+                          <div className="text-sm font-black text-white">{evt.timer.hrs}</div>
+                          <div className="text-[7px] text-slate-400 font-bold uppercase">HRS</div>
                         </div>
-                        <div className="bg-white/10 px-2.5 py-1 rounded-xl text-center">
-                          <span className="text-xs font-black text-white">{evt.timer.min}</span>
-                          <span className="text-[8px] text-slate-400 block font-bold">MIN</span>
+                        <div className="bg-white/10 px-2.5 py-1 rounded-lg">
+                          <div className="text-sm font-black text-white">{evt.timer.min}</div>
+                          <div className="text-[7px] text-slate-400 font-bold uppercase">MIN</div>
                         </div>
                       </div>
                     )}
 
-                    {/* Footer Info Row */}
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-300">
-                      <span>{evt.daysLeft || evt.liveTill || 'Unlocks soon'}</span>
-                      {evt.price && <span className="text-[#00DFD8] font-extrabold">₹{evt.price}</span>}
+                    <div className="flex items-center justify-between">
+                      {isOpen && (
+                        <>
+                          <span className="text-xs font-extrabold text-slate-300">{evt.daysLeft}</span>
+                          <span className="text-base font-black text-white font-syne">₹{evt.price}</span>
+                        </>
+                      )}
+
+                      {isUpcoming && (
+                        <>
+                          <span className="text-xs font-bold text-slate-400">{evt.liveTill}</span>
+                          <span className="text-base font-black text-white font-syne">₹{evt.price}</span>
+                        </>
+                      )}
+
+                      {isLocked && (
+                        <span className="text-xs font-bold text-slate-400">Unlocks soon</span>
+                      )}
                     </div>
 
-                    {/* Action Button */}
-                    {isOpen && (
-                      <button
-                        onClick={() => setSelectedItemForBooking({ id: evt.id, title: evt.title, price: evt.price, type: 'Event Pass' })}
-                        className="w-full py-3.5 bg-[#00DFD8] hover:bg-[#00DFD8]/90 text-black text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-xl flex items-center justify-center gap-2"
-                      >
-                        <span>Register</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    )}
-
-                    {isUpcoming && (
-                      <button
-                        onClick={() => alert(`We will notify you when ${evt.title} opens on Sep 1!`)}
-                        className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/15 text-white text-xs font-extrabold uppercase tracking-wider rounded-2xl transition-all flex items-center justify-center gap-2"
-                      >
-                        <Bell className="w-4 h-4 text-[#FF0055]" />
-                        <span>Remind me</span>
-                      </button>
-                    )}
-
-                    {isLocked && (
-                      <button
-                        disabled
-                        className="w-full py-3 bg-white/5 text-slate-500 border border-white/5 text-xs font-bold uppercase tracking-wider rounded-2xl cursor-not-allowed flex items-center justify-center gap-2"
-                      >
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>{evt.btnText}</span>
-                      </button>
-                    )}
+                    <button
+                      onClick={() => {
+                        if (isOpen || isUpcoming) {
+                          setSelectedItemForBooking(evt);
+                        }
+                      }}
+                      disabled={isLocked}
+                      className={`w-full py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
+                        isOpen 
+                          ? 'bg-[#00DFD8] hover:bg-[#00f5ed] text-black shadow-lg shadow-[#00DFD8]/20' 
+                          : isUpcoming 
+                          ? 'bg-white/10 hover:bg-white/20 text-white border border-white/15' 
+                          : 'bg-white/5 text-slate-500 cursor-not-allowed border border-white/5'
+                      }`}
+                    >
+                      <span>{evt.btnText}</span>
+                    </button>
 
                   </div>
 
@@ -294,6 +300,7 @@ export default function EventsPage() {
           onClose={() => setConfirmedRegistration(null)}
         />
       )}
+
     </div>
   );
 }
