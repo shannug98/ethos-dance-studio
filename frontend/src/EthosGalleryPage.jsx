@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowLeft, MessageCircle, Users, CheckCircle2, Flame, ExternalLink } from 'lucide-react';
-import { LOGO_TRANSPARENT_BASE64 } from './assets/logoBase64';
+import { Sparkles, ArrowLeft, MessageCircle, Users, ExternalLink } from 'lucide-react';
 
 export default function EthosGalleryPage() {
   // Photos for Column 1 (Scrolls UP)
@@ -21,7 +20,7 @@ export default function EthosGalleryPage() {
     'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80',
   ];
 
-  // Photos for Column 3 (Scrolls UP)
+  // Photos for Column 3 (Scrolls UP - Hidden on small mobile for clean 2-col look, visible on md+)
   const col3Photos = [
     'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
@@ -91,64 +90,65 @@ export default function EthosGalleryPage() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#131415] font-sans selection:bg-[#FF0044] selection:text-white overflow-x-hidden">
       
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-50 bg-[#FFFFFF]/90 backdrop-blur-md border-b border-[#EAE6DF] h-[76px] px-6 sm:px-12 flex items-center justify-between shadow-sm">
-        <a href="/" className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#FF0044] transition-colors">
-          <ArrowLeft className="w-4 h-4 text-[#FF0044]" />
-          <span>Back to Main Studio Website</span>
+      {/* Sticky Mobile-Optimized Header */}
+      <header className="sticky top-0 z-50 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-[#EAE6DF] h-16 sm:h-[76px] px-3 sm:px-8 flex items-center justify-between shadow-sm">
+        <a href="/" className="flex items-center gap-1.5 text-xs font-bold text-slate-800 hover:text-[#FF0044] transition-colors">
+          <ArrowLeft className="w-4 h-4 text-[#FF0044] shrink-0" />
+          <span className="hidden sm:inline">Back to Main Studio</span>
+          <span className="sm:hidden">Back</span>
         </a>
 
-        <div className="flex items-center gap-3">
-          <span className="font-display-giant text-2xl sm:text-3xl text-black tracking-tighter uppercase font-black">
-            ETHOS<span className="text-[#FF0044]">.</span> COMMUNITIES
+        <div className="flex items-center gap-1.5">
+          <span className="font-display-giant text-lg sm:text-2xl text-black tracking-tight uppercase font-black">
+            ETHOS<span className="text-[#FF0044]">.</span> <span className="hidden xs:inline">COMMUNITIES</span>
           </span>
         </div>
 
         <a
           href="/#checkout"
-          className="px-5 py-2.5 bg-black text-white text-xs font-extrabold uppercase tracking-wider rounded-full hover:bg-[#FF0044] transition-all shadow-md"
+          className="px-3 py-1.5 sm:px-5 sm:py-2.5 bg-black text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-wider rounded-full hover:bg-[#FF0044] transition-all shadow-md shrink-0"
         >
-          Join The Tribe
+          Join Tribe
         </a>
       </header>
 
-      {/* 🌟 3-COLUMN VERTICAL INFINITE MARQUEE SECTION MATCHING COMMUNITIE.IN LAYOUT */}
-      <section className="py-16 px-4 sm:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[85vh]">
+      {/* 🌟 MOBILE & DESKTOP OPTIMIZED 3-COLUMN VERTICAL MARQUEE SECTION */}
+      <section className="py-8 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         
         {/* Left Side Text Content */}
-        <div className="lg:col-span-6 space-y-6 text-left">
+        <div className="lg:col-span-6 space-y-4 sm:space-y-6 text-left">
           
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FF0044] text-white text-xs font-black uppercase tracking-widest rounded-full shadow-lg">
-            <Sparkles className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#FF0044] text-white text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-full shadow-md">
+            <Sparkles className="w-3.5 h-3.5" />
             <span>ETHOS CLUBS & COMMUNITY LINKS</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black font-display tracking-tight text-[#050505] leading-[0.95] uppercase">
-            Click in, vibe out— <br />
-            <span className="text-[#FF0044]">your next favourite</span> <br />
+          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black font-display tracking-tight text-[#050505] leading-[1.02] sm:leading-[0.95] uppercase">
+            Click in, vibe out— <br className="hidden sm:block" />
+            <span className="text-[#FF0044]">your next favourite</span> <br className="hidden sm:block" />
             dance club is waiting!
           </h1>
 
           {/* Joined Counter Badge with Overlapping Avatars */}
-          <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-white border border-[#E0D9CD] rounded-full shadow-md">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-[#E0D9CD] rounded-full shadow-sm">
             <div className="flex -space-x-2">
-              <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="" />
-              <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="" />
-              <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="" />
+              <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="" />
+              <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="" />
+              <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="" />
             </div>
-            <span className="text-xs font-black text-slate-800 uppercase tracking-wide">
+            <span className="text-[11px] sm:text-xs font-black text-slate-800 uppercase tracking-wide">
               50K+ Joined Already 🔥
             </span>
           </div>
 
-          <p className="text-base text-slate-600 leading-relaxed font-normal max-w-lg">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-lg">
             Hyderabad just got a lot more fun! Pick your favourite dance club below, join the WhatsApp group with like-minded dancers, and be part of the Ethos tribe.
           </p>
 
           <div className="pt-2">
             <a
               href="#explore-clubs"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[#111111] text-white text-sm font-extrabold uppercase tracking-wider rounded-full shadow-xl hover:bg-[#FF0044] hover:scale-105 transition-all"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 bg-[#111111] text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider rounded-full shadow-xl hover:bg-[#FF0044] transition-all"
             >
               <span>Explore All Clubs</span>
               <span>🥳</span>
@@ -157,35 +157,35 @@ export default function EthosGalleryPage() {
 
         </div>
 
-        {/* Right Side: 3 Vertical Moving Photo Columns */}
-        <div className="lg:col-span-6 grid grid-cols-3 gap-4 h-[550px] overflow-hidden relative rounded-3xl bg-[#F0EBE1] p-3 border-2 border-[#E2DACD] shadow-inner">
+        {/* Right Side: Responsive Animated Image Columns (2 cols on mobile, 3 cols on md+) */}
+        <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 h-[420px] sm:h-[550px] overflow-hidden relative rounded-2xl sm:rounded-3xl bg-[#F0EBE1] p-2.5 sm:p-3 border-2 border-[#E2DACD] shadow-inner">
           
           {/* Top & Bottom Soft Fading Gradients */}
-          <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#F0EBE1] to-transparent z-10 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F0EBE1] to-transparent z-10 pointer-events-none" />
+          <div className="absolute top-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-b from-[#F0EBE1] to-transparent z-10 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-[#F0EBE1] to-transparent z-10 pointer-events-none" />
 
           {/* COLUMN 1: MOVES UP CONTINUOUSLY */}
-          <div className="flex flex-col gap-4 animate-vertical-up">
+          <div className="flex flex-col gap-2.5 sm:gap-4 animate-vertical-up">
             {[...col1Photos, ...col1Photos].map((imgUrl, i) => (
-              <div key={i} className="w-full h-44 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
+              <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
                 <img src={imgUrl} alt="" className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 hover:scale-110 transition-all duration-500" />
               </div>
             ))}
           </div>
 
           {/* COLUMN 2: MOVES DOWN CONTINUOUSLY */}
-          <div className="flex flex-col gap-4 animate-vertical-down">
+          <div className="flex flex-col gap-2.5 sm:gap-4 animate-vertical-down">
             {[...col2Photos, ...col2Photos].map((imgUrl, i) => (
-              <div key={i} className="w-full h-44 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
+              <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
                 <img src={imgUrl} alt="" className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 hover:scale-110 transition-all duration-500" />
               </div>
             ))}
           </div>
 
-          {/* COLUMN 3: MOVES UP CONTINUOUSLY */}
-          <div className="flex flex-col gap-4 animate-vertical-up-slow">
+          {/* COLUMN 3: MOVES UP CONTINUOUSLY (Visible on Tablet/Desktop md+) */}
+          <div className="hidden md:flex flex-col gap-2.5 sm:gap-4 animate-vertical-up-slow">
             {[...col3Photos, ...col3Photos].map((imgUrl, i) => (
-              <div key={i} className="w-full h-44 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
+              <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
                 <img src={imgUrl} alt="" className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 hover:scale-110 transition-all duration-500" />
               </div>
             ))}
@@ -196,59 +196,59 @@ export default function EthosGalleryPage() {
       </section>
 
       {/* 🚀 CLUBS & COMMUNITY GROUPS GRID */}
-      <section id="explore-clubs" className="py-20 px-4 sm:px-8 max-w-7xl mx-auto border-t border-[#EAE6DF]">
+      <section id="explore-clubs" className="py-12 sm:py-20 px-4 sm:px-8 max-w-7xl mx-auto border-t border-[#EAE6DF]">
         
-        <div className="text-center space-y-3 mb-14">
-          <span className="px-3.5 py-1 bg-[#1F41FF] text-white text-xs font-extrabold uppercase tracking-widest rounded-full inline-block">
+        <div className="text-center space-y-3 mb-10 sm:mb-14">
+          <span className="px-3 py-1 bg-[#1F41FF] text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest rounded-full inline-block">
             EXPLORE DANCE CLUBS IN HYDERABAD
           </span>
-          <h2 className="text-4xl sm:text-6xl font-black font-display text-black uppercase tracking-tight">
+          <h2 className="text-3xl sm:text-6xl font-black font-display text-black uppercase tracking-tight leading-tight">
             PICK YOUR DANCE TRIBE
           </h2>
-          <p className="text-sm text-slate-600 max-w-lg mx-auto font-normal">
+          <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto font-normal px-2">
             Join active WhatsApp groups, meet fellow dancers, participate in weekend jam sessions, and showcase your passion!
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {ethosClubs.map((club) => (
             <div
               key={club.id}
-              className="bg-white border-2 border-[#EBE7DF] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-[#FF0044] transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white border-2 border-[#EBE7DF] rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl hover:border-[#FF0044] transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="relative h-64 overflow-hidden bg-black">
+                <div className="relative h-52 sm:h-64 overflow-hidden bg-black">
                   <img
                     src={club.image}
                     alt={club.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <span className="absolute top-4 left-4 px-3 py-1 bg-black/80 text-white text-xs font-extrabold uppercase rounded-full backdrop-blur-md">
+                  <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-1 bg-black/80 text-white text-[10px] sm:text-xs font-extrabold uppercase rounded-full backdrop-blur-md">
                     {club.tag}
                   </span>
                 </div>
 
-                <div className="p-6 space-y-3">
+                <div className="p-5 sm:p-6 space-y-2.5 sm:space-y-3">
                   <div className="flex items-center gap-2 text-xs font-bold text-[#FF0044]">
                     <Users className="w-4 h-4" />
                     <span>{club.members}</span>
                   </div>
 
-                  <h3 className="text-xl font-black text-black uppercase font-display">{club.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-black text-black uppercase font-display leading-snug">{club.title}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed font-normal">{club.desc}</p>
                   
-                  <div className="text-xs font-bold text-slate-500 pt-2 border-t border-slate-100">
+                  <div className="text-[11px] sm:text-xs font-bold text-slate-500 pt-2 border-t border-slate-100">
                     🕒 {club.schedule}
                   </div>
                 </div>
               </div>
 
-              <div className="p-6 pt-0">
+              <div className="p-5 sm:p-6 pt-0">
                 <a
                   href="https://chat.whatsapp.com/EthosDanceStudioKukatpally"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3.5 bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-extrabold uppercase tracking-wider rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md"
+                  className="w-full py-3 sm:py-3.5 bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-extrabold uppercase tracking-wider rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md"
                 >
                   <MessageCircle className="w-4 h-4 fill-current" />
                   <span>Join WhatsApp Club</span>
@@ -262,9 +262,9 @@ export default function EthosGalleryPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#111111] text-white py-12 text-center text-xs text-slate-400 space-y-3 border-t border-slate-800">
-        <div className="font-extrabold text-white uppercase text-base font-display">ETHOS DANCE STUDIO COMMUNITIES</div>
-        <p>Second floor, 1/2/49/1, Nizampet Rd, Jai Bharat Nagar, Kukatpally, Hyderabad, Telangana 500085</p>
+      <footer className="bg-[#111111] text-white py-10 px-4 text-center text-xs text-slate-400 space-y-2 border-t border-slate-800">
+        <div className="font-extrabold text-white uppercase text-sm sm:text-base font-display">ETHOS DANCE STUDIO COMMUNITIES</div>
+        <p className="max-w-md mx-auto">Second floor, 1/2/49/1, Nizampet Rd, Jai Bharat Nagar, Kukatpally, Hyderabad, Telangana 500085</p>
         <p>© 2026 Ethos Dance Studio. All Rights Reserved.</p>
       </footer>
 
