@@ -3,24 +3,18 @@ import { Lock, CheckCircle, ShieldCheck, Sparkles, Send, Ticket } from 'lucide-r
 import confetti from 'canvas-confetti';
 
 export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
-  const [selectedPass, setSelectedPass] = useState({
-    id: 1,
-    title: 'Monthly All-Access VIP Pass',
-    price: 3499,
-    type: 'Monthly Pass'
-  });
+  const ethosPassOptions = [
+    { id: 1, title: 'Free Demo Trial Pass', price: 0, type: 'Free Trial', desc: 'Monday - Friday 1 Demo Trial Free' },
+    { id: 2, title: 'Kids Monthly Pass (Ages 4-12)', price: 2000, type: 'Kids Monthly Pass', desc: 'Choice of 4-6 Yrs (5 PM) or 6-12 Yrs (7 PM) batch' },
+    { id: 3, title: 'Adults / Dance Fitness Monthly Pass', price: 2500, type: 'Adults Monthly Pass', desc: 'Choice of Morning Fitness or Evening Adults batch', isPopular: true },
+    { id: 4, title: 'Royal Wedding Sangeet Choreography', price: 14999, type: 'Sangeet Package', desc: 'Custom track mixing + entrance & family group sync' }
+  ];
 
+  const [selectedPass, setSelectedPass] = useState(ethosPassOptions[2]);
   const [customer, setCustomer] = useState({ name: '', email: '', phone: '' });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [notificationAlerts, setNotificationAlerts] = useState([]);
-
-  const passOptions = [
-    { id: 1, title: 'Single Class Drop-in Pass', price: 499, type: 'Class Pass', desc: 'Valid for 1 regular studio session' },
-    { id: 2, title: 'Monthly All-Access VIP Pass', price: 3499, type: 'Monthly Pass', desc: 'Unlimited regular classes + 1 masterclass/mo', isPopular: true },
-    { id: 3, title: '10-Class Flexi Pass', price: 3999, type: 'Flexi Pass', desc: '10 session credits valid for 60 days' },
-    { id: 4, title: 'Royal Wedding Sangeet Package', price: 14999, type: 'Sangeet Package', desc: 'Custom music mix + 5 tracks choreographed + 12 hrs training' }
-  ];
 
   const handlePayNow = async (e) => {
     e.preventDefault();
@@ -52,9 +46,9 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
         key: orderData.keyId || 'rzp_test_RhythmPulse2025',
         amount: orderData.amount,
         currency: 'INR',
-        name: 'Movement Studios',
+        name: 'Ethos Dance Studio',
         description: `Booking for ${selectedPass.title}`,
-        image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=200&q=80',
+        image: '/ethos_logo_transparent.png',
         order_id: orderData.orderId,
         handler: async function (response) {
           try {
@@ -79,7 +73,7 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
             try { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } catch (e) {}
 
             setNotificationAlerts([
-              `📲 SMS SENT to ${customer.phone}: "Movement Studios Order Confirmed! Ref: ${registrationData.transactionId}."`,
+              `📲 SMS SENT to ${customer.phone}: "Ethos Dance Studio Order Confirmed! Ref: ${registrationData.transactionId}."`,
               `🚨 ADMIN ALERT: "New Order! ${customer.name} paid ₹${selectedPass.price} for ${selectedPass.title}."`
             ]);
 
@@ -132,8 +126,8 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
     try { confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } }); } catch (e) {}
 
     setNotificationAlerts([
-      `📲 SMS SENT to ${customer.phone}: "Movement Studios Order Confirmed! Ref: ${mockTxId}"`,
-      `🚨 ADMIN ALERT: "New Order from ${customer.name} for ${selectedPass.title} (₹${selectedPass.price})"`
+      `📲 SMS SENT to ${customer.phone}: "Ethos Dance Studio Booking Confirmed! Ref: ${mockTxId}"`,
+      `🚨 ADMIN ALERT: "New Booking from ${customer.name} for ${selectedPass.title} (₹${selectedPass.price})"`
     ]);
 
     setTimeout(() => {
@@ -160,10 +154,10 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
             RAZORPAY REAL ONLINE CHECKOUT HUB
           </span>
           <h2 className="text-4xl sm:text-6xl font-display-giant text-white uppercase tracking-tight">
-            BOOK YOUR DANCE PASS & PAY ONLINE
+            BOOK BATCH PASS & PAY ONLINE (INR)
           </h2>
           <p className="text-sm text-slate-300 max-w-xl mx-auto font-normal">
-            Select a studio pass tier, enter your contact details, and pay securely via Razorpay (UPI, GPay, PhonePe, Cards, NetBanking).
+            Select your batch tier, enter contact details, and complete your registration via Razorpay (UPI, GPay, PhonePe, Cards, NetBanking).
           </p>
         </div>
 
@@ -172,10 +166,10 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
           {/* Left Column: Pass Selection Cards */}
           <div className="lg:col-span-6 space-y-4">
             <h3 className="text-xl font-extrabold uppercase font-display text-white mb-2">
-              1. Select Your Studio Pass Tier
+              1. Select Your Batch Tier
             </h3>
 
-            {passOptions.map((opt) => (
+            {ethosPassOptions.map((opt) => (
               <div
                 key={opt.id}
                 onClick={() => setSelectedPass(opt)}
@@ -188,7 +182,7 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
                 <div>
                   {opt.isPopular && (
                     <span className="px-2 py-0.5 bg-[#D0FBF9] text-[#000000] text-[10px] font-extrabold uppercase mb-1 inline-block">
-                      POPULAR CHOICE
+                      POPULAR BATCH
                     </span>
                   )}
                   <h4 className="text-lg font-extrabold uppercase font-display">{opt.title}</h4>
@@ -209,7 +203,7 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
               
               <div className="flex justify-between items-center pb-4 border-b border-[#333333]">
                 <div>
-                  <span className="text-[10px] text-slate-400 font-extrabold uppercase block">Selected Tier</span>
+                  <span className="text-[10px] text-slate-400 font-extrabold uppercase block">Selected Batch</span>
                   <h4 className="text-lg font-extrabold text-[#D0FBF9] uppercase font-display">{selectedPass.title}</h4>
                 </div>
                 <div className="text-right">
@@ -240,7 +234,7 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
                   <input
                     type="text" required value={customer.name}
                     onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-                    placeholder="e.g. Ananya Sharma"
+                    placeholder="e.g. Rahul Sharma"
                     className="w-full p-3 bg-[#111111] border border-[#333333] text-white focus:border-[#D0FBF9] focus:outline-none"
                   />
                 </div>
@@ -251,7 +245,7 @@ export default function UnifiedCheckoutSection({ API_URL, onSuccessPayment }) {
                     <input
                       type="email" required value={customer.email}
                       onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
-                      placeholder="ananya@example.com"
+                      placeholder="rahul@example.com"
                       className="w-full p-3 bg-[#111111] border border-[#333333] text-white focus:border-[#D0FBF9] focus:outline-none"
                     />
                   </div>

@@ -28,98 +28,119 @@ namespace DanceStudio.API.Data
                 new StudioSetting { Id = 5, Key = "AdminPhone", Value = "+91 9876543210" }
             );
 
-            // Seed Initial Classes
+            // Seed Ethos Official Classes
             modelBuilder.Entity<DanceClass>().HasData(
                 new DanceClass
                 {
                     Id = 1,
-                    Title = "Urban Hip-Hop & Grooves",
-                    Category = "Commercial Hip-Hop",
-                    Level = "All Levels",
-                    Description = "Master high-energy urban choreography, body isolations, bounce, and musicality.",
-                    PricePerSession = 499,
-                    Duration = "75 mins",
-                    Instructor = "Rohan Sharma",
+                    Title = "Dance Fitness (Any Age)",
+                    Category = "Morning Batch",
+                    Level = "All Ages",
+                    Description = "High-energy rhythm fitness, cardio jam & sweat workout for all age groups.",
+                    PricePerSession = 2500,
+                    Duration = "60 mins",
+                    Instructor = "Ethos Master Team",
+                    ImageUrl = "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80",
+                    Rating = 5.0
+                },
+                new DanceClass
+                {
+                    Id = 2,
+                    Title = "Adults Batch (Beginner)",
+                    Category = "Adults",
+                    Level = "Beginner",
+                    Description = "Foundation grooves, isolations, swag, and step-by-step Bollywood & Commercial routines.",
+                    PricePerSession = 2500,
+                    Duration = "60 mins",
+                    Instructor = "Ethos Senior Choreographer",
                     ImageUrl = "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80",
                     Rating = 4.9
                 },
                 new DanceClass
                 {
-                    Id = 2,
-                    Title = "Bollywood Commercial Fusion",
-                    Category = "Bollywood Fusion",
-                    Level = "Beginner to Intermediate",
-                    Description = "High octane Bollywood hits blended with Afro, Hip-Hop & Bolly-hop routines.",
-                    PricePerSession = 450,
+                    Id = 3,
+                    Title = "Kids Batch (4-6 Years)",
+                    Category = "Kids",
+                    Level = "Beginner (Ages 4-6)",
+                    Description = "Fun, playful movement, basic rhythm building, and creative balance training for little stars.",
+                    PricePerSession = 2000,
                     Duration = "60 mins",
-                    Instructor = "Ananya Roy",
-                    ImageUrl = "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80",
+                    Instructor = "Ethos Kids Lead",
+                    ImageUrl = "https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80",
                     Rating = 5.0
                 },
                 new DanceClass
                 {
-                    Id = 3,
-                    Title = "Contemporary Storytelling",
-                    Category = "Contemporary",
-                    Level = "Intermediate",
-                    Description = "Explore fluid floorwork, emotional storytelling, releases, and graceful weight transfers.",
-                    PricePerSession = 550,
-                    Duration = "90 mins",
-                    Instructor = "Vikram Sengupta",
-                    ImageUrl = "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80",
-                    Rating = 4.8
-                }
-            );
-
-            // Seed Initial Schedules
-            modelBuilder.Entity<ClassSchedule>().HasData(
-                new ClassSchedule { Id = 1, Day = "Monday", Time = "06:00 PM - 07:15 PM", ClassName = "Urban Hip-Hop & Grooves", Style = "Hip-Hop", Instructor = "Rohan Sharma", Level = "All Levels", AvailableSlots = 6, TotalSlots = 20, StudioRoom = "Studio A" },
-                new ClassSchedule { Id = 2, Day = "Monday", Time = "07:30 PM - 08:30 PM", ClassName = "Bollywood Commercial Fusion", Style = "Bollywood", Instructor = "Ananya Roy", Level = "Beginner", AvailableSlots = 4, TotalSlots = 25, StudioRoom = "Studio B" },
-                new ClassSchedule { Id = 3, Day = "Tuesday", Time = "06:30 PM - 08:00 PM", ClassName = "Contemporary Storytelling", Style = "Contemporary", Instructor = "Vikram Sengupta", Level = "Intermediate", AvailableSlots = 9, TotalSlots = 15, StudioRoom = "Studio A" }
-            );
-
-            // Seed Workshops
-            modelBuilder.Entity<EventWorkshop>().HasData(
-                new EventWorkshop
+                    Id = 4,
+                    Title = "Kids Batch (6-12 Years)",
+                    Category = "Kids",
+                    Level = "Intermediate (Ages 6-12)",
+                    Description = "Dynamic dance choreography, stage presentation, and beat coordination for growing dancers.",
+                    PricePerSession = 2000,
+                    Duration = "60 mins",
+                    Instructor = "Ethos Kids Lead",
+                    ImageUrl = "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80",
+                    Rating = 4.9
+                },
+                new DanceClass
                 {
-                    Id = 1,
-                    Title = "International Afro-Fusion Masterclass",
-                    GuestChoreographer = "Koffi & Team (Paris)",
-                    Date = "Saturday, Aug 29",
-                    Time = "05:00 PM - 08:00 PM",
-                    Location = "Main Grand Arena",
-                    Price = 1499,
-                    Level = "Open to All",
-                    DanceStyle = "Afro-Beats & Amapiano",
-                    ImageUrl = "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80",
-                    SeatsLeft = 5,
-                    Description = "Learn authentic Amapiano grooves, footwork, and viral choreography directly from guest Paris artists."
+                    Id = 5,
+                    Title = "Adults Batch (Advanced)",
+                    Category = "Adults",
+                    Level = "Advanced",
+                    Description = "Complex musicality, fast-paced choreography, execution, and performance attitude.",
+                    PricePerSession = 2500,
+                    Duration = "60 mins",
+                    Instructor = "Ethos Master Director",
+                    ImageUrl = "https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80",
+                    Rating = 5.0
                 }
             );
 
-            // Seed Packages
+            // Seed Ethos Mon-Fri Schedules
+            modelBuilder.Entity<ClassSchedule>().HasData(
+                new ClassSchedule { Id = 1, Day = "Monday", Time = "07:30 AM - 08:30 AM", ClassName = "Dance Fitness (Any Age)", Style = "Morning Fitness", Instructor = "Ethos Master Team", Level = "All Ages", AvailableSlots = 15, TotalSlots = 25, StudioRoom = "Studio A" },
+                new ClassSchedule { Id = 2, Day = "Monday", Time = "09:00 AM - 10:00 AM", ClassName = "Adults Batch (Beginner)", Style = "Adults Beginner", Instructor = "Ethos Choreographer", Level = "Beginner", AvailableSlots = 12, TotalSlots = 20, StudioRoom = "Studio A" },
+                new ClassSchedule { Id = 3, Day = "Monday", Time = "05:00 PM - 06:00 PM", ClassName = "Kids Batch (4-6 Years)", Style = "Kids Batch", Instructor = "Ethos Kids Lead", Level = "Ages 4-6", AvailableSlots = 10, TotalSlots = 15, StudioRoom = "Studio B" },
+                new ClassSchedule { Id = 4, Day = "Monday", Time = "06:00 PM - 07:00 PM", ClassName = "Adults Batch (Beginner)", Style = "Adults Evening", Instructor = "Ethos Choreographer", Level = "Beginner", AvailableSlots = 8, TotalSlots = 20, StudioRoom = "Studio A" },
+                new ClassSchedule { Id = 5, Day = "Monday", Time = "07:00 PM - 08:00 PM", ClassName = "Kids Batch (6-12 Years)", Style = "Kids Batch", Instructor = "Ethos Kids Lead", Level = "Ages 6-12", AvailableSlots = 10, TotalSlots = 20, StudioRoom = "Studio B" },
+                new ClassSchedule { Id = 6, Day = "Monday", Time = "08:00 PM - 09:00 PM", ClassName = "Adults Batch (Advanced)", Style = "Adults Advanced", Instructor = "Ethos Master Director", Level = "Advanced", AvailableSlots = 6, TotalSlots = 15, StudioRoom = "Studio A" }
+            );
+
+            // Seed Ethos Packages
             modelBuilder.Entity<DancePackage>().HasData(
                 new DancePackage
                 {
                     Id = 1,
-                    Title = "Single Drop-in Pass",
-                    Price = 499,
-                    BillingCycle = "Session",
-                    Type = "Single Pass",
+                    Title = "Free Demo Trial Pass",
+                    Price = 0,
+                    BillingCycle = "1 Session",
+                    Type = "Free Trial",
                     IsPopular = false,
-                    FeaturesJson = "[\"1 Regular Class Session\", \"Valid for any dance style\", \"Studio locker access\", \"7-day validity\"]",
-                    CTA = "Book Drop-In"
+                    FeaturesJson = "[\"Monday - Friday Free Demo Trial\", \"Valid for any 1 batch session\", \"Studio locker access\", \"100% Free - No charges\"]",
+                    CTA = "Book Free Demo"
                 },
                 new DancePackage
                 {
                     Id = 2,
-                    Title = "Monthly All-Access VIP Pass",
-                    Price = 3499,
+                    Title = "Kids Monthly Membership (4-12 Yrs)",
+                    Price = 2000,
                     BillingCycle = "Month",
-                    Type = "Monthly Pass",
+                    Type = "Kids Monthly Pass",
+                    IsPopular = false,
+                    FeaturesJson = "[\"Mon - Fri Kids Batches\", \"Choice of 4-6 Yrs or 6-12 Yrs slot\", \"Stage performance showcase\", \"Regular progress feedback\"]",
+                    CTA = "Join Kids Batch"
+                },
+                new DancePackage
+                {
+                    Id = 3,
+                    Title = "Adults / Fitness Monthly Pass",
+                    Price = 2500,
+                    BillingCycle = "Month",
+                    Type = "Adults Monthly Pass",
                     IsPopular = true,
-                    FeaturesJson = "[\"Unlimited Weekly Regular Classes\", \"1 Free Masterclass Workshop/mo\", \"Priority Studio Slot Booking\", \"10% Off Sangeet Packages\", \"Free Practice Room Hour/week\"]",
-                    CTA = "Get VIP Pass"
+                    FeaturesJson = "[\"Mon - Fri Regular Classes\", \"Dance Fitness / Beginner / Advanced\", \"Choice of Morning or Evening Slot\", \"1 Free Demo Trial included\"]",
+                    CTA = "Join Adults Batch"
                 }
             );
 
@@ -128,13 +149,13 @@ namespace DanceStudio.API.Data
                 new Instructor
                 {
                     Id = 1,
-                    Name = "Sophia Bennett",
-                    Role = "Founder & Master Choreographer",
-                    Specialty = "Commercial Hip-Hop & Stage Concepts",
-                    Bio = "12+ years directing national performances and modern dance ensembles.",
+                    Name = "Ethos Master Team",
+                    Role = "Founder & Choreography Directors",
+                    Specialty = "Dance Fitness, Commercial Hip-Hop & Sangeet",
+                    Bio = "Professional directors bringing high energy training to Kukatpally, Hyderabad.",
                     ImageUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
-                    YearsExperience = 12,
-                    InstagramHandle = "@sophia_movement"
+                    YearsExperience = 10,
+                    InstagramHandle = "@ethosdancestudio"
                 }
             );
         }

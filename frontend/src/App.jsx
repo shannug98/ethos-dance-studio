@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
-import DanceMatcher from './components/DanceMatcher';
 import AboutSection from './components/AboutSection';
 import ClassesSection from './components/ClassesSection';
 import SchedulesSection from './components/SchedulesSection';
@@ -62,11 +61,6 @@ export default function App() {
     setAdminDashboardOpen(true);
   };
 
-  const scrollToQuiz = () => {
-    const el = document.getElementById('quiz');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans">
       
@@ -80,26 +74,25 @@ export default function App() {
       <main>
         <HeroSection
           onBookWorkshop={handleSelectItemForBooking}
-          onScrollToQuiz={scrollToQuiz}
         />
 
-        {/* 1. Dance Matcher Quiz with crisp light contrast block */}
-        <DanceMatcher
-          onBookRecommendedStyle={handleSelectItemForBooking}
-        />
-
-        {/* 2. Vision & Who We Are Split Grid */}
+        {/* 1. Vision & Who We Are Split Grid */}
         <AboutSection />
 
-        {/* 3. Dance Classes Catalog */}
+        {/* 2. Dance Classes Catalog */}
         <ClassesSection
           onSelectClass={handleSelectItemForBooking}
         />
 
-        {/* 4. Live Weekly Timetable Schedule */}
+        {/* 3. Live Weekly Timetable Schedule (Mon-Fri 1 Demo Free) */}
         <SchedulesSection
           schedules={schedules}
           onSelectScheduleSlot={handleSelectItemForBooking}
+        />
+
+        {/* 4. Communitie.in Style Community Gallery & Impact Counters */}
+        <GallerySection
+          onBookPass={handleSelectItemForBooking}
         />
 
         {/* 5. Masterclass Workshops */}
@@ -128,10 +121,7 @@ export default function App() {
           onSuccessPayment={handleSuccessPayment}
         />
 
-        {/* 10. Studio Vibe & Gallery */}
-        <GallerySection />
-
-        {/* 11. Location & Contact Form */}
+        {/* 10. Location & Contact Form */}
         <ContactSection />
       </main>
 

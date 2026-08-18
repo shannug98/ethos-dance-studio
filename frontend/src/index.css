@@ -26,6 +26,29 @@ body {
   background: #1F41FF;
 }
 
+/* Vertical Infinite Marquee Animations for 3 Columns */
+@keyframes verticalScrollUp {
+  0% { transform: translateY(0%); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes verticalScrollDown {
+  0% { transform: translateY(-50%); }
+  100% { transform: translateY(0%); }
+}
+
+.animate-vertical-up {
+  animation: verticalScrollUp 25s linear infinite;
+}
+
+.animate-vertical-down {
+  animation: verticalScrollDown 28s linear infinite;
+}
+
+.animate-vertical-up-slow {
+  animation: verticalScrollUp 32s linear infinite;
+}
+
 /* Figma Site Design Utilities */
 .font-display-giant {
   font-family: 'Encode Sans Condensed', sans-serif;

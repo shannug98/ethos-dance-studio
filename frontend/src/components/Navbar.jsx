@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Menu, X } from 'lucide-react';
+import { Lock, Menu, X, ExternalLink } from 'lucide-react';
 
 export default function Navbar({ onOpenAdmin, onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,6 +13,18 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
           <a href="#classes" className="hover:text-[#D0FBF9] transition-colors">Classes</a>
           <a href="#about" className="hover:text-[#D0FBF9] transition-colors">About Ethos</a>
           <a href="#schedule" className="hover:text-[#D0FBF9] transition-colors">Schedule</a>
+          
+          {/* Gallery opens dedicated ETHOS GALLERY PAGE in a NEW TAB */}
+          <a
+            href="./gallery.html#gallery-page"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#D0FBF9] transition-colors text-[#FF0044] flex items-center gap-1 font-bold"
+          >
+            <span>Gallery</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+
           <a href="#sangeet" className="hover:text-[#D0FBF9] transition-colors">Sangeet Hub</a>
           <a href="#workshops" className="hover:text-[#D0FBF9] transition-colors">Workshops</a>
           <a href="#contact" className="hover:text-[#D0FBF9] transition-colors">Location</a>
@@ -64,6 +76,18 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
           <a href="#classes" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Classes</a>
           <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">About Ethos</a>
           <a href="#schedule" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Schedule</a>
+          
+          <a
+            href="./gallery.html#gallery-page"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-1 text-[#FF0044] font-bold"
+          >
+            <span>Gallery</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+
           <a href="#sangeet" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Sangeet Hub</a>
           <a href="#workshops" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Workshops</a>
           <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Location</a>
