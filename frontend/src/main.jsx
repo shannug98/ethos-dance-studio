@@ -8,6 +8,8 @@ import EthosGalleryPage from './EthosGalleryPage.jsx'
 import SangeetPage from './pages/SangeetPage.jsx'
 import PackagesPage from './pages/PackagesPage.jsx'
 import LocationPage from './pages/LocationPage.jsx'
+import StudentPortalPage from './pages/StudentPortalPage.jsx'
+import AdminPortalPage from './pages/AdminPortalPage.jsx'
 
 const pathname = window.location.pathname.toLowerCase();
 const hash = window.location.hash.toLowerCase();
@@ -26,6 +28,10 @@ if (pathname.includes('events') || hash.includes('events')) {
   ComponentToRender = PackagesPage;
 } else if (pathname.includes('location') || hash.includes('location')) {
   ComponentToRender = LocationPage;
+} else if (pathname.includes('student') || hash.includes('student')) {
+  ComponentToRender = StudentPortalPage;
+} else if (pathname.includes('admin') || hash.includes('admin')) {
+  ComponentToRender = AdminPortalPage;
 }
 
 createRoot(document.getElementById('root')).render(

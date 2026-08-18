@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, Menu, X, UserCheck } from 'lucide-react';
 
-export default function Navbar({ onOpenAdmin, onOpenStudentPortal, onQuickBook }) {
+export default function Navbar({ onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -77,26 +77,30 @@ export default function Navbar({ onOpenAdmin, onOpenStudentPortal, onQuickBook }
             Reserve Spot
           </button>
 
-          {/* Student & Parent Member Portal Login */}
-          <button
-            onClick={onOpenStudentPortal}
+          {/* Student & Parent Member Portal Login (Opens in New Tab) */}
+          <a
+            href="student.html"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-3 py-2 bg-[#1F41FF] hover:bg-[#3b5cff] text-xs font-bold text-white flex items-center gap-1.5 transition-all rounded-sm shadow-md"
             title="Monthly Package Student & Parent Login Portal"
           >
             <UserCheck className="w-3.5 h-3.5 text-[#D0FBF9]" />
             <span className="hidden sm:inline">Member Login</span>
             <span className="sm:hidden">Portal</span>
-          </button>
+          </a>
 
-          {/* Admin Login */}
-          <button
-            onClick={onOpenAdmin}
+          {/* Admin Login (Opens in New Tab) */}
+          <a
+            href="admin.html"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-3 py-2 bg-[#1A1A1A] hover:bg-[#262626] text-xs font-semibold text-white border border-[#404040] flex items-center gap-1.5 transition-all"
             title="Admin Login Portal"
           >
             <Lock className="w-3.5 h-3.5 text-[#D900FF]" />
             <span className="hidden sm:inline">Admin</span>
-          </button>
+          </a>
 
           {/* Clean Stylized Ethos Dance Studio Text Logo -> Navigates to index.html */}
           <a href="index.html" className="flex flex-col text-right pl-2 leading-none">
@@ -183,12 +187,25 @@ export default function Navbar({ onOpenAdmin, onOpenStudentPortal, onQuickBook }
             Location
           </a>
 
-          <button
-            onClick={() => { setMobileMenuOpen(false); onOpenStudentPortal && onOpenStudentPortal(); }}
+          <a
+            href="student.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
             className="w-full py-3 bg-[#1F41FF] text-xs font-bold text-white uppercase text-center block"
           >
             Member Portal Login
-          </button>
+          </a>
+
+          <a
+            href="admin.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full py-3 bg-[#1A1A1A] text-xs font-bold text-white uppercase text-center block border border-[#404040]"
+          >
+            Admin Portal Login
+          </a>
         </div>
       )}
     </nav>

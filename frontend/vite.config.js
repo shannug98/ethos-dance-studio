@@ -16,6 +16,8 @@ export default defineConfig({
         sangeet: resolve(__dirname, 'sangeet.html'),
         packages: resolve(__dirname, 'packages.html'),
         location: resolve(__dirname, 'location.html'),
+        student: resolve(__dirname, 'student.html'),
+        admin: resolve(__dirname, 'admin.html'),
       },
     },
   },
