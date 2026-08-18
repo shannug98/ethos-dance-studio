@@ -8,8 +8,8 @@ export default function InstructorsSection() {
       role: 'Founder & Master Choreographer',
       bio: '12+ years directing national performances and modern dance ensembles.',
       image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-      bgColor: 'bg-[#D900FF]',
-      textColor: 'text-[#000000]'
+      bgColor: 'bg-white',
+      textColor: 'text-slate-900'
     },
     {
       id: 2,
@@ -17,8 +17,8 @@ export default function InstructorsSection() {
       role: 'Founder & Program Director',
       bio: 'Pioneered commercial hip-hop fusion and international masterclass tours.',
       image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
-      bgColor: 'bg-[#D0FBF9]',
-      textColor: 'text-[#000000]'
+      bgColor: 'bg-white',
+      textColor: 'text-slate-900'
     },
     {
       id: 3,
@@ -26,8 +26,8 @@ export default function InstructorsSection() {
       role: 'Lead Street & Urban Director',
       bio: 'Specialist in isolations, popping, and high-energy stage performance.',
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-      bgColor: 'bg-[#1F41FF]',
-      textColor: 'text-[#FFFFFF]'
+      bgColor: 'bg-white',
+      textColor: 'text-slate-900'
     },
     {
       id: 4,
@@ -35,51 +35,51 @@ export default function InstructorsSection() {
       role: 'Head Sangeet Choreographer',
       bio: 'Choreographed over 200+ royal wedding entrance dances & flashmobs.',
       image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
-      bgColor: 'bg-[#FFFFFF]',
-      textColor: 'text-[#000000]'
+      bgColor: 'bg-white',
+      textColor: 'text-slate-900'
     }
   ];
 
   return (
-    <section id="instructors" className="bg-[#000000] text-[#FFFFFF] border-b border-[#333333]">
+    <section id="instructors" className="bg-[#FAF8F5] text-slate-900 border-b border-slate-200">
       
-      {/* Top Founder Header & Quote matching Figma website */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16 border-b border-[#333333]">
-        <h2 className="text-4xl sm:text-6xl font-display-giant text-white uppercase tracking-tight mb-6">
+      {/* Top Founder Header & Quote */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16 border-b border-slate-200">
+        <h2 className="text-4xl sm:text-6xl font-black font-syne text-slate-900 uppercase tracking-tight mb-6">
           OUR FOUNDERS & CHOREOGRAPHERS
         </h2>
         
-        <div className="max-w-2xl border-l-4 border-[#1F41FF] pl-6 py-2 space-y-2">
-          <p className="text-xl sm:text-2xl font-serif italic text-slate-200">
+        <div className="max-w-2xl border-l-4 border-[#0088FF] pl-6 py-2 space-y-2">
+          <p className="text-xl sm:text-2xl font-serif italic text-slate-700">
             "Find your flow, and dance your truth."
           </p>
-          <span className="text-xs font-bold uppercase tracking-widest text-[#D0FBF9] block">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#0088FF] block">
             — SOPHIA BENNETT, FOUNDER
           </span>
         </div>
       </div>
 
-      {/* Founder Grid with Figma Color Blocks */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Founder Grid with Clean Light Cards */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {founders.map((person) => (
-          <div key={person.id} className="border-r border-b border-[#333333] flex flex-col justify-between group">
-            <div className="relative h-72 bg-[#000000] overflow-hidden">
+          <div key={person.id} className="bg-white border border-slate-200 shadow-xl rounded-3xl overflow-hidden flex flex-col justify-between group hover:border-slate-300 transition-all">
+            <div className="relative h-72 bg-slate-100 overflow-hidden">
               <img
                 src={person.image}
                 alt={person.name}
-                className="w-full h-full object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
 
-            {/* Color Accent Card Block */}
-            <div className={`p-6 ${person.bgColor} ${person.textColor} space-y-2 flex-1 flex flex-col justify-center`}>
-              <h3 className="text-2xl font-extrabold uppercase font-display tracking-tight leading-tight">
+            {/* Card Info */}
+            <div className="p-6 space-y-2 flex-1 flex flex-col justify-center">
+              <h3 className="text-2xl font-black uppercase font-syne text-slate-900 tracking-tight leading-tight">
                 {person.name}
               </h3>
-              <div className="text-xs font-bold uppercase tracking-wider opacity-90">
+              <div className="text-xs font-extrabold uppercase tracking-wider text-[#0088FF]">
                 {person.role}
               </div>
-              <p className="text-xs opacity-80 leading-relaxed font-normal">
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 {person.bio}
               </p>
             </div>

@@ -20,13 +20,13 @@ export default function SchedulePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans">
       
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
       <main className="pt-[76px]">
         {/* Page Banner */}
-        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
+        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
           <h1 className="text-4xl sm:text-6xl font-black font-syne">OFFICIAL CLASS TIMETABLE</h1>
           <p className="text-xs sm:text-sm font-extrabold font-outfit tracking-widest mt-2 opacity-90">
             Monday - Friday Weekly Batches • Morning & Evening Sessions

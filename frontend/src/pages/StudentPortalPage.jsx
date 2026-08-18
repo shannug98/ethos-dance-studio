@@ -181,7 +181,7 @@ export default function StudentPortalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans flex flex-col justify-between">
       
       {/* Navbar */}
       <Navbar />

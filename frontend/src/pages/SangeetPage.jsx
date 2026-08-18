@@ -12,15 +12,15 @@ export default function SangeetPage() {
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans">
       
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
       <main className="pt-[76px]">
         {/* Page Banner */}
-        <div className="bg-gradient-to-r from-[#D900FF] via-[#FF0044] to-[#1F41FF] p-8 text-center text-white font-display uppercase tracking-widest">
-          <h1 className="text-4xl sm:text-6xl font-black font-display-giant">ROYAL SANGEET HUB</h1>
-          <p className="text-xs sm:text-sm font-bold tracking-widest mt-2">Custom Wedding & Event Choreography Packages</p>
+        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
+          <h1 className="text-4xl sm:text-6xl font-black font-syne">ROYAL SANGEET HUB</h1>
+          <p className="text-xs sm:text-sm font-extrabold tracking-widest mt-2 opacity-90">Custom Wedding & Event Choreography Packages</p>
         </div>
 
         <SangeethSection onSelectSangeetPackage={(item) => setSelectedItemForBooking(item)} />

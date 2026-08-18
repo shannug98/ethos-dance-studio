@@ -54,80 +54,80 @@ export default function PackagesSection({ onSelectPackage }) {
   ];
 
   return (
-    <section id="packages" className="bg-[#090A0F] text-white py-20 border-b border-white/10">
+    <section id="packages" className="bg-[#FAF8F5] text-slate-900 py-16 sm:py-20 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
-        {/* HEADER SECTION MATCHING IMG 1 */}
+        {/* HEADER SECTION MATCHING LIGHT CREAM THEME */}
         <div className="max-w-3xl mb-12 space-y-4">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 bg-[#00DFD8]/20 border border-[#00DFD8]/40 text-[#00DFD8] text-[10px] font-black uppercase rounded-full">
+            <span className="px-3 py-1 bg-[#0088FF]/10 border border-[#0088FF]/30 text-[#0088FF] text-[10px] font-black uppercase rounded-full">
               • Open Now
             </span>
-            <span className="px-3 py-1 bg-[#7928CA]/20 border border-[#7928CA]/40 text-[#7928CA] text-[10px] font-black uppercase rounded-full">
+            <span className="px-3 py-1 bg-[#FF0055]/10 border border-[#FF0055]/30 text-[#FF0055] text-[10px] font-black uppercase rounded-full">
               August Pass
             </span>
           </div>
 
-          <h2 className="text-4xl sm:text-6xl font-black font-syne uppercase tracking-tight text-white">
-            Spot the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00DFD8] to-[#FF0055] italic">Unexpected.</span>
+          <h2 className="text-4xl sm:text-6xl font-black font-syne uppercase tracking-tight text-slate-900">
+            Spot the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0088FF] to-[#FF0055] italic font-serif">Unexpected.</span>
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base font-medium leading-relaxed">
+          <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
             Dance isn't about expensive gear — it's about learning to notice rhythm, mastering choreography, and capturing the moment on stage.
           </p>
 
           {/* STATS ROW */}
           <div className="flex items-center gap-8 pt-4">
             <div>
-              <div className="text-2xl font-black font-syne text-[#00DFD8]">₹2,000</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Monthly Entry</div>
+              <div className="text-2xl font-black font-syne text-[#0088FF]">₹2,000</div>
+              <div className="text-[10px] text-slate-500 font-bold uppercase">Monthly Entry</div>
             </div>
-            <div className="border-l border-white/10 pl-8">
-              <div className="text-2xl font-black font-syne text-white">28 days</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase">To Learn & Perform</div>
+            <div className="border-l border-slate-300 pl-8">
+              <div className="text-2xl font-black font-syne text-slate-900">28 days</div>
+              <div className="text-[10px] text-slate-500 font-bold uppercase">To Learn & Perform</div>
             </div>
-            <div className="border-l border-white/10 pl-8">
+            <div className="border-l border-slate-300 pl-8">
               <div className="text-2xl font-black font-syne text-[#FF0055]">Aug 2026</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Current Batch</div>
+              <div className="text-[10px] text-slate-500 font-bold uppercase">Current Batch</div>
             </div>
           </div>
 
           {/* COUNTDOWN TIMER BAR */}
-          <div className="bg-[#12131A] border border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
+          <div className="bg-white border border-slate-200 shadow-md rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
             <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block">ENROLLMENT CLOSES IN</span>
-              <span className="text-xs font-bold text-white">Submit your registration before Aug 28</span>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500 block">ENROLLMENT CLOSES IN</span>
+              <span className="text-xs font-bold text-slate-900">Submit your registration before Aug 28</span>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-center">
-                <div className="text-lg font-black font-syne text-[#00DFD8]">{timeLeft.days}</div>
-                <div className="text-[8px] text-slate-400 uppercase font-bold">DAYS</div>
+              <div className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-center">
+                <div className="text-lg font-black font-syne text-[#0088FF]">{timeLeft.days}</div>
+                <div className="text-[8px] text-slate-500 uppercase font-bold">DAYS</div>
               </div>
-              <div className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-center">
-                <div className="text-lg font-black font-syne text-[#00DFD8]">{String(timeLeft.hours).padStart(2, '0')}</div>
-                <div className="text-[8px] text-slate-400 uppercase font-bold">HRS</div>
+              <div className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-center">
+                <div className="text-lg font-black font-syne text-[#0088FF]">{String(timeLeft.hours).padStart(2, '0')}</div>
+                <div className="text-[8px] text-slate-500 uppercase font-bold">HRS</div>
               </div>
-              <div className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-center">
-                <div className="text-lg font-black font-syne text-[#00DFD8]">{String(timeLeft.mins).padStart(2, '0')}</div>
-                <div className="text-[8px] text-slate-400 uppercase font-bold">MIN</div>
+              <div className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-center">
+                <div className="text-lg font-black font-syne text-[#0088FF]">{String(timeLeft.mins).padStart(2, '0')}</div>
+                <div className="text-[8px] text-slate-500 uppercase font-bold">MIN</div>
               </div>
-              <div className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-center">
+              <div className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-center">
                 <div className="text-lg font-black font-syne text-[#FF0055]">{String(timeLeft.secs).padStart(2, '0')}</div>
-                <div className="text-[8px] text-slate-400 uppercase font-bold">SEC</div>
+                <div className="text-[8px] text-slate-500 uppercase font-bold">SEC</div>
               </div>
             </div>
           </div>
 
         </div>
 
-        {/* CARDS GRID MATCHING IMG 1 */}
+        {/* CARDS GRID MATCHING LIGHT THEME */}
         <div className="space-y-16">
           {ethosPackages.map((pkg) => (
             <div key={pkg.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               
               {/* LEFT CARD: REEL / VIDEO PREVIEW CARD */}
-              <div className="lg:col-span-5 bg-[#12131A] border border-white/10 rounded-3xl p-4 flex flex-col justify-between relative overflow-hidden group min-h-[460px]">
+              <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col justify-between relative overflow-hidden group min-h-[460px] shadow-xl">
                 <img
                   src={pkg.videoThumbnail}
                   alt={pkg.title}
@@ -136,7 +136,7 @@ export default function PackagesSection({ onSelectPackage }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-black/40 rounded-3xl"></div>
 
                 {/* Top User Bar */}
-                <div className="relative z-10 flex items-center gap-3 p-2 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 max-w-fit">
+                <div className="relative z-10 flex items-center gap-3 p-2 bg-black/50 backdrop-blur-md rounded-2xl border border-white/10 max-w-fit">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#FF0055] to-[#7928CA] flex items-center justify-center font-bold text-xs text-white">
                     E
                   </div>
@@ -148,76 +148,79 @@ export default function PackagesSection({ onSelectPackage }) {
 
                 {/* Center Play Button */}
                 <div className="relative z-10 flex justify-center items-center my-auto">
-                  <button className="w-16 h-16 rounded-full bg-[#FF0055] text-white flex items-center justify-center shadow-2xl shadow-[#FF0055]/50 group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-[#FF0055] transition-all cursor-pointer shadow-2xl">
                     <Play className="w-7 h-7 fill-white translate-x-0.5" />
-                  </button>
+                  </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="relative z-10 flex justify-between items-center pt-4 border-t border-white/10">
-                  <span className="text-xs font-bold text-slate-200">Ethos Studio Showcase Reel</span>
-                  <ExternalLink className="w-4 h-4 text-slate-400 hover:text-white cursor-pointer" />
+                {/* Bottom Video Badge */}
+                <div className="relative z-10 p-3 bg-black/60 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs text-slate-200 font-semibold">
+                    <Video className="w-4 h-4 text-[#00DFD8]" />
+                    <span>Watch Batch Demo Reel</span>
+                  </div>
+                  <span className="text-[10px] text-[#00DFD8] font-bold uppercase tracking-wider">0:45 HD</span>
                 </div>
               </div>
 
-              {/* RIGHT CARD: CHECKOUT & BENEFIT CARD MATCHING IMG 1 */}
-              <div className="lg:col-span-7 bg-[#12131A] border border-white/15 rounded-3xl p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+              {/* RIGHT CARD: PASS CHECKOUT CARD */}
+              <div className="lg:col-span-7 bg-white text-slate-900 border border-slate-200 shadow-xl shadow-slate-200/60 rounded-3xl p-8 flex flex-col justify-between relative">
                 
-                <div>
-                  {/* Price Banner */}
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-5xl font-black font-syne text-white">₹{pkg.price}</span>
-                    <span className="text-xs text-slate-400 font-bold uppercase">/ {pkg.billingCycle}</span>
+                {pkg.isPopular && (
+                  <div className="absolute top-6 right-6">
+                    <span className="px-3.5 py-1.5 bg-[#FF0055] text-white text-[10px] font-black uppercase tracking-wider rounded-full shadow-md">
+                      POPULAR BATCH
+                    </span>
+                  </div>
+                )}
+
+                <div className="space-y-6">
+                  <div>
+                    <span className="text-xs font-black text-[#FF0055] uppercase tracking-widest block mb-1">
+                      {pkg.type}
+                    </span>
+                    <h3 className="text-3xl font-black font-syne text-slate-900 uppercase">
+                      {pkg.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-slate-500 mt-1">
+                      {pkg.validity}
+                    </p>
                   </div>
 
-                  <p className="text-xs text-slate-300 font-medium mb-6">
-                    {pkg.validity}
-                  </p>
-
-                  {/* Buttons */}
-                  <div className="space-y-3 mb-8">
-                    <button
-                      onClick={() => onSelectPackage && onSelectPackage({ id: pkg.id, title: pkg.title, price: pkg.price, type: pkg.type })}
-                      className="w-full py-4 bg-[#00DFD8] hover:bg-[#00DFD8]/90 text-black text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-xl shadow-[#00DFD8]/20 flex items-center justify-center gap-2"
-                    >
-                      <span>Register & Pay ₹{pkg.price}</span>
-                      <span>→</span>
-                    </button>
-
-                    <button
-                      onClick={() => onSelectPackage && onSelectPackage({ id: 401, title: 'Free Demo Trial Pass', price: 0, type: 'Free Trial' })}
-                      className="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/15 text-white text-xs font-extrabold uppercase tracking-wider rounded-2xl transition-all flex items-center justify-center gap-2"
-                    >
-                      <span>Book Free Demo Trial</span>
-                      <span>→</span>
-                    </button>
+                  {/* Top Prize Perk Highlight Box */}
+                  <div className="p-4 bg-[#FFF5F7] border border-[#FF0055]/30 rounded-2xl text-xs font-bold text-[#FF0055]">
+                    {pkg.topPrize}
                   </div>
 
-                  {/* Checkmark Feature List */}
-                  <div className="space-y-3 mb-8">
-                    {pkg.features.map((feat, i) => (
-                      <div key={i} className="flex items-center gap-3 text-xs font-bold text-slate-200">
-                        <CheckCircle2 className="w-4 h-4 text-[#00DFD8] shrink-0" />
+                  {/* Feature Checkmarks List */}
+                  <div className="space-y-3 pt-2">
+                    <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">WHAT'S INCLUDED:</h4>
+                    {pkg.features.map((feat, idx) => (
+                      <div key={idx} className="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                        <CheckCircle2 className="w-5 h-5 text-[#0088FF] shrink-0" />
                         <span>{feat}</span>
                       </div>
                     ))}
                   </div>
-
-                  {/* Top Prize Box */}
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6">
-                    <div className="text-[10px] font-extrabold text-[#00DFD8] uppercase tracking-wider mb-1">
-                      {pkg.topPrize.split(':')[0]}
-                    </div>
-                    <div className="text-xs font-bold text-white">
-                      {pkg.topPrize.split(':')[1]}
-                    </div>
-                  </div>
                 </div>
 
-                {/* Footer Caption */}
-                <div className="pt-4 border-t border-white/10 flex items-center justify-center gap-2 text-[10px] text-slate-400 font-bold uppercase">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#00DFD8]" />
-                  <span>Secure payment - UPI, Credit/Debit Card & Netbanking</span>
+                {/* Pricing & Register CTA Footer */}
+                <div className="pt-8 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
+                  <div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-black font-syne text-slate-900">₹{pkg.price}</span>
+                      <span className="text-xs text-slate-500 font-bold">/{pkg.billingCycle}</span>
+                    </div>
+                    <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">✓ Includes taxes & demo trial</span>
+                  </div>
+
+                  <button
+                    onClick={() => onSelectPackage && onSelectPackage(pkg)}
+                    className="py-4 px-8 bg-[#0088FF] hover:bg-[#0077EE] text-white text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-lg shadow-[#0088FF]/30 flex items-center justify-center gap-2 group"
+                  >
+                    <span>Register & Pay ₹{pkg.price}</span>
+                    <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
                 </div>
 
               </div>
