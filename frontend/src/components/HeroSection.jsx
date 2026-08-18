@@ -6,11 +6,11 @@ export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
   return (
     <section className="relative min-h-screen pt-[76px] bg-[#000000] text-white flex flex-col justify-between overflow-hidden">
       
-      {/* Hero Central Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 w-full relative z-10 my-auto py-16">
+      {/* Hero Central Content Aligned to Left Edge */}
+      <div className="w-full relative z-10 my-auto py-12 px-6 sm:px-12 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left Text Block */}
+          {/* Left Text Block - Aligned to Far Left */}
           <div className="lg:col-span-7 space-y-8 text-left">
             
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FF0044] text-white text-xs font-extrabold uppercase tracking-widest">
@@ -45,8 +45,8 @@ export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
 
           </div>
 
-          {/* Right Official Logo Display (Exact Logo Card) */}
-          <div className="lg:col-span-5 flex items-center justify-center">
+          {/* Right Official Logo Display Card */}
+          <div className="lg:col-span-5 flex items-center justify-center lg:justify-end">
             <div className="p-8 bg-[#111111] border-2 border-[#333333] max-w-md w-full text-center space-y-4 shadow-2xl relative group hover:border-[#FF0044] transition-all">
               <div className="w-64 h-64 sm:w-80 sm:h-80 mx-auto">
                 <img
