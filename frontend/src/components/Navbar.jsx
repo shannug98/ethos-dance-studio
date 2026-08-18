@@ -30,20 +30,16 @@ export default function Navbar({ onQuickBook }) {
     window.location.reload();
   };
 
-  // If user is logged in: links navigate in SAME TAB (_self). If guest: links open in NEW TAB (_blank)
-  const linkTarget = loggedInUser ? '_self' : '_blank';
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#000000] border-b border-[#333333] h-[76px]">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* Left Nav Links - Dynamic target (_self when logged in, _blank when guest) */}
+        {/* Left Nav Links - Open seamlessly in the SAME TAB (_self) */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-xs lg:text-sm font-semibold tracking-tight text-white uppercase">
           
           <a
             href="events.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             className="hover:text-[#D0FBF9] transition-colors font-bold text-[#FF0044]"
           >
             Events
@@ -51,8 +47,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="schedule.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             className="hover:text-[#D0FBF9] transition-colors"
           >
             Schedule
@@ -60,8 +55,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="gallery.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             className="hover:text-[#D0FBF9] transition-colors"
           >
             Gallery
@@ -69,8 +63,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="sangeet.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             className="hover:text-[#D0FBF9] transition-colors"
           >
             Sangeet Hub
@@ -78,8 +71,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="packages.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             className="hover:text-[#D0FBF9] transition-colors"
           >
             Passes
@@ -87,8 +79,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="location.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             className="hover:text-[#D0FBF9] transition-colors"
           >
             Location
@@ -134,12 +125,11 @@ export default function Navbar({ onQuickBook }) {
               </button>
             </div>
           ) : (
-            /* IF NOT LOGGED IN: SHOW MEMBER LOGIN & ADMIN BUTTONS */
+            /* IF NOT LOGGED IN: SHOW MEMBER LOGIN & ADMIN BUTTONS (OPEN IN SAME TAB) */
             <>
               <a
                 href="student.html"
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_self"
                 className="px-3 py-2 bg-[#1F41FF] hover:bg-[#3b5cff] text-xs font-bold text-white flex items-center gap-1.5 transition-all rounded-sm shadow-md"
                 title="Monthly Package Student & Parent Login Portal"
               >
@@ -150,8 +140,7 @@ export default function Navbar({ onQuickBook }) {
 
               <a
                 href="admin.html"
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_self"
                 className="px-3 py-2 bg-[#1A1A1A] hover:bg-[#262626] text-xs font-semibold text-white border border-[#404040] flex items-center gap-1.5 transition-all"
                 title="Admin Login Portal"
               >
@@ -162,7 +151,7 @@ export default function Navbar({ onQuickBook }) {
           )}
 
           {/* Clean Stylized Ethos Dance Studio Text Logo -> Navigates to index.html */}
-          <a href="index.html" target={linkTarget} className="flex flex-col text-right pl-2 leading-none">
+          <a href="index.html" target="_self" className="flex flex-col text-right pl-2 leading-none">
             <span className="font-display-giant text-2xl sm:text-3xl text-white tracking-tighter">
               ETHOS<span className="text-[#FF0044]">.</span>
             </span>
@@ -188,8 +177,7 @@ export default function Navbar({ onQuickBook }) {
           
           <a
             href="events.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-[#FF0044] font-bold"
           >
@@ -198,8 +186,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="schedule.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             onClick={() => setMobileMenuOpen(false)}
             className="block hover:text-[#D0FBF9]"
           >
@@ -208,8 +195,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="gallery.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             onClick={() => setMobileMenuOpen(false)}
             className="block hover:text-[#D0FBF9]"
           >
@@ -218,8 +204,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="sangeet.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             onClick={() => setMobileMenuOpen(false)}
             className="block hover:text-[#D0FBF9]"
           >
@@ -228,8 +213,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="packages.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             onClick={() => setMobileMenuOpen(false)}
             className="block hover:text-[#D0FBF9]"
           >
@@ -238,8 +222,7 @@ export default function Navbar({ onQuickBook }) {
 
           <a
             href="location.html"
-            target={linkTarget}
-            rel="noopener noreferrer"
+            target="_self"
             onClick={() => setMobileMenuOpen(false)}
             className="block hover:text-[#D0FBF9]"
           >
@@ -269,8 +252,7 @@ export default function Navbar({ onQuickBook }) {
             <>
               <a
                 href="student.html"
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_self"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full py-3 bg-[#1F41FF] text-xs font-bold text-white uppercase text-center block"
               >
@@ -279,8 +261,7 @@ export default function Navbar({ onQuickBook }) {
 
               <a
                 href="admin.html"
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_self"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full py-3 bg-[#1A1A1A] text-xs font-bold text-white uppercase text-center block border border-[#404040]"
               >
