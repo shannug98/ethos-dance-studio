@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
+import EventTickerBanner from './components/EventTickerBanner';
 import HeroSection from './components/HeroSection';
 import AboutSection from './components/AboutSection';
 import WorkshopsSection from './components/WorkshopsSection';
@@ -44,18 +45,18 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans">
       
-      {/* Global Navbar with links that open dedicated pages in a NEW TAB */}
+      {/* Global Navbar */}
       <Navbar
         onOpenAdmin={() => setAdminLoginOpen(true)}
         onQuickBook={handleSelectItemForBooking}
       />
 
-      {/* 🌟 HOME PAGE ONLY CONTAINS:
-          1. Hero Section (First image + FIND YOUR FLOW + Logo + Reserve Demo)
-          2. About Ethos Section (Vision & Who We Are)
-          3. Upcoming Events & Masterclass Workshops Section
-          4. Footer
-      */}
+      {/* 🚀 Sliding Upcoming Event Notification Banner placed right below Navigation Panel */}
+      <div className="pt-[76px]">
+        <EventTickerBanner onSelectEvent={handleSelectItemForBooking} />
+      </div>
+
+      {/* 🌟 HOME PAGE CONTENT */}
       <main>
         {/* 1. Hero Section (First Image + FIND YOUR FLOW) */}
         <HeroSection
