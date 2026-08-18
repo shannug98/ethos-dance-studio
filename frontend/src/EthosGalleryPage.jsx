@@ -97,14 +97,21 @@ export default function EthosGalleryPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#131415] font-sans selection:bg-[#FF0044] selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans overflow-x-hidden">
       
       {/* Standard Unified Navbar */}
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
       <main className="pt-[76px]">
+        
+        {/* Page Banner */}
+        <div className="bg-gradient-to-r from-[#FF0044] via-[#1F41FF] to-[#D900FF] p-8 text-center text-white font-display uppercase tracking-widest">
+          <h1 className="text-4xl sm:text-6xl font-black font-display-giant">ETHOS COMMUNITIES & GALLERY</h1>
+          <p className="text-xs sm:text-sm font-bold tracking-widest mt-2">Hyderabad's Premier Dance Tribe & WhatsApp Clubs</p>
+        </div>
+
         {/* 🌟 3-COLUMN VERTICAL MARQUEE HERO SECTION */}
-        <section className="py-8 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* Left Side Text Content */}
           <div className="lg:col-span-6 space-y-4 sm:space-y-6 text-left">
@@ -114,32 +121,32 @@ export default function EthosGalleryPage() {
               <span>ETHOS CLUBS & COMMUNITY LINKS</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black font-display tracking-tight text-[#050505] leading-[1.02] sm:leading-[0.95] uppercase">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black font-display tracking-tight text-white leading-[1.02] sm:leading-[0.95] uppercase">
               Click in, vibe out— <br className="hidden sm:block" />
               <span className="text-[#FF0044]">your next favourite</span> <br className="hidden sm:block" />
               dance club is waiting!
             </h1>
 
             {/* Joined Counter Badge with Overlapping Avatars */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-[#E0D9CD] rounded-full shadow-sm">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#1A1A1A] border border-[#333333] rounded-full shadow-md">
               <div className="flex -space-x-2">
-                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="" />
-                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="" />
-                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="" />
+                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-black object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="" />
+                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-black object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="" />
+                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-black object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="" />
               </div>
-              <span className="text-[11px] sm:text-xs font-black text-slate-800 uppercase tracking-wide">
+              <span className="text-[11px] sm:text-xs font-black text-slate-200 uppercase tracking-wide">
                 50K+ Joined Already 🔥
               </span>
             </div>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-lg">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal max-w-lg">
               Hyderabad just got a lot more fun! Pick your favourite dance club below, join the WhatsApp group with like-minded dancers, and be part of the Ethos tribe.
             </p>
 
             <div className="pt-2">
               <a
                 href="#explore-clubs"
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 bg-[#111111] text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider rounded-full shadow-xl hover:bg-[#FF0044] transition-all"
+                className="btn-cyan inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 text-xs sm:text-sm uppercase font-bold tracking-wider rounded-full shadow-2xl"
               >
                 <span>Explore All Clubs</span>
                 <span>🥳</span>
@@ -149,16 +156,16 @@ export default function EthosGalleryPage() {
           </div>
 
           {/* Right Side: Animated Image Columns */}
-          <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 h-[420px] sm:h-[550px] overflow-hidden relative rounded-2xl sm:rounded-3xl bg-[#F0EBE1] p-2.5 sm:p-3 border-2 border-[#E2DACD] shadow-inner">
+          <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 h-[420px] sm:h-[550px] overflow-hidden relative rounded-2xl sm:rounded-3xl bg-[#0F0F0F] p-2.5 sm:p-3 border-2 border-[#262626] shadow-2xl">
             
             {/* Top & Bottom Soft Fading Gradients */}
-            <div className="absolute top-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-b from-[#F0EBE1] to-transparent z-10 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-[#F0EBE1] to-transparent z-10 pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-b from-[#0F0F0F] to-transparent z-10 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-[#0F0F0F] to-transparent z-10 pointer-events-none" />
 
             {/* COLUMN 1: MOVES UP CONTINUOUSLY */}
             <div className="flex flex-col gap-2.5 sm:gap-4 animate-vertical-up">
               {[...col1Photos, ...col1Photos].map((imgUrl, i) => (
-                <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
+                <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border border-[#333333] shadow-lg bg-black shrink-0">
                   <img src={imgUrl} alt="" className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 hover:scale-110 transition-all duration-500" />
                 </div>
               ))}
@@ -167,7 +174,7 @@ export default function EthosGalleryPage() {
             {/* COLUMN 2: MOVES DOWN CONTINUOUSLY */}
             <div className="flex flex-col gap-2.5 sm:gap-4 animate-vertical-down">
               {[...col2Photos, ...col2Photos].map((imgUrl, i) => (
-                <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
+                <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border border-[#333333] shadow-lg bg-black shrink-0">
                   <img src={imgUrl} alt="" className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 hover:scale-110 transition-all duration-500" />
                 </div>
               ))}
@@ -176,7 +183,7 @@ export default function EthosGalleryPage() {
             {/* COLUMN 3: MOVES UP CONTINUOUSLY (Visible on Tablet/Desktop md+) */}
             <div className="hidden md:flex flex-col gap-2.5 sm:gap-4 animate-vertical-up-slow">
               {[...col3Photos, ...col3Photos].map((imgUrl, i) => (
-                <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white shadow-md bg-black shrink-0">
+                <div key={i} className="w-full h-36 sm:h-44 rounded-xl sm:rounded-2xl overflow-hidden border border-[#333333] shadow-lg bg-black shrink-0">
                   <img src={imgUrl} alt="" className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 hover:scale-110 transition-all duration-500" />
                 </div>
               ))}
@@ -187,16 +194,16 @@ export default function EthosGalleryPage() {
         </section>
 
         {/* 🚀 CLUBS & COMMUNITY GROUPS GRID */}
-        <section id="explore-clubs" className="py-12 sm:py-20 px-4 sm:px-8 max-w-7xl mx-auto border-t border-[#EAE6DF]">
+        <section id="explore-clubs" className="py-12 sm:py-20 px-4 sm:px-8 max-w-7xl mx-auto border-t border-[#262626]">
           
           <div className="text-center space-y-3 mb-10 sm:mb-14">
             <span className="px-3 py-1 bg-[#1F41FF] text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest rounded-full inline-block">
               EXPLORE DANCE CLUBS IN HYDERABAD
             </span>
-            <h2 className="text-3xl sm:text-6xl font-black font-display text-black uppercase tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-6xl font-black font-display text-white uppercase tracking-tight leading-tight">
               PICK YOUR DANCE TRIBE
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto font-normal px-2">
+            <p className="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto font-normal px-2">
               Join active WhatsApp groups, meet fellow dancers, participate in weekend jam sessions, and showcase your passion!
             </p>
           </div>
@@ -205,7 +212,7 @@ export default function EthosGalleryPage() {
             {ethosClubs.map((club) => (
               <div
                 key={club.id}
-                className="bg-white border-2 border-[#EBE7DF] rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl hover:border-[#FF0044] transition-all duration-300 flex flex-col justify-between group"
+                className="bg-[#111111] border border-[#262626] rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-[#FF0044] transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
                   <div className="relative h-52 sm:h-64 overflow-hidden bg-black">
@@ -214,7 +221,7 @@ export default function EthosGalleryPage() {
                       alt={club.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-1 bg-black/80 text-white text-[10px] sm:text-xs font-extrabold uppercase rounded-full backdrop-blur-md">
+                    <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-1 bg-black/80 text-white text-[10px] sm:text-xs font-extrabold uppercase rounded-full backdrop-blur-md border border-white/10">
                       {club.tag}
                     </span>
                   </div>
@@ -225,10 +232,10 @@ export default function EthosGalleryPage() {
                       <span>{club.members}</span>
                     </div>
 
-                    <h3 className="text-lg sm:text-xl font-black text-black uppercase font-display leading-snug">{club.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">{club.desc}</p>
+                    <h3 className="text-lg sm:text-xl font-black text-white uppercase font-display leading-snug">{club.title}</h3>
+                    <p className="text-xs text-slate-400 leading-relaxed font-normal">{club.desc}</p>
                     
-                    <div className="text-[11px] sm:text-xs font-bold text-slate-500 pt-2 border-t border-slate-100">
+                    <div className="text-[11px] sm:text-xs font-bold text-slate-400 pt-2 border-t border-[#222222]">
                       🕒 {club.schedule}
                     </div>
                   </div>
