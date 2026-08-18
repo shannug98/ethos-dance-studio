@@ -8,41 +8,28 @@ export default function HeroSection({ onBookWorkshop }) {
   return (
     <section className="relative pt-[76px] bg-[#090A0F] text-white flex flex-col justify-between overflow-hidden">
       
-      {/* HERO CONTENT: MOBILE FLUID COLUMN (IMAGE TOP, TEXT DOWN) & DESKTOP 2-COLUMN */}
+      {/* HERO CONTENT: MOBILE FLUID COLUMN (LOGO TOP, TEXT DOWN) & DESKTOP 2-COLUMN */}
       <div className="max-w-7xl mx-auto w-full py-8 sm:py-16 px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* 1. HERO LOGO EMBLEM CARD (REPLACED DANCER IMAGE WITH ETHOS LOGO - IMG 3) */}
-          <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center">
-            <div className="relative w-full max-w-lg rounded-3xl overflow-hidden glass-card p-6 group border border-white/15 shadow-2xl bg-gradient-to-b from-[#161722] to-[#0C0D12]">
-              <div className="relative h-[280px] sm:h-[380px] lg:h-[420px] rounded-2xl overflow-hidden bg-black/40 border border-white/10 flex flex-col items-center justify-center p-8 text-center group-hover:border-[#FF0055]/50 transition-colors duration-500">
-                
-                {/* Ambient Radial Glow */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#FF0055]/20 via-transparent to-[#00DFD8]/20 blur-xl"></div>
-                
-                {/* Official Ethos Emblem Logo (img 3) */}
-                <div className="relative z-10 w-48 sm:w-64 lg:w-72 max-h-[260px] flex items-center justify-center filter drop-shadow-[0_0_30px_rgba(255,0,85,0.4)] group-hover:scale-105 transition-transform duration-500">
-                  <img
-                    src={ethosPureLogo}
-                    alt="Ethos Dance Studio Official Logo"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+          {/* 1. HERO LOGO EMBLEM (TRANSPARENT NO CARD WRAPPER - MATCHING USER DIRECTIVE) */}
+          <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center items-center relative py-4">
+            
+            {/* Ambient Glowing Background Effect Behind Logo */}
+            <div className="absolute w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] bg-gradient-to-tr from-[#FF0055]/30 via-transparent to-[#00DFD8]/20 rounded-full blur-3xl pointer-events-none -z-0"></div>
 
-                {/* Bottom Live Sessions Bar */}
-                <div className="absolute bottom-4 left-4 right-4 p-3.5 bg-black/60 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-between z-20">
-                  <div className="text-left">
-                    <span className="text-[10px] font-extrabold text-[#00DFD8] uppercase tracking-wider block">WEEKLY BATCHES LIVE</span>
-                    <strong className="text-xs font-bold text-white">Mon-Fri Morning & Evening Sessions</strong>
-                  </div>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#00DFD8] animate-ping"></span>
-                </div>
-
-              </div>
+            {/* Official Transparent Ethos Emblem Logo */}
+            <div className="relative z-10 w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[480px] flex items-center justify-center p-2 filter drop-shadow-[0_0_40px_rgba(255,0,85,0.45)] hover:scale-105 transition-transform duration-500">
+              <img
+                src={ethosPureLogo}
+                alt="Ethos Dance Studio Emblem Logo"
+                className="w-full h-auto object-contain bg-transparent"
+              />
             </div>
+
           </div>
 
-          {/* 2. HERO TEXT MATTER (FOR MOBILE: RENDERED DOWN BELOW IMAGE) */}
+          {/* 2. HERO TEXT MATTER (FOR MOBILE: RENDERED DOWN BELOW LOGO) */}
           <div className="lg:col-span-6 order-2 lg:order-1 space-y-5 text-left">
             
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#FF0055]/20 border border-[#FF0055]/40 text-[#FF0055] text-[10px] sm:text-xs font-extrabold uppercase tracking-widest rounded-full">
