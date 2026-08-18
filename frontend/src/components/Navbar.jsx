@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Menu, X, ExternalLink } from 'lucide-react';
+import { Lock, Menu, X } from 'lucide-react';
 
 export default function Navbar({ onOpenAdmin, onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -8,71 +8,61 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#000000] border-b border-[#333333] h-[76px]">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* Left Nav Links - All standard white text opening dedicated pages in new tabs */}
+        {/* Left Nav Links - Clean links opening dedicated pages in new tabs */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-xs lg:text-sm font-semibold tracking-tight text-white uppercase">
           
           <a
             href="classes.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+            className="hover:text-[#D0FBF9] transition-colors"
           >
-            <span>Classes</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
+            Classes
           </a>
 
-          <a href="#about" className="hover:text-[#D0FBF9] transition-colors">About Ethos</a>
-          
           <a
             href="schedule.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+            className="hover:text-[#D0FBF9] transition-colors"
           >
-            <span>Schedule</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
+            Schedule
           </a>
 
           <a
             href="gallery.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+            className="hover:text-[#D0FBF9] transition-colors"
           >
-            <span>Gallery</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
+            Gallery
           </a>
 
           <a
             href="sangeet.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+            className="hover:text-[#D0FBF9] transition-colors"
           >
-            <span>Sangeet Hub</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
+            Sangeet Hub
           </a>
-
-          <a href="#workshops" className="hover:text-[#D0FBF9] transition-colors">Workshops</a>
 
           <a
             href="packages.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+            className="hover:text-[#D0FBF9] transition-colors"
           >
-            <span>Passes</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
+            Passes
           </a>
 
           <a
             href="location.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
+            className="hover:text-[#D0FBF9] transition-colors"
           >
-            <span>Location</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
+            Location
           </a>
 
         </div>
@@ -126,23 +116,19 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between hover:text-[#D0FBF9]"
+            className="block hover:text-[#D0FBF9]"
           >
-            <span>Classes</span>
-            <ExternalLink className="w-4 h-4 text-slate-400" />
+            Classes
           </a>
 
-          <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">About Ethos</a>
-          
           <a
             href="schedule.html"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between hover:text-[#D0FBF9]"
+            className="block hover:text-[#D0FBF9]"
           >
-            <span>Schedule</span>
-            <ExternalLink className="w-4 h-4 text-slate-400" />
+            Schedule
           </a>
 
           <a
@@ -150,10 +136,9 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between hover:text-[#D0FBF9]"
+            className="block hover:text-[#D0FBF9]"
           >
-            <span>Gallery</span>
-            <ExternalLink className="w-4 h-4 text-slate-400" />
+            Gallery
           </a>
 
           <a
@@ -161,23 +146,19 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between hover:text-[#D0FBF9]"
+            className="block hover:text-[#D0FBF9]"
           >
-            <span>Sangeet Hub</span>
-            <ExternalLink className="w-4 h-4 text-slate-400" />
+            Sangeet Hub
           </a>
-
-          <a href="#workshops" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Workshops</a>
 
           <a
             href="packages.html"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between hover:text-[#D0FBF9]"
+            className="block hover:text-[#D0FBF9]"
           >
-            <span>Passes</span>
-            <ExternalLink className="w-4 h-4 text-slate-400" />
+            Passes
           </a>
 
           <a
@@ -185,10 +166,9 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between hover:text-[#D0FBF9]"
+            className="block hover:text-[#D0FBF9]"
           >
-            <span>Location</span>
-            <ExternalLink className="w-4 h-4 text-slate-400" />
+            Location
           </a>
 
           <button
