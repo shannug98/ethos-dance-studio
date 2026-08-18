@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BookingPaymentModal from '../components/BookingPaymentModal';
@@ -8,7 +8,14 @@ import { User, Lock, Calendar, Award, Image, Settings, CheckCircle2, Key, AlertT
 const API_URL = 'http://localhost:5000';
 
 export default function StudentPortalPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return localStorage.getItem('ethos_logged_in_user') !== null;
+    } catch {
+      return false;
+    }
+  });
+
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('attendance'); // 'attendance', 'renewal', 'performance', 'gallery', 'profile'
@@ -22,30 +29,50 @@ export default function StudentPortalPage() {
   const [confirmedRenewal, setConfirmedRenewal] = useState(null);
 
   // Student Profile & Pass Data
-  const [studentInfo, setStudentInfo] = useState({
-    name: 'Aarav Reddy',
-    age: '12 Years',
-    parentName: 'Suresh Reddy',
-    packageTitle: 'Monthly Adult/Kids Beginner Pass',
-    totalClasses: 20,
-    classesAttended: 12,
-    classesLeft: 8,
-    passExpiryDate: 'August 23, 2026 (In 5 Days)',
-    daysRemaining: 5,
-    attendanceRate: '90%',
-    rhythmScore: '94%',
-    stageConfidence: '92%',
-    teacherNotes: 'Aarav is performing exceptionally well in Hip-Hop isolations and Bollywood fusion sync. Highly recommended for the upcoming stage showcase!',
-    email: 'student.aarav@ethosdance.com',
-    phone: '+91 98765 12345',
-    profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+  const [studentInfo, setStudentInfo] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ethos_logged_in_user');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      name: 'Aarav Reddy',
+      age: '12 Years',
+      parentName: 'Suresh Reddy',
+      packageTitle: 'Monthly Adult/Kids Beginner Pass',
+      totalClasses: 20,
+      classesAttended: 12,
+      classesLeft: 8,
+      passExpiryDate: 'August 23, 2026 (In 5 Days)',
+      daysRemaining: 5,
+      attendanceRate: '90%',
+      rhythmScore: '94%',
+      stageConfidence: '92%',
+      teacherNotes: 'Aarav is performing exceptionally well in Hip-Hop isolations and Bollywood fusion sync. Highly recommended for the upcoming stage showcase!',
+      email: 'student.aarav@ethosdance.com',
+      phone: '+91 98765 12345',
+      profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+    };
   });
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
+    } else {
+      localStorage.removeItem('ethos_logged_in_user');
+    }
+  }, [isLoggedIn, studentInfo]);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     if (loginId && password) {
       setIsLoggedIn(true);
+      localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
     }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('ethos_logged_in_user');
   };
 
   const handleResetPassword = () => {
@@ -57,7 +84,9 @@ export default function StudentPortalPage() {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setStudentInfo(prev => ({ ...prev, profilePic: imageUrl }));
+      const updated = { ...studentInfo, profilePic: imageUrl };
+      setStudentInfo(updated);
+      localStorage.setItem('ethos_logged_in_user', JSON.stringify(updated));
     }
   };
 
@@ -243,7 +272,7 @@ export default function StudentPortalPage() {
                 </div>
 
                 <button
-                  onClick={() => setIsLoggedIn(false)}
+                  onClick={handleLogout}
                   className="px-4 py-3 bg-[#222222] hover:bg-[#333333] text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all"
                 >
                   Log Out
@@ -492,24 +521,60 @@ export default function StudentPortalPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-slate-400 font-bold mb-1">Student Name</label>
-                      <input type="text" value={studentInfo.name} onChange={(e) => setStudentInfo({ ...studentInfo, name: e.target.value })} className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white" />
+                      <input
+                        type="text"
+                        value={studentInfo.name}
+                        onChange={(e) => {
+                          const updated = { ...studentInfo, name: e.target.value };
+                          setStudentInfo(updated);
+                          localStorage.setItem('ethos_logged_in_user', JSON.stringify(updated));
+                        }}
+                        className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white"
+                      />
                     </div>
 
                     <div>
                       <label className="block text-slate-400 font-bold mb-1">Student Age</label>
-                      <input type="text" value={studentInfo.age} onChange={(e) => setStudentInfo({ ...studentInfo, age: e.target.value })} className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white" />
+                      <input
+                        type="text"
+                        value={studentInfo.age}
+                        onChange={(e) => {
+                          const updated = { ...studentInfo, age: e.target.value };
+                          setStudentInfo(updated);
+                          localStorage.setItem('ethos_logged_in_user', JSON.stringify(updated));
+                        }}
+                        className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white"
+                      />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-slate-400 font-bold mb-1">Parent Name</label>
-                      <input type="text" value={studentInfo.parentName} onChange={(e) => setStudentInfo({ ...studentInfo, parentName: e.target.value })} className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white" />
+                      <input
+                        type="text"
+                        value={studentInfo.parentName}
+                        onChange={(e) => {
+                          const updated = { ...studentInfo, parentName: e.target.value };
+                          setStudentInfo(updated);
+                          localStorage.setItem('ethos_logged_in_user', JSON.stringify(updated));
+                        }}
+                        className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white"
+                      />
                     </div>
 
                     <div>
                       <label className="block text-slate-400 font-bold mb-1">Parent Contact Number</label>
-                      <input type="text" value={studentInfo.phone} onChange={(e) => setStudentInfo({ ...studentInfo, phone: e.target.value })} className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white" />
+                      <input
+                        type="text"
+                        value={studentInfo.phone}
+                        onChange={(e) => {
+                          const updated = { ...studentInfo, phone: e.target.value };
+                          setStudentInfo(updated);
+                          localStorage.setItem('ethos_logged_in_user', JSON.stringify(updated));
+                        }}
+                        className="w-full bg-black border border-[#333333] rounded-xl px-4 py-3 text-white"
+                      />
                     </div>
                   </div>
 
