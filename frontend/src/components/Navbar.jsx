@@ -86,8 +86,8 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             <span>Admin</span>
           </button>
 
-          {/* Clean Stylized Ethos Dance Studio Text Logo */}
-          <a href="/" className="flex flex-col text-right pl-2 leading-none">
+          {/* Clean Stylized Ethos Dance Studio Text Logo -> Navigates to index.html (Main Page) */}
+          <a href="index.html" className="flex flex-col text-right pl-2 leading-none">
             <span className="font-display-giant text-2xl sm:text-3xl text-white tracking-tighter">
               ETHOS<span className="text-[#FF0044]">.</span>
             </span>
