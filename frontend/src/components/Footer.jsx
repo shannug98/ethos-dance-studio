@@ -9,16 +9,12 @@ export default function Footer({ onQuickBook }) {
         
         {/* Logo Column */}
         <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-14 h-14 text-black shrink-0">
-              <img src="/ethos_symbol.svg" alt="Ethos Logo Emblem" className="w-full h-full object-contain filter invert" />
-            </div>
-            <div>
-              <h2 className="text-4xl sm:text-5xl font-display-giant uppercase tracking-tighter text-[#000000] leading-none">
-                ETHOS
-              </h2>
-              <span className="text-[10px] font-extrabold uppercase tracking-[4px] text-slate-800 block">DANCE STUDIO</span>
-            </div>
+          <div className="h-20 w-auto">
+            <img
+              src="/ethos_logo_transparent.png"
+              alt="Ethos Dance Studio Logo"
+              className="h-full w-auto object-contain"
+            />
           </div>
           <p className="text-xs font-bold uppercase tracking-wider text-slate-800">
             Ethos Dance Studio© 2026 All Rights Reserved

@@ -5,13 +5,13 @@ export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
   return (
     <section className="relative min-h-screen pt-[76px] bg-[#000000] text-white flex flex-col justify-between overflow-hidden">
       
-      {/* Background Graphic: Giant ETHOS Logo Symbol replacing the woman photo */}
-      <div className="absolute inset-0 top-[76px] z-0 flex items-center justify-center overflow-hidden opacity-30 pointer-events-none">
-        <div className="w-[600px] h-[600px] sm:w-[800px] sm:h-[800px] lg:w-[900px] lg:h-[900px] text-white animate-pulse" style={{ animationDuration: '8s' }}>
+      {/* Background Graphic: Giant Official Ethos Logo Image replacing woman photo */}
+      <div className="absolute inset-0 top-[76px] z-0 flex items-center justify-center overflow-hidden opacity-20 pointer-events-none">
+        <div className="w-[500px] h-[500px] sm:w-[700px] sm:h-[700px] lg:w-[850px] lg:h-[850px]">
           <img
-            src="/ethos_symbol.svg"
-            alt="Ethos Symbol Background"
-            className="w-full h-full object-contain filter drop-shadow-[0_0_80px_rgba(255,0,68,0.5)]"
+            src="/ethos_logo_dark.png"
+            alt="Ethos Logo Background"
+            className="w-full h-full object-contain filter drop-shadow-[0_0_80px_rgba(255,0,68,0.6)]"
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-transparent to-[#000000]" />
@@ -19,10 +19,10 @@ export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
 
       {/* Hero Central Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 w-full relative z-10 my-auto py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Text Block */}
-          <div className="lg:col-span-8 space-y-8 text-left">
+          <div className="lg:col-span-7 space-y-8 text-left">
             
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FF0044] text-white text-xs font-extrabold uppercase tracking-widest">
               <Sparkles className="w-3.5 h-3.5" />
@@ -56,20 +56,15 @@ export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
 
           </div>
 
-          {/* Right Symbol Showcase Card (Official Ethos Symbol) */}
-          <div className="lg:col-span-4 flex items-center justify-center">
-            <div className="p-8 bg-[#111111]/80 border-2 border-[#333333] backdrop-blur-md max-w-sm w-full text-center space-y-4 shadow-2xl relative group hover:border-[#FF0044] transition-all">
-              <div className="w-48 h-48 mx-auto text-white">
+          {/* Right Official Logo Display (Exact Logo Image from PDF) */}
+          <div className="lg:col-span-5 flex items-center justify-center">
+            <div className="p-8 bg-[#111111]/90 border-2 border-[#333333] backdrop-blur-xl max-w-md w-full text-center space-y-4 shadow-2xl relative group hover:border-[#FF0044] transition-all">
+              <div className="w-64 h-64 sm:w-80 sm:h-80 mx-auto">
                 <img
-                  src="/ethos_symbol.svg"
-                  alt="Ethos Symbol Emblem"
-                  className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(255,0,68,0.6)] group-hover:scale-105 transition-transform duration-500"
+                  src="/ethos_logo_dark.png"
+                  alt="Official Ethos Dance Studio Logo"
+                  className="w-full h-full object-contain filter drop-shadow-[0_0_30px_rgba(255,0,68,0.7)] group-hover:scale-105 transition-transform duration-500"
                 />
-              </div>
-
-              <div className="pt-2 border-t border-[#222222]">
-                <h3 className="text-2xl font-display-giant uppercase text-white tracking-widest">ETHOS</h3>
-                <span className="text-[10px] font-extrabold uppercase tracking-[4px] text-[#FF0044] block">DANCE STUDIO</span>
               </div>
             </div>
           </div>

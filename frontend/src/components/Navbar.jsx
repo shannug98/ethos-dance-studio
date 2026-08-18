@@ -37,14 +37,14 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             <span>Admin</span>
           </button>
 
-          {/* Official Ethos Brand Logo Symbol & Text */}
-          <a href="#" className="flex items-center gap-2.5 pl-2">
-            <div className="w-9 h-9 text-white shrink-0">
-              <img src="/ethos_symbol.svg" alt="Ethos Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,0,68,0.8)]" />
-            </div>
-            <div className="flex flex-col text-left leading-none">
-              <span className="font-display-giant text-2xl text-white tracking-tighter">ETHOS</span>
-              <span className="text-[8px] font-extrabold uppercase tracking-[3px] text-[#FF0044]">STUDIO</span>
+          {/* Official Ethos Brand Logo Image */}
+          <a href="#" className="flex items-center pl-2">
+            <div className="h-12 w-auto shrink-0">
+              <img
+                src="/ethos_logo_dark.png"
+                alt="Ethos Dance Studio Logo"
+                className="h-full w-auto object-contain filter drop-shadow-[0_0_10px_rgba(255,0,68,0.7)]"
+              />
             </div>
           </a>
 
