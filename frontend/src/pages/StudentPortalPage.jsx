@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
-import { User, Lock, Calendar, Award, Image, Settings, CheckCircle2, Key, AlertTriangle, CreditCard, Upload, Send, MessageSquare, Sparkles, Smartphone, ShieldCheck } from 'lucide-react';
+import { User, Lock, Calendar, Award, Image, Settings, CheckCircle2, Key, AlertTriangle, CreditCard, Upload, Send, MessageSquare, Sparkles, Smartphone, ShieldCheck, MessageCircle } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000';
 
@@ -21,10 +21,11 @@ export default function StudentPortalPage() {
   const [otpCode, setOtpCode] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [demoOtpNotice, setDemoOtpNotice] = useState('');
+  const [whatsappOtpUrl, setWhatsappOtpUrl] = useState('');
 
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
-  const [activeTab, setActiveTab] = useState('attendance'); // 'attendance', 'renewal', 'performance', 'gallery', 'profile'
+  const [activeTab, setActiveTab] = useState('attendance');
   const [showPasswordResetSuccess, setShowPasswordResetSuccess] = useState(false);
   const [smsSentNotice, setSmsSentNotice] = useState(null);
   
@@ -57,7 +58,7 @@ export default function StudentPortalPage() {
       stageConfidence: '92%',
       teacherNotes: 'Shanmuka is performing exceptionally well in Commercial Hip-Hop isolations and Bollywood fusion sync. Ready for upcoming stage performance!',
       email: 'shanmuka@gmail.com',
-      phone: '9876543210',
+      phone: '8341701113',
       profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
     };
   });
@@ -70,10 +71,20 @@ export default function StudentPortalPage() {
     }
   }, [isLoggedIn, studentInfo]);
 
-  // Handle Send OTP
+  // Handle Send OTP (Generate WhatsApp OTP link as well)
   const handleSendOtp = async (e) => {
     e.preventDefault();
     if (!loginPhone) return;
+
+    const generatedOtp = new RandomOtp();
+    const cleanPhone = loginPhone.replace(/[^0-9]/g, '');
+
+    const waText = encodeURIComponent(
+      `🔐 *Ethos Dance Studio Member Login OTP*\n\n` +
+      `Your 6-digit login OTP code is: *${generatedOtp}*\n\n` +
+      `Valid for 10 minutes. Do not share this code with anyone.`
+    );
+    setWhatsappOtpUrl(`https://wa.me/91${cleanPhone}?text=${waText}`);
 
     try {
       const res = await fetch(`${API_URL}/api/auth/send-otp`, {
@@ -83,12 +94,16 @@ export default function StudentPortalPage() {
       });
       const data = await res.json();
       setOtpSent(true);
-      setDemoOtpNotice(data.demoOtp || '482910');
+      setDemoOtpNotice(data.demoOtp || generatedOtp);
     } catch (err) {
       setOtpSent(true);
-      setDemoOtpNotice('482910');
+      setDemoOtpNotice(generatedOtp);
     }
   };
+
+  function RandomOtp() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
 
   // Handle Verify OTP
   const handleVerifyOtp = async (e) => {
@@ -145,6 +160,20 @@ export default function StudentPortalPage() {
     }
   };
 
+  const getParentWhatsappUrl = () => {
+    const cleanPhone = (studentInfo.phone || '9876543210').replace(/[^0-9]/g, '');
+    const waText = encodeURIComponent(
+      `⚠️ *Ethos Dance Studio Pass Expiry Reminder*\n\n` +
+      `Dear *${studentInfo.parentName}*,\n` +
+      `*${studentInfo.name}'s* monthly dance pass at Ethos Kukatpally expires in *${studentInfo.daysRemaining} days* (${studentInfo.passExpiryDate}).\n\n` +
+      `Remaining Balance: *${studentInfo.classesLeft} Classes*\n` +
+      `Renew online in 1 click: https://shannug98.github.io/ethos-dance-studio/student.html\n\n` +
+      `Thank you,\n` +
+      `Ethos Dance Studio Team`
+    );
+    return `https://wa.me/91${cleanPhone}?text=${waText}`;
+  };
+
   const handleSendParentSms = () => {
     const message = `Dear ${studentInfo.parentName}, ${studentInfo.name}'s monthly pass at Ethos Dance Studio Kukatpally expires in ${studentInfo.daysRemaining} days (${studentInfo.passExpiryDate}). Renew online at https://shannug98.github.io/ethos-dance-studio/student.html`;
     setSmsSentNotice(message);
@@ -154,7 +183,7 @@ export default function StudentPortalPage() {
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans flex flex-col justify-between">
       
-      {/* Navbar with in-session navigation capability */}
+      {/* Navbar */}
       <Navbar />
 
       <main className="pt-[76px] max-w-7xl mx-auto px-4 sm:px-8 py-12 w-full flex-1">
@@ -181,7 +210,7 @@ export default function StudentPortalPage() {
                 }`}
               >
                 <Smartphone className="w-3.5 h-3.5" />
-                <span>Mobile OTP Login</span>
+                <span>Mobile / WhatsApp OTP</span>
               </button>
 
               <button
@@ -202,14 +231,14 @@ export default function StudentPortalPage() {
                 <div className="text-center space-y-1">
                   <h2 className="text-xl font-black uppercase font-display text-white">ETHOS OTP LOGIN</h2>
                   <p className="text-xs text-slate-400">
-                    No password required! Enter your registered mobile number to receive a 6-digit OTP.
+                    No password required! Receive your 6-digit OTP via SMS or free WhatsApp.
                   </p>
                 </div>
 
                 {!otpSent ? (
                   <form onSubmit={handleSendOtp} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Mobile Number</label>
+                      <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Mobile / WhatsApp Number</label>
                       <input
                         type="tel"
                         required
@@ -225,15 +254,27 @@ export default function StudentPortalPage() {
                       className="w-full py-4 bg-[#FF0044] hover:bg-[#e0003c] text-white text-xs font-extrabold uppercase tracking-widest rounded-xl transition-all shadow-xl flex items-center justify-center gap-2"
                     >
                       <Send className="w-4 h-4" />
-                      <span>Send 6-Digit OTP to Mobile</span>
+                      <span>Send 6-Digit OTP</span>
                     </button>
                   </form>
                 ) : (
                   <form onSubmit={handleVerifyOtp} className="space-y-4">
                     <div className="p-3 bg-[#25D366]/15 border border-[#25D366] text-[#25D366] text-xs font-bold rounded-xl space-y-1">
-                      <div>📲 OTP sent to +91 {loginPhone || '9876543210'}</div>
-                      {demoOtpNotice && <div>Demo OTP Code: <code className="text-white bg-black px-2 py-0.5 rounded">{demoOtpNotice}</code></div>}
+                      <div>📲 OTP code generated for +91 {loginPhone || '8341701113'}</div>
+                      {demoOtpNotice && <div>OTP Code: <code className="text-white bg-black px-2 py-0.5 rounded">{demoOtpNotice}</code></div>}
                     </div>
+
+                    {whatsappOtpUrl && (
+                      <a
+                        href={whatsappOtpUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full py-3 bg-[#25D366] hover:bg-[#20bd5a] text-black text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center gap-2"
+                      >
+                        <MessageCircle className="w-4 h-4 fill-black" />
+                        <span>Send OTP to my WhatsApp (Free)</span>
+                      </a>
+                    )}
 
                     <div>
                       <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Enter 6-Digit OTP</label>
@@ -267,7 +308,7 @@ export default function StudentPortalPage() {
                 )}
 
                 <div className="p-3 bg-[#1A1A1A] border border-[#262626] rounded-xl text-[11px] text-slate-400 text-center">
-                  Quick Mobile OTP Login: <code className="text-[#D0FBF9] font-bold">9876543210</code> (OTP: <code className="text-[#D0FBF9] font-bold">482910</code>)
+                  Quick Mobile OTP Login: <code className="text-[#D0FBF9] font-bold">8341701113</code> (OTP: <code className="text-[#D0FBF9] font-bold">482910</code>)
                 </div>
               </div>
             )}
@@ -358,14 +399,16 @@ export default function StudentPortalPage() {
                   Renew Pass Online Now
                 </button>
 
-                <button
-                  onClick={handleSendParentSms}
-                  className="px-3.5 py-2.5 bg-black/50 border border-white/30 text-white text-xs font-bold uppercase rounded-xl hover:bg-black transition-all shrink-0 flex items-center gap-1.5"
-                  title="Dispatch SMS Reminder to Parent"
+                <a
+                  href={getParentWhatsappUrl()}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3.5 py-2.5 bg-[#25D366] text-black text-xs font-black uppercase rounded-xl hover:bg-[#20bd5a] transition-all shrink-0 flex items-center gap-1.5 shadow-lg"
+                  title="Dispatch WhatsApp Expiry Reminder to Parent"
                 >
-                  <Send className="w-3.5 h-3.5 text-[#25D366]" />
-                  <span>Send SMS</span>
-                </button>
+                  <MessageCircle className="w-4 h-4 fill-black" />
+                  <span>Send WhatsApp</span>
+                </a>
               </div>
             </div>
 
@@ -374,7 +417,7 @@ export default function StudentPortalPage() {
               <div className="p-4 bg-[#25D366]/20 border-2 border-[#25D366] text-white rounded-2xl space-y-1 animate-pulse">
                 <div className="flex items-center gap-2 text-[#25D366] text-xs font-extrabold uppercase">
                   <MessageSquare className="w-4 h-4" />
-                  <span>OFFICIAL ETHOS DLT SMS DISPATCHED TO PARENT ({studentInfo.phone}):</span>
+                  <span>OFFICIAL ETHOS SMS DISPATCHED TO PARENT ({studentInfo.phone}):</span>
                 </div>
                 <p className="text-xs font-mono text-slate-200 bg-black/50 p-2.5 rounded-lg border border-[#25D366]/30">
                   "{smsSentNotice}"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Lock, Sparkles, ShieldCheck, CheckCircle, MessageSquare, Send } from 'lucide-react';
+import { X, Lock, Sparkles, ShieldCheck, CheckCircle, MessageSquare, Send, MessageCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessPayment }) {
@@ -9,6 +9,7 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
   const [errorMessage, setErrorMessage] = useState('');
   const [notificationAlerts, setNotificationAlerts] = useState([]);
   const [activatedCustomerCode, setActivatedCustomerCode] = useState('ETH1025');
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
   const handleLaunchRazorpay = async (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
     setLoading(true);
 
     try {
-      // 1. Create order on server (ASP.NET Core Web API)
+      // 1. Create order on server
       const orderRes = await fetch(`${API_URL}/api/payment/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,7 +48,6 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
         handler: async function (response) {
           setStep('PROCESSING');
 
-          // Server-side Signature Verification & Account Activation
           try {
             const verifyRes = await fetch(`${API_URL}/api/payment/verify-signature`, {
               method: 'POST',
@@ -69,9 +69,21 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
             const customerCode = activationData.customerCode || 'ETH1025';
             setActivatedCustomerCode(customerCode);
 
+            const cleanPhone = customer.phone.replace(/[^0-9]/g, '');
+            const waText = encodeURIComponent(
+              `🎉 *Welcome to Ethos Dance Studio!*\n\n` +
+              `Hi *${customer.name}*,\n` +
+              `Your *${item.title}* package (₹${item.price}) is successfully activated!\n\n` +
+              `🔑 *Customer Code*: ${customerCode}\n` +
+              `🗓️ *Valid Until*: 30 Days from today\n` +
+              `🌐 *Member Portal*: https://shannug98.github.io/ethos-dance-studio/student.html\n\n` +
+              `See you in studio at Kukatpally!`
+            );
+            const waLink = `https://wa.me/91${cleanPhone}?text=${waText}`;
+            setWhatsappUrl(waLink);
+
             try { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } catch (e) {}
 
-            // Save logged-in session automatically in localStorage
             localStorage.setItem('ethos_logged_in_user', JSON.stringify({
               id: 1025,
               customerCode: customerCode,
@@ -86,8 +98,8 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
             }));
 
             setNotificationAlerts([
-              `📲 SMS DISPATCHED to ${customer.phone}: "Welcome to Ethos! Customer ID: ${customerCode}. Activate portal: https://shannug98.github.io/ethos-dance-studio/student.html"`,
-              `🚨 WEBHOOK CONFIRMED: Payment captured for ${customer.name} (Ref: ${activationData.booking?.transactionId || 'PAY-ACTIVE'})`
+              `📲 WHATSAPP RECEIPT READY for ${customer.phone}: Customer ID ${customerCode}`,
+              `🚨 PAYMENT CAPTURED: Ref ${activationData.booking?.transactionId || 'PAY-ACTIVE'}`
             ]);
 
             setStep('DONE');
@@ -101,7 +113,7 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
                 customerPhone: customer.phone,
                 customerCode: customerCode
               });
-            }, 2500);
+            }, 3500);
 
           } catch (err) {
             handleMockFallback('pay_demo123');
@@ -143,6 +155,19 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
       const mockCode = "ETH" + Math.floor(1000 + Math.random() * 9000);
       setActivatedCustomerCode(mockCode);
 
+      const cleanPhone = (customer.phone || '9876543210').replace(/[^0-9]/g, '');
+      const waText = encodeURIComponent(
+        `🎉 *Welcome to Ethos Dance Studio!*\n\n` +
+        `Hi *${customer.name || 'Dancer'}*,\n` +
+        `Your *${item.title}* package (₹${item.price}) is successfully activated!\n\n` +
+        `🔑 *Customer Code*: ${mockCode}\n` +
+        `🗓️ *Valid Until*: 30 Days from today\n` +
+        `🌐 *Member Portal*: https://shannug98.github.io/ethos-dance-studio/student.html\n\n` +
+        `See you in studio at Kukatpally!`
+      );
+      const waLink = `https://wa.me/91${cleanPhone}?text=${waText}`;
+      setWhatsappUrl(waLink);
+
       try { confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } }); } catch (e) {}
 
       localStorage.setItem('ethos_logged_in_user', JSON.stringify({
@@ -159,8 +184,8 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
       }));
 
       setNotificationAlerts([
-        `📲 SMS DISPATCHED to ${customer.phone || '9876543210'}: "Welcome to Ethos! Customer ID: ${mockCode}. Activate portal: https://shannug98.github.io/ethos-dance-studio/student.html"`,
-        `🚨 WEBHOOK CONFIRMED: Payment captured for ${customer.name || 'Shanmuka'} (Ref: ${mockTxId})`
+        `📲 WHATSAPP RECEIPT READY for ${customer.phone || '9876543210'}: Customer ID ${mockCode}`,
+        `🚨 PAYMENT CAPTURED: Ref ${mockTxId}`
       ]);
 
       setStep('DONE');
@@ -176,7 +201,7 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
           customerCode: mockCode,
           bookedAt: new Date().toISOString()
         });
-      }, 2500);
+      }, 3500);
     }, 1200);
   };
 
@@ -192,8 +217,8 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
               <Lock className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-extrabold uppercase font-display tracking-wider">Server-Verified Payment Gateway</h3>
-              <p className="text-[11px] text-slate-400">Cards • UPI • GPay • PhonePe • NetBanking</p>
+              <h3 className="text-base font-extrabold uppercase font-display tracking-wider">Payment & Account Activation</h3>
+              <p className="text-[11px] text-slate-400">Razorpay • Free WhatsApp Instant Confirmation</p>
             </div>
           </div>
 
@@ -222,7 +247,7 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
             <form onSubmit={handleLaunchRazorpay} className="space-y-4 text-xs">
               <div className="p-3 bg-[#1A1A1A] border border-[#262626] rounded-xl text-slate-300">
                 <span className="font-extrabold text-white uppercase block mb-0.5">Create your Ethos Account</span>
-                Your customer account ID & SMS portal activation link will be generated upon payment.
+                Your customer account ID & WhatsApp activation receipt will be generated upon payment.
               </div>
 
               {errorMessage && (
@@ -242,7 +267,7 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
               </div>
 
               <div>
-                <label className="text-slate-300 font-bold block mb-1">Mobile Phone (for OTP & SMS Alerts) *</label>
+                <label className="text-slate-300 font-bold block mb-1">Mobile Phone (WhatsApp Number for Instant Receipt) *</label>
                 <input
                   type="tel" required value={customer.phone}
                   onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
@@ -268,25 +293,25 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
                   className="btn-cyan w-full py-4 text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 rounded-xl shadow-xl"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>{loading ? 'Creating Server Order...' : `Continue to Pay ₹${item?.price || 2500}`}</span>
+                  <span>{loading ? 'Processing Order...' : `Continue to Pay ₹${item?.price || 2500}`}</span>
                 </button>
               </div>
             </form>
           )}
 
-          {/* STEP 2: PROCESSING SERVER VERIFICATION & WEBHOOK */}
+          {/* STEP 2: PROCESSING SERVER VERIFICATION */}
           {step === 'PROCESSING' && (
             <div className="py-10 text-center space-y-4">
               <div className="w-12 h-12 border-4 border-[#FF0044] border-t-transparent animate-spin mx-auto rounded-full" />
               <div className="text-base font-extrabold uppercase font-display text-white">Verifying Razorpay Order & Webhook Signature...</div>
-              <p className="text-xs text-slate-400">Activating Ethos Customer Account & Generating Credentials...</p>
+              <p className="text-xs text-slate-400">Activating Ethos Customer Account & Preparing WhatsApp Receipt...</p>
             </div>
           )}
 
-          {/* STEP 3: SUCCESS & CUSTOMER CODE */}
+          {/* STEP 3: SUCCESS & WHATSAPP DISPATCH BUTTON */}
           {step === 'DONE' && (
             <div className="py-4 text-center space-y-4">
-              <div className="w-14 h-14 bg-[#25D366] text-black flex items-center justify-center mx-auto rounded-full">
+              <div className="w-14 h-14 bg-[#25D366] text-black flex items-center justify-center mx-auto rounded-full shadow-lg">
                 <CheckCircle className="w-8 h-8" />
               </div>
 
@@ -301,6 +326,20 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
                   Customer Code: <strong className="text-white text-base">{activatedCustomerCode}</strong>
                 </p>
               </div>
+
+              {whatsappUrl && (
+                <div className="pt-2">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-black text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-xl flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-5 h-5 fill-black" />
+                    <span>Send Instant Confirmation via WhatsApp (Free)</span>
+                  </a>
+                </div>
+              )}
               
               {notificationAlerts.length > 0 && (
                 <div className="space-y-2 text-left pt-2">

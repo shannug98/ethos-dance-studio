@@ -36,7 +36,9 @@ export default function ContactSection() {
 
               <div className="p-4 bg-[#111111] border border-[#333333]">
                 <strong className="text-white text-sm block mb-1 uppercase">Phone & Contact</strong>
-                +91 98765 43210 / +91 91234 56789
+                <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="text-[#FF0044] font-bold text-base hover:underline">
+                  +91 83417 01113
+                </a>
               </div>
 
               <div className="p-4 bg-[#111111] border border-[#333333]">
@@ -71,7 +73,7 @@ export default function ContactSection() {
                 <input
                   type="tel" required value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="+91 9876543210"
+                  placeholder="+91 83417 01113"
                   className="w-full p-3 bg-[#000000] border border-[#333333] text-white focus:border-[#D0FBF9] focus:outline-none"
                 />
               </div>

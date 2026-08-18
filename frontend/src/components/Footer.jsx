@@ -33,16 +33,16 @@ export default function Footer({ onQuickBook }) {
 
           <div>
             <span className="block opacity-60 uppercase">Instagram:</span>
-            <a href="#" className="font-bold text-sm underline text-[#000000]">
+            <a href="https://instagram.com/ethosdancestudio" target="_blank" rel="noreferrer" className="font-bold text-sm underline text-[#000000]">
               @ethosdancestudio
             </a>
           </div>
 
           <div>
             <span className="block opacity-60 uppercase">Call / WhatsApp:</span>
-            <span className="font-bold text-sm text-[#000000] block mt-0.5">
-              +91 98765 43210
-            </span>
+            <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="font-bold text-base text-[#FF0044] underline block mt-0.5">
+              +91 83417 01113
+            </a>
           </div>
         </div>
 
@@ -56,7 +56,7 @@ export default function Footer({ onQuickBook }) {
           </div>
 
           <div className="pt-2">
-            <a href="#classes" className="underline font-bold text-xs">View Class Schedules & Timetable</a>
+            <a href="schedule.html" target="_self" className="underline font-bold text-xs">View Class Schedules & Timetable</a>
           </div>
         </div>
 
@@ -66,16 +66,16 @@ export default function Footer({ onQuickBook }) {
       <div className="grid grid-cols-1 md:grid-cols-3 border-t border-[#000000]">
         
         {/* Block 1: Cobalt Blue */}
-        <a href="#contact" className="bg-[#1F41FF] text-white p-10 flex items-center justify-center hover:bg-[#3353ff] transition-all">
+        <a href="https://instagram.com/ethosdancestudio" target="_blank" rel="noreferrer" className="bg-[#1F41FF] text-white p-10 flex items-center justify-center hover:bg-[#3353ff] transition-all">
           <span className="font-display-giant text-3xl sm:text-4xl uppercase tracking-tight">
             Our Socials
           </span>
         </a>
 
         {/* Block 2: Black */}
-        <a href="#contact" className="bg-[#000000] text-white p-10 flex items-center justify-center hover:bg-[#1a1a1a] transition-all border-y md:border-y-0 md:border-x border-[#333333]">
+        <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="bg-[#000000] text-white p-10 flex items-center justify-center hover:bg-[#1a1a1a] transition-all border-y md:border-y-0 md:border-x border-[#333333]">
           <span className="font-display-giant text-3xl sm:text-4xl uppercase tracking-tight text-[#D0FBF9]">
-            Email Us
+            WhatsApp Us
           </span>
         </a>
 
