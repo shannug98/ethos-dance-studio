@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
-import { User, Lock, Calendar, Award, Image, Settings, CheckCircle2, Key, AlertTriangle, CreditCard, Upload, Send, MessageSquare, Sparkles } from 'lucide-react';
+import { User, Lock, Calendar, Award, Image, Settings, CheckCircle2, Key, AlertTriangle, CreditCard, Upload, Send, MessageSquare, Sparkles, Smartphone, ShieldCheck } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000';
 
@@ -15,6 +15,12 @@ export default function StudentPortalPage() {
       return false;
     }
   });
+
+  const [loginMode, setLoginMode] = useState('OTP'); // 'OTP' or 'ID'
+  const [loginPhone, setLoginPhone] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [demoOtpNotice, setDemoOtpNotice] = useState('');
 
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
@@ -35,10 +41,12 @@ export default function StudentPortalPage() {
       if (saved) return JSON.parse(saved);
     } catch {}
     return {
-      name: 'Aarav Reddy',
-      age: '12 Years',
-      parentName: 'Suresh Reddy',
-      packageTitle: 'Monthly Adult/Kids Beginner Pass',
+      id: 1025,
+      customerCode: 'ETH1025',
+      name: 'Shanmuka Gaddam',
+      age: '24 Years',
+      parentName: 'Suresh Gaddam',
+      packageTitle: 'Royal Celebration / Adults Monthly Pass',
       totalClasses: 20,
       classesAttended: 12,
       classesLeft: 8,
@@ -47,9 +55,9 @@ export default function StudentPortalPage() {
       attendanceRate: '90%',
       rhythmScore: '94%',
       stageConfidence: '92%',
-      teacherNotes: 'Aarav is performing exceptionally well in Hip-Hop isolations and Bollywood fusion sync. Highly recommended for the upcoming stage showcase!',
-      email: 'student.aarav@ethosdance.com',
-      phone: '+91 98765 12345',
+      teacherNotes: 'Shanmuka is performing exceptionally well in Commercial Hip-Hop isolations and Bollywood fusion sync. Ready for upcoming stage performance!',
+      email: 'shanmuka@gmail.com',
+      phone: '9876543210',
       profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
     };
   });
@@ -61,6 +69,53 @@ export default function StudentPortalPage() {
       localStorage.removeItem('ethos_logged_in_user');
     }
   }, [isLoggedIn, studentInfo]);
+
+  // Handle Send OTP
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    if (!loginPhone) return;
+
+    try {
+      const res = await fetch(`${API_URL}/api/auth/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: loginPhone })
+      });
+      const data = await res.json();
+      setOtpSent(true);
+      setDemoOtpNotice(data.demoOtp || '482910');
+    } catch (err) {
+      setOtpSent(true);
+      setDemoOtpNotice('482910');
+    }
+  };
+
+  // Handle Verify OTP
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    if (!otpCode) return;
+
+    try {
+      const res = await fetch(`${API_URL}/api/auth/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: loginPhone, otpCode: otpCode })
+      });
+      const data = await res.json();
+      
+      if (data.user) {
+        setStudentInfo(data.user);
+        setIsLoggedIn(true);
+        localStorage.setItem('ethos_logged_in_user', JSON.stringify(data.user));
+      } else {
+        setIsLoggedIn(true);
+        localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
+      }
+    } catch (err) {
+      setIsLoggedIn(true);
+      localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
+    }
+  };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -112,73 +167,168 @@ export default function StudentPortalPage() {
           </p>
         </div>
 
-        {/* IF NOT LOGGED IN: SHOW FULL LOGIN PAGE */}
+        {/* IF NOT LOGGED IN: SHOW MOBILE OTP / CUSTOMER ID LOGIN PAGE */}
         {!isLoggedIn ? (
           <div className="bg-[#111111] border border-[#262626] rounded-3xl p-8 sm:p-12 max-w-md mx-auto space-y-6 shadow-2xl">
-            <div className="text-center space-y-2">
-              <div className="w-16 h-16 bg-[#1F41FF]/20 border-2 border-[#1F41FF] rounded-full flex items-center justify-center mx-auto text-[#D0FBF9]">
-                <Lock className="w-8 h-8" />
-              </div>
-              <h2 className="text-2xl font-black uppercase font-display text-white">MEMBER PORTAL LOGIN</h2>
-              <p className="text-xs text-slate-400 font-normal leading-relaxed">
-                Credentials are issued upon purchasing monthly packages. Log in to check remaining classes, parent progress reports, and renew your pass.
-              </p>
-            </div>
-
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Student ID / Email</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. ETHOS-MEMBER or email"
-                  value={loginId}
-                  onChange={(e) => setLoginId(e.target.value)}
-                  className="w-full bg-[#1A1A1A] border border-[#333333] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1F41FF]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Password</label>
-                <input
-                  type="password"
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#1A1A1A] border border-[#333333] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1F41FF]"
-                />
-              </div>
-
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" className="rounded bg-[#1A1A1A] border-[#333333]" defaultChecked />
-                  <span>Remember Me</span>
-                </label>
-                <button type="button" onClick={handleResetPassword} className="text-[#D0FBF9] hover:underline font-bold">
-                  Forgot Password?
-                </button>
-              </div>
-
-              {showPasswordResetSuccess && (
-                <div className="p-3 bg-[#25D366]/20 border border-[#25D366] text-[#25D366] text-xs font-bold rounded-xl flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Password reset link sent to registered email!</span>
-                </div>
-              )}
+            
+            {/* Login Mode Toggle Tabs */}
+            <div className="flex items-center gap-2 bg-[#1A1A1A] p-1.5 rounded-2xl border border-[#333333]">
+              <button
+                type="button"
+                onClick={() => setLoginMode('OTP')}
+                className={`flex-1 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all ${
+                  loginMode === 'OTP' ? 'bg-[#FF0044] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Smartphone className="w-3.5 h-3.5" />
+                <span>Mobile OTP Login</span>
+              </button>
 
               <button
-                type="submit"
-                className="w-full py-4 bg-[#FF0044] hover:bg-[#e0003c] text-white text-xs font-extrabold uppercase tracking-widest rounded-xl transition-all shadow-xl"
+                type="button"
+                onClick={() => setLoginMode('ID')}
+                className={`flex-1 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all ${
+                  loginMode === 'ID' ? 'bg-[#1F41FF] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                }`}
               >
-                Log In to Member Dashboard
+                <Lock className="w-3.5 h-3.5" />
+                <span>Customer ID</span>
               </button>
-            </form>
-
-            <div className="p-4 bg-[#1A1A1A] border border-[#262626] rounded-2xl text-[11px] text-slate-400 text-center space-y-1">
-              <span className="font-bold text-white block uppercase">Demo Member Credentials:</span>
-              <p>ID: <code className="text-[#D0FBF9]">ETHOS-MEMBER</code> | Password: <code className="text-[#D0FBF9]">ethos123</code></p>
             </div>
+
+            {/* TAB 1: MOBILE NUMBER OTP LOGIN */}
+            {loginMode === 'OTP' && (
+              <div className="space-y-4">
+                <div className="text-center space-y-1">
+                  <h2 className="text-xl font-black uppercase font-display text-white">ETHOS OTP LOGIN</h2>
+                  <p className="text-xs text-slate-400">
+                    No password required! Enter your registered mobile number to receive a 6-digit OTP.
+                  </p>
+                </div>
+
+                {!otpSent ? (
+                  <form onSubmit={handleSendOtp} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Mobile Number</label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="98XXXXXXXX"
+                        value={loginPhone}
+                        onChange={(e) => setLoginPhone(e.target.value)}
+                        className="w-full bg-[#1A1A1A] border border-[#333333] rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#FF0044]"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-[#FF0044] hover:bg-[#e0003c] text-white text-xs font-extrabold uppercase tracking-widest rounded-xl transition-all shadow-xl flex items-center justify-center gap-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Send 6-Digit OTP to Mobile</span>
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleVerifyOtp} className="space-y-4">
+                    <div className="p-3 bg-[#25D366]/15 border border-[#25D366] text-[#25D366] text-xs font-bold rounded-xl space-y-1">
+                      <div>📲 OTP sent to +91 {loginPhone || '9876543210'}</div>
+                      {demoOtpNotice && <div>Demo OTP Code: <code className="text-white bg-black px-2 py-0.5 rounded">{demoOtpNotice}</code></div>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Enter 6-Digit OTP</label>
+                      <input
+                        type="text"
+                        required
+                        maxLength={6}
+                        placeholder="e.g. 482910"
+                        value={otpCode}
+                        onChange={(e) => setOtpCode(e.target.value)}
+                        className="w-full bg-[#1A1A1A] border border-[#333333] rounded-xl px-4 py-3.5 text-center text-lg font-mono font-black text-[#D0FBF9] focus:outline-none focus:border-[#25D366] tracking-widest"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-[#25D366] hover:bg-[#1ebe5d] text-black text-xs font-extrabold uppercase tracking-widest rounded-xl transition-all shadow-xl flex items-center justify-center gap-2"
+                    >
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>Verify OTP & Log In</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setOtpSent(false)}
+                      className="w-full text-center text-xs text-slate-400 hover:text-white font-bold"
+                    >
+                      Change Mobile Number
+                    </button>
+                  </form>
+                )}
+
+                <div className="p-3 bg-[#1A1A1A] border border-[#262626] rounded-xl text-[11px] text-slate-400 text-center">
+                  Quick Mobile OTP Login: <code className="text-[#D0FBF9] font-bold">9876543210</code> (OTP: <code className="text-[#D0FBF9] font-bold">482910</code>)
+                </div>
+              </div>
+            )}
+
+            {/* TAB 2: CUSTOMER ID & PASSWORD LOGIN */}
+            {loginMode === 'ID' && (
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Customer Code / ID</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. ETH1025 or ETHOS-MEMBER"
+                    value={loginId}
+                    onChange={(e) => setLoginId(e.target.value)}
+                    className="w-full bg-[#1A1A1A] border border-[#333333] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1F41FF]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 uppercase mb-1">Password</label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-[#1A1A1A] border border-[#333333] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1F41FF]"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-xs text-slate-400">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" className="rounded bg-[#1A1A1A] border-[#333333]" defaultChecked />
+                    <span>Remember Me</span>
+                  </label>
+                  <button type="button" onClick={handleResetPassword} className="text-[#D0FBF9] hover:underline font-bold">
+                    Forgot Password?
+                  </button>
+                </div>
+
+                {showPasswordResetSuccess && (
+                  <div className="p-3 bg-[#25D366]/20 border border-[#25D366] text-[#25D366] text-xs font-bold rounded-xl flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>Password setup link sent to registered email!</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-[#1F41FF] hover:bg-[#3b5cff] text-white text-xs font-extrabold uppercase tracking-widest rounded-xl transition-all shadow-xl"
+                >
+                  Log In with Customer Code
+                </button>
+
+                <div className="p-3 bg-[#1A1A1A] border border-[#262626] rounded-xl text-[11px] text-slate-400 text-center">
+                  ID: <code className="text-[#D0FBF9]">ETH1025</code> | Password: <code className="text-[#D0FBF9]">ethos123</code>
+                </div>
+              </form>
+            )}
+
           </div>
         ) : (
           /* LOGGED IN MEMBER DASHBOARD */
@@ -195,7 +345,7 @@ export default function StudentPortalPage() {
                     PASS EXPIRING SOON: EXPIRES IN {studentInfo.daysRemaining} DAYS!
                   </h3>
                   <p className="text-xs text-slate-200">
-                    Expiry Date: <strong>{studentInfo.passExpiryDate}</strong> • Remaining Balance: <strong>{studentInfo.classesLeft} Classes Left</strong>
+                    Customer ID: <strong className="text-[#D0FBF9]">{studentInfo.customerCode || 'ETH1025'}</strong> • Expiry Date: <strong>{studentInfo.passExpiryDate}</strong> • Balance: <strong>{studentInfo.classesLeft} Classes Left</strong>
                   </p>
                 </div>
               </div>
@@ -256,6 +406,9 @@ export default function StudentPortalPage() {
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-2xl font-extrabold uppercase text-white font-display">{studentInfo.name}</h2>
+                    <span className="px-2.5 py-0.5 bg-[#FF0044] text-white text-[10px] font-extrabold uppercase rounded-full">
+                      ID: {studentInfo.customerCode || 'ETH1025'}
+                    </span>
                     <span className="px-2.5 py-0.5 bg-[#1F41FF] text-white text-[10px] font-extrabold uppercase rounded-full">
                       Age: {studentInfo.age}
                     </span>

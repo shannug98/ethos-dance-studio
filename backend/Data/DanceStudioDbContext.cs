@@ -15,6 +15,13 @@ namespace DanceStudio.API.Data
         public DbSet<Instructor> Instructors { get; set; } = null!;
         public DbSet<StudioSetting> Settings { get; set; } = null!;
 
+        // 🌟 Domain DbSets
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<CustomerPackage> CustomerPackages { get; set; } = null!;
+        public DbSet<PaymentRecord> PaymentRecords { get; set; } = null!;
+        public DbSet<NotificationRecord> Notifications { get; set; } = null!;
+        public DbSet<OtpVerification> OtpVerifications { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,6 +33,34 @@ namespace DanceStudio.API.Data
                 new StudioSetting { Id = 3, Key = "AdminUsername", Value = "admin" },
                 new StudioSetting { Id = 4, Key = "AdminPassword", Value = "adminpass" },
                 new StudioSetting { Id = 5, Key = "AdminPhone", Value = "+91 9876543210" }
+            );
+
+            // Seed Ethos Demo User (ETH1025)
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1025,
+                    CustomerCode = "ETH1025",
+                    Name = "Shanmuka Gaddam",
+                    Phone = "9876543210",
+                    Email = "shanmuka@gmail.com",
+                    PasswordHash = "ethos123",
+                    IsActive = true
+                }
+            );
+
+            // Seed Demo Active Customer Package
+            modelBuilder.Entity<CustomerPackage>().HasData(
+                new CustomerPackage
+                {
+                    Id = 1,
+                    UserId = 1025,
+                    PackageId = 3,
+                    PackageName = "Royal Celebration / Monthly Pass",
+                    StartDate = DateTime.UtcNow,
+                    ExpiryDate = DateTime.UtcNow.AddDays(7), // Expiring in 7 days for testing
+                    Status = "Active"
+                }
             );
 
             // Seed Ethos Official Classes

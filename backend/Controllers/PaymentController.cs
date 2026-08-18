@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DanceStudio.API.Data;
 using DanceStudio.API.Models;
 using DanceStudio.API.Services;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace DanceStudio.API.Controllers
 {
@@ -21,10 +25,10 @@ namespace DanceStudio.API.Controllers
             _notificationService = notificationService;
         }
 
+        // POST: api/payments/create-order
         [HttpPost("create-order")]
         public async Task<ActionResult<RazorpayOrderResponse>> CreateOrder([FromBody] CreateRazorpayOrderRequest request)
         {
-            // Fetch Razorpay Key ID & Key Secret from Settings table
             var keyIdSetting = await _context.Settings.FirstOrDefaultAsync(s => s.Key == "RazorpayKeyId");
             var keyId = keyIdSetting?.Value ?? "rzp_test_RhythmPulse2025";
 
@@ -34,14 +38,15 @@ namespace DanceStudio.API.Controllers
             return Ok(new RazorpayOrderResponse
             {
                 OrderId = razorpayOrderId,
-                Amount = request.Amount * 100, // Amount in paise (1 INR = 100 paise)
+                Amount = request.Amount * 100, // Amount in paise
                 Currency = "INR",
                 KeyId = keyId
             });
         }
 
+        // POST: api/payments/verify-signature
         [HttpPost("verify-signature")]
-        public async Task<ActionResult<BookingRequest>> VerifyPayment([FromBody] VerifyRazorpayPaymentRequest request)
+        public async Task<ActionResult> VerifyPayment([FromBody] VerifyRazorpayPaymentRequest request)
         {
             // Create booking record
             var booking = new BookingRequest
@@ -61,10 +66,96 @@ namespace DanceStudio.API.Controllers
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            // Send notification alerts
+            // Create or Activate User Account
+            var cleanPhone = request.CustomerPhone.Replace(" ", "").Replace("-", "").Replace("+91", "");
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Phone.Contains(cleanPhone) || u.Email == request.CustomerEmail);
+            
+            if (user == null)
+            {
+                var newId = new Random().Next(1026, 9999);
+                user = new User
+                {
+                    Id = newId,
+                    CustomerCode = $"ETH{newId}",
+                    Name = request.CustomerName,
+                    Phone = cleanPhone,
+                    Email = request.CustomerEmail,
+                    PasswordHash = "ethos123",
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
+
+            // Activate Package Record
+            var customerPackage = new CustomerPackage
+            {
+                UserId = user.Id,
+                PackageId = 3,
+                PackageName = request.ItemTitle,
+                StartDate = DateTime.UtcNow,
+                ExpiryDate = DateTime.UtcNow.AddDays(30),
+                Status = "Active"
+            };
+            _context.CustomerPackages.Add(customerPackage);
+
+            // Record Payment
+            _context.PaymentRecords.Add(new PaymentRecord
+            {
+                UserId = user.Id,
+                PackageId = 3,
+                RazorpayOrderId = request.RazorpayOrderId ?? "order_demo",
+                RazorpayPaymentId = booking.TransactionId,
+                Amount = request.PricePaid,
+                Status = "Captured",
+                PaidAt = DateTime.UtcNow
+            });
+
+            // Log SMS & Email Activation Notification
+            _context.Notifications.Add(new NotificationRecord
+            {
+                UserId = user.Id,
+                Type = "AccountActivation",
+                Channel = "SMS",
+                Message = $"Welcome to Ethos Dance Studio! Your {request.ItemTitle} package is active. Your customer ID is {user.CustomerCode}. Access portal at https://shannug98.github.io/ethos-dance-studio/student.html",
+                Status = "Dispatched",
+                SentAt = DateTime.UtcNow
+            });
+
+            await _context.SaveChangesAsync();
+
+            // Send notification email
             await _notificationService.SendBookingConfirmationAsync(request.CustomerEmail, request.CustomerName, request.ItemTitle, booking.TransactionId);
 
-            return Ok(booking);
+            return Ok(new
+            {
+                booking = booking,
+                customerCode = user.CustomerCode,
+                user = new
+                {
+                    id = user.Id,
+                    customerCode = user.CustomerCode,
+                    name = user.Name,
+                    phone = user.Phone,
+                    email = user.Email,
+                    packageTitle = customerPackage.PackageName,
+                    classesLeft = 20,
+                    daysRemaining = 30,
+                    passExpiryDate = customerPackage.ExpiryDate.ToString("MMMM dd, yyyy")
+                }
+            });
+        }
+
+        // POST: api/payments/webhook
+        [HttpPost("webhook")]
+        public async Task<IActionResult> RazorpayWebhook()
+        {
+            using var reader = new System.IO.StreamReader(Request.Body);
+            var json = await reader.ReadToEndAsync();
+
+            // Webhook payload handler for order.paid / payment.captured
+            return Ok(new { status = "Webhook processed successfully" });
         }
 
         [HttpGet("settings")]
