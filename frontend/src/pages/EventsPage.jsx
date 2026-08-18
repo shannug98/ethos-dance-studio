@@ -144,7 +144,7 @@ export default function EventsPage() {
           </div>
         </div>
 
-        {/* 3-COLUMN EVENT CARDS GRID MATCHING SCREENSHOT */}
+        {/* 3-COLUMN EVENT CARDS GRID WITH COHESIVE LIGHT CARD DESIGN */}
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {eventsList.map((evt) => {
@@ -156,17 +156,17 @@ export default function EventsPage() {
               return (
                 <div
                   key={evt.id}
-                  className={`bg-[#0F1117] text-white border rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-300 shadow-xl ${
+                  className={`bg-white text-slate-900 border rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-300 shadow-xl shadow-slate-200/60 ${
                     isOpen 
-                      ? 'border-[#00DFD8]/60 ring-2 ring-[#00DFD8]/20 shadow-2xl' 
+                      ? 'border-[#0088FF]/50 ring-2 ring-[#0088FF]/10' 
                       : isUpcoming
-                      ? 'border-[#FF5533]/50'
-                      : 'border-white/10 opacity-90'
+                      ? 'border-[#FF5533]/40'
+                      : 'border-slate-200 opacity-90'
                   }`}
                 >
                   {/* Ribbons / Status Badges */}
                   {evt.ribbon && (
-                    <div className="absolute top-6 -right-10 rotate-45 bg-[#00DFD8] text-black text-[9px] font-black uppercase px-10 py-1 shadow-md tracking-wider">
+                    <div className="absolute top-6 -right-10 rotate-45 bg-[#0088FF] text-white text-[9px] font-black uppercase px-10 py-1 shadow-md tracking-wider">
                       {evt.ribbon}
                     </div>
                   )}
@@ -176,17 +176,17 @@ export default function EventsPage() {
                     <div className="flex items-center justify-between mb-6">
                       <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-full border ${
                         isOpen 
-                          ? 'bg-[#00DFD8]/20 border-[#00DFD8]/40 text-[#00DFD8]' 
+                          ? 'bg-[#0088FF]/10 border-[#0088FF]/30 text-[#0088FF]' 
                           : isUpcoming 
-                          ? 'bg-[#FF5533]/20 border-[#FF5533]/40 text-[#FF5533]'
-                          : 'bg-white/5 border-white/10 text-slate-400'
+                          ? 'bg-[#FF5533]/10 border-[#FF5533]/30 text-[#FF5533]'
+                          : 'bg-slate-100 border-slate-200 text-slate-500'
                       }`}>
                         {evt.pill}
                       </span>
 
                       {/* Icon Box */}
-                      <div className="w-10 h-10 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-white">
-                        <IconComponent className="w-5 h-5 text-[#00DFD8]" />
+                      <div className="w-10 h-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800">
+                        <IconComponent className="w-5 h-5 text-[#0088FF]" />
                       </div>
                     </div>
 
@@ -196,38 +196,38 @@ export default function EventsPage() {
                     </span>
 
                     {/* Event Title */}
-                    <h3 className="text-2xl font-black font-syne text-white uppercase mb-1">
+                    <h3 className="text-2xl font-black font-syne text-slate-900 uppercase mb-1">
                       {evt.title}
                     </h3>
 
                     {/* Subtext Bullet */}
-                    <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wide mb-4">
+                    <p className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide mb-4">
                       {evt.subtext}
                     </p>
 
                     {/* Description Paragraph */}
-                    <p className="text-xs text-slate-300 font-medium leading-relaxed mb-6">
+                    <p className="text-xs text-slate-600 font-medium leading-relaxed mb-6">
                       {evt.desc}
                     </p>
                   </div>
 
                   {/* Footer / CTA Area */}
-                  <div className="pt-6 border-t border-white/10 space-y-4">
+                  <div className="pt-6 border-t border-slate-100 space-y-4">
                     
                     {/* Countdown box for upcoming */}
                     {isUpcoming && evt.timer && (
-                      <div className="p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center gap-3 text-center">
-                        <div className="bg-white/10 px-2.5 py-1 rounded-lg">
-                          <div className="text-sm font-black text-white">{evt.timer.days}</div>
-                          <div className="text-[7px] text-slate-400 font-bold uppercase">DAYS</div>
+                      <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center gap-3 text-center">
+                        <div className="bg-white border border-slate-200 px-2.5 py-1 rounded-lg shadow-sm">
+                          <div className="text-sm font-black text-slate-900">{evt.timer.days}</div>
+                          <div className="text-[7px] text-slate-500 font-bold uppercase">DAYS</div>
                         </div>
-                        <div className="bg-white/10 px-2.5 py-1 rounded-lg">
-                          <div className="text-sm font-black text-white">{evt.timer.hrs}</div>
-                          <div className="text-[7px] text-slate-400 font-bold uppercase">HRS</div>
+                        <div className="bg-white border border-slate-200 px-2.5 py-1 rounded-lg shadow-sm">
+                          <div className="text-sm font-black text-slate-900">{evt.timer.hrs}</div>
+                          <div className="text-[7px] text-slate-500 font-bold uppercase">HRS</div>
                         </div>
-                        <div className="bg-white/10 px-2.5 py-1 rounded-lg">
-                          <div className="text-sm font-black text-white">{evt.timer.min}</div>
-                          <div className="text-[7px] text-slate-400 font-bold uppercase">MIN</div>
+                        <div className="bg-white border border-slate-200 px-2.5 py-1 rounded-lg shadow-sm">
+                          <div className="text-sm font-black text-slate-900">{evt.timer.min}</div>
+                          <div className="text-[7px] text-slate-500 font-bold uppercase">MIN</div>
                         </div>
                       </div>
                     )}
@@ -235,20 +235,20 @@ export default function EventsPage() {
                     <div className="flex items-center justify-between">
                       {isOpen && (
                         <>
-                          <span className="text-xs font-extrabold text-slate-300">{evt.daysLeft}</span>
-                          <span className="text-base font-black text-white font-syne">₹{evt.price}</span>
+                          <span className="text-xs font-extrabold text-slate-500">{evt.daysLeft}</span>
+                          <span className="text-base font-black text-slate-900 font-syne">₹{evt.price}</span>
                         </>
                       )}
 
                       {isUpcoming && (
                         <>
-                          <span className="text-xs font-bold text-slate-400">{evt.liveTill}</span>
-                          <span className="text-base font-black text-white font-syne">₹{evt.price}</span>
+                          <span className="text-xs font-bold text-slate-500">{evt.liveTill}</span>
+                          <span className="text-base font-black text-slate-900 font-syne">₹{evt.price}</span>
                         </>
                       )}
 
                       {isLocked && (
-                        <span className="text-xs font-bold text-slate-400">Unlocks soon</span>
+                        <span className="text-xs font-bold text-slate-500">Unlocks soon</span>
                       )}
                     </div>
 
@@ -261,10 +261,10 @@ export default function EventsPage() {
                       disabled={isLocked}
                       className={`w-full py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
                         isOpen 
-                          ? 'bg-[#00DFD8] hover:bg-[#00f5ed] text-black shadow-lg shadow-[#00DFD8]/20' 
+                          ? 'bg-[#0088FF] hover:bg-[#0077EE] text-white shadow-lg shadow-[#0088FF]/30' 
                           : isUpcoming 
-                          ? 'bg-white/10 hover:bg-white/20 text-white border border-white/15' 
-                          : 'bg-white/5 text-slate-500 cursor-not-allowed border border-white/5'
+                          ? 'bg-slate-900 hover:bg-slate-800 text-white' 
+                          : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
                       }`}
                     >
                       <span>{evt.btnText}</span>

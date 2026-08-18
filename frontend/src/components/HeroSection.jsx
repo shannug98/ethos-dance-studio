@@ -8,18 +8,30 @@ export default function HeroSection({ onBookWorkshop }) {
   return (
     <section className="relative pt-[76px] bg-[#090A0F] text-white flex flex-col justify-between overflow-hidden">
       
+      {/* 🌟 TRANSPARENT BACKGROUND WATERMARK (IMG 3 AS BACKGROUND) 🌟 */}
+      <div className="absolute inset-0 top-[76px] z-0 flex items-center justify-center overflow-hidden opacity-15 pointer-events-none">
+        <div className="w-[340px] h-[340px] sm:w-[650px] sm:h-[650px] lg:w-[850px] lg:h-[850px] flex items-center justify-center">
+          <img
+            src={ethosPureLogo}
+            alt="Ethos Watermark Background"
+            className="w-full h-full object-contain filter drop-shadow-[0_0_80px_rgba(255,0,85,0.6)]"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-[#090A0F]" />
+      </div>
+
       {/* HERO CONTENT: MOBILE FLUID COLUMN (LOGO TOP, TEXT DOWN) & DESKTOP 2-COLUMN */}
-      <div className="max-w-7xl mx-auto w-full py-8 sm:py-16 px-4 sm:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto w-full py-8 sm:py-16 px-4 sm:px-8 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* 1. HERO LOGO EMBLEM (TRANSPARENT NO CARD WRAPPER - MATCHING USER DIRECTIVE) */}
+          {/* 1. HERO LOGO GRAPHIC (PURE TRANSPARENT - NO CARD WRAPPER AT ALL) */}
           <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center items-center relative py-4">
             
-            {/* Ambient Glowing Background Effect Behind Logo */}
+            {/* Ambient Radial Glow Behind Transparent Logo */}
             <div className="absolute w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] bg-gradient-to-tr from-[#FF0055]/30 via-transparent to-[#00DFD8]/20 rounded-full blur-3xl pointer-events-none -z-0"></div>
 
-            {/* Official Transparent Ethos Emblem Logo */}
-            <div className="relative z-10 w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[480px] flex items-center justify-center p-2 filter drop-shadow-[0_0_40px_rgba(255,0,85,0.45)] hover:scale-105 transition-transform duration-500">
+            {/* Pure Transparent Logo Image (img 3) */}
+            <div className="relative z-10 w-full max-w-[300px] sm:max-w-[420px] lg:max-w-[460px] flex items-center justify-center p-2 filter drop-shadow-[0_0_40px_rgba(255,0,85,0.5)] hover:scale-105 transition-transform duration-500">
               <img
                 src={ethosPureLogo}
                 alt="Ethos Dance Studio Emblem Logo"
@@ -63,7 +75,7 @@ export default function HeroSection({ onBookWorkshop }) {
         </div>
       </div>
 
-      {/* Solid Cobalt Blue Accent Strip with 100% Infinite Sliding Marquee */}
+      {/* Solid Accent Strip with 100% Infinite Sliding Marquee */}
       <div className="w-full h-10 sm:h-12 bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] flex items-center z-10 text-white text-[10px] sm:text-xs font-extrabold tracking-widest uppercase overflow-hidden relative shadow-lg">
         <div className="animate-marquee flex items-center whitespace-nowrap">
           <span className="pr-8">{blueStripText}</span>
