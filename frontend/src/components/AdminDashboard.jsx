@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Search, DollarSign, ShoppingBag, Send, RefreshCw, Lock, Bell, Settings, Key, ShieldCheck, CheckCircle2, Calendar, User, Star, Upload, MessageCircle, AlertTriangle, Image as ImageIcon, Ticket, Award } from 'lucide-react';
+import { X, Search, DollarSign, ShoppingBag, Send, RefreshCw, Lock, Bell, Settings, Key, ShieldCheck, CheckCircle2, Calendar, User, Star, Upload, MessageCircle, AlertTriangle, Image as ImageIcon, Ticket, Award, TrendingUp, CreditCard } from 'lucide-react';
 
 export default function AdminDashboard({ API_URL, onClose, onLogout }) {
   const [activeTab, setActiveTab] = useState('PACKAGES'); // 'PACKAGES', 'EVENTS', or 'SETTINGS'
@@ -17,6 +17,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       phone: '+91 98765 43210',
       email: 'rohan@example.com',
       packageName: 'Adults & Fitness Pass',
+      price: 2500,
       batch: 'Monday - Friday (8:00 PM)',
       classesLeft: 12,
       daysRemaining: 18,
@@ -36,6 +37,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       phone: '+91 91234 56789',
       email: 'ananya@example.com',
       packageName: 'Kids Monthly Pass (4-12 Yrs)',
+      price: 2000,
       batch: 'Mon - Fri (5:00 PM Kids)',
       classesLeft: 4,
       daysRemaining: 3,
@@ -54,7 +56,8 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       parentName: 'Rajesh Reddy',
       phone: '+91 94401 23456',
       email: 'kavya@example.com',
-      packageName: 'Bollywood Commercial Pass',
+      packageName: 'Adults & Fitness Pass',
+      price: 2500,
       batch: 'Mon - Fri (6:00 PM)',
       classesLeft: 0,
       daysRemaining: 0,
@@ -127,6 +130,13 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       status: 'CONFIRMED'
     }
   ]);
+
+  // Master Workshop Events Catalog
+  const masterEventsList = [
+    { id: 301, title: 'Hip-Hop & Choreography Masterclass', date: 'Aug 19, 2026' },
+    { id: 302, title: 'Contemporary & Floorwork Workshop', date: 'Sep 25, 2026' },
+    { id: 303, title: 'Bollywood Fusion & Sangeet Workshop', date: 'Oct 25, 2026' }
+  ];
 
   // Settings State
   const [settings, setSettings] = useState({
@@ -213,7 +223,21 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
     return `https://wa.me/91${cleanPhone}?text=${waText}`;
   };
 
-  const totalRevenue = eventTickets.reduce((sum, t) => sum + t.pricePaid, 0) + (students.length * 2500);
+  // 💰 REVENUE CALCULATIONS
+  const monthlyPackagesRevenue = students.reduce((sum, s) => sum + (s.price || 2500), 0);
+  const allEventsRevenue = eventTickets.reduce((sum, t) => sum + t.pricePaid, 0);
+  const grandTotalRevenue = monthlyPackagesRevenue + allEventsRevenue;
+
+  // Calculate Revenue per Event
+  const getRevenueForEvent = (eventId) => {
+    return eventTickets
+      .filter(t => t.eventId === eventId)
+      .reduce((sum, t) => sum + t.pricePaid, 0);
+  };
+
+  const getTicketsSoldForEvent = (eventId) => {
+    return eventTickets.filter(t => t.eventId === eventId).length;
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/90 backdrop-blur-xl animate-fadeIn">
@@ -231,17 +255,12 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                 ETHOS MASTER ADMIN DASHBOARD
               </h2>
               <p className="text-[11px] font-bold text-slate-400">
-                Kukatpally Studio Management • Real-time Passes, Ratings & Event Attendees
+                Kukatpally Studio Management • Real-time Passes, Ratings & Event Revenue Breakdown
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="px-3.5 py-1.5 bg-white/5 border border-white/10 rounded-full text-right hidden md:block">
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Total Revenue</span>
-              <span className="text-sm font-black font-syne text-[#00DFD8]">₹{totalRevenue.toLocaleString()}</span>
-            </div>
-
             {onClose && (
               <button
                 onClick={onClose}
@@ -253,18 +272,59 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
           </div>
         </div>
 
+        {/* 📊 SEPARATE FINANCIAL REVENUE DASHBOARD BAR */}
+        <div className="bg-slate-950 border-b border-slate-800 px-4 sm:px-6 py-4 grid grid-cols-1 sm:grid-cols-3 gap-4 shrink-0">
+          
+          {/* 1. Monthly Packages Revenue Card */}
+          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-black uppercase text-slate-400 block tracking-wider">MONTHLY PACKAGES REVENUE</span>
+              <span className="text-xl font-black font-syne text-[#0088FF]">₹{monthlyPackagesRevenue.toLocaleString()}</span>
+              <span className="text-[10px] text-slate-500 font-bold block">{students.length} Active Subscribers</span>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-[#0088FF]/10 border border-[#0088FF]/30 flex items-center justify-center text-[#0088FF]">
+              <User className="w-5 h-5" />
+            </div>
+          </div>
+
+          {/* 2. All Events Revenue Card */}
+          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-black uppercase text-slate-400 block tracking-wider">ALL EVENTS REVENUE</span>
+              <span className="text-xl font-black font-syne text-[#FF0055]">₹{allEventsRevenue.toLocaleString()}</span>
+              <span className="text-[10px] text-slate-500 font-bold block">{eventTickets.length} Event Tickets Sold</span>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-[#FF0055]/10 border border-[#FF0055]/30 flex items-center justify-center text-[#FF0055]">
+              <Ticket className="w-5 h-5" />
+            </div>
+          </div>
+
+          {/* 3. Grand Total Studio Revenue Card */}
+          <div className="bg-gradient-to-r from-[#7928CA]/30 via-[#FF0055]/20 to-[#00DFD8]/20 border border-[#7928CA]/50 rounded-2xl p-3.5 flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-black uppercase text-[#00DFD8] block tracking-wider">GRAND TOTAL STUDIO REVENUE</span>
+              <span className="text-2xl font-black font-syne text-white">₹{grandTotalRevenue.toLocaleString()}</span>
+              <span className="text-[10px] text-slate-300 font-bold block">Combined Monthly + Events</span>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-[#7928CA]/40 border border-[#7928CA]/60 flex items-center justify-center text-white shadow-lg">
+              <TrendingUp className="w-5 h-5 text-[#00DFD8]" />
+            </div>
+          </div>
+
+        </div>
+
         {/* NAVIGATION TABS BAR */}
-        <div className="bg-slate-950 border-b border-slate-800 px-6 py-3 flex items-center gap-3 overflow-x-auto no-scrollbar shrink-0">
+        <div className="bg-slate-900 border-b border-slate-800 px-6 py-3 flex items-center gap-3 overflow-x-auto no-scrollbar shrink-0">
           <button
             onClick={() => setActiveTab('PACKAGES')}
             className={`px-5 py-2.5 text-xs font-black uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2 ${
               activeTab === 'PACKAGES'
                 ? 'bg-[#0088FF] text-white shadow-lg shadow-[#0088FF]/30'
-                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+                : 'bg-slate-950 text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <User className="w-4 h-4" />
-            <span>Monthly Packages & Students ({students.length})</span>
+            <span>Monthly Packages (Revenue: ₹{monthlyPackagesRevenue.toLocaleString()})</span>
           </button>
 
           <button
@@ -272,11 +332,11 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
             className={`px-5 py-2.5 text-xs font-black uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2 ${
               activeTab === 'EVENTS'
                 ? 'bg-[#FF0055] text-white shadow-lg shadow-[#FF0055]/30'
-                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+                : 'bg-slate-950 text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Ticket className="w-4 h-4" />
-            <span>Events & Tickets Roster ({eventTickets.length})</span>
+            <span>Events & Masterclasses (Revenue: ₹{allEventsRevenue.toLocaleString()})</span>
           </button>
 
           <button
@@ -284,7 +344,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
             className={`px-5 py-2.5 text-xs font-black uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2 ${
               activeTab === 'SETTINGS'
                 ? 'bg-[#7928CA] text-white shadow-lg shadow-[#7928CA]/30'
-                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+                : 'bg-slate-950 text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Settings className="w-4 h-4" />
@@ -311,13 +371,21 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
           {activeTab === 'PACKAGES' && (
             <div className="space-y-6">
               
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-black uppercase font-syne text-white">
-                  STUDENT MONTHLY SUBSCRIBERS & RATINGS
-                </h3>
-                <span className="text-xs text-slate-400 font-bold">
-                  Showing {students.length} Enrolled Members
-                </span>
+              {/* Monthly Packages Summary Header */}
+              <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-black uppercase font-syne text-white">
+                    MONTHLY PACKAGES REVENUE & STUDENT SUBSCRIBERS
+                  </h3>
+                  <p className="text-xs text-slate-400 font-medium">
+                    Total Revenue Generated from Monthly Subscriptions: <strong className="text-[#0088FF]">₹{monthlyPackagesRevenue.toLocaleString()}</strong>
+                  </p>
+                </div>
+
+                <div className="px-4 py-2 bg-[#0088FF]/20 border border-[#0088FF]/40 rounded-xl text-center">
+                  <span className="text-[10px] text-slate-300 uppercase font-bold block">Monthly Subscriptions</span>
+                  <span className="text-base font-black font-syne text-[#0088FF]">₹{monthlyPackagesRevenue.toLocaleString()}</span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 gap-6">
@@ -354,7 +422,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                           </div>
 
                           <div className="text-xs text-slate-400 font-medium space-y-1">
-                            <div>📦 Pass: <strong className="text-slate-200">{student.packageName}</strong></div>
+                            <div>📦 Pass: <strong className="text-slate-200">{student.packageName}</strong> • Revenue Paid: <strong className="text-[#0088FF]">₹{student.price}</strong></div>
                             <div>🕒 Batch: <strong className="text-slate-200">{student.batch}</strong></div>
                             <div>👨‍👩‍👦 Parent/Phone: <strong className="text-slate-200">{student.parentName} ({student.phone})</strong></div>
                             <div>🎟️ Classes Left: <strong className="text-[#00DFD8]">{student.classesLeft} Classes</strong> • Expiry: {student.passExpiryDate}</div>
@@ -442,22 +510,60 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
           {activeTab === 'EVENTS' && (
             <div className="space-y-6">
               
-              <div className="flex items-center justify-between">
+              {/* Overall Events Revenue Summary Header */}
+              <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-black uppercase font-syne text-white">
-                    EVENT TICKETS & ATTENDEE ROSTER
+                    ALL EVENTS & MASTERCLASSES REVENUE
                   </h3>
                   <p className="text-xs text-slate-400 font-medium">
-                    All attendees with Person Names, Ticket IDs, Pricing Tiers & WhatsApp Receipt Buttons
+                    Total Revenue Generated Across All Workshops: <strong className="text-[#FF0055]">₹{allEventsRevenue.toLocaleString()}</strong> ({eventTickets.length} Tickets Sold)
                   </p>
                 </div>
-                <span className="text-xs text-slate-400 font-bold">
-                  Total Sold: {eventTickets.length} Tickets
-                </span>
+
+                <div className="px-4 py-2 bg-[#FF0055]/20 border border-[#FF0055]/40 rounded-xl text-center">
+                  <span className="text-[10px] text-slate-300 uppercase font-bold block">All Events Total</span>
+                  <span className="text-base font-black font-syne text-[#FF0055]">₹{allEventsRevenue.toLocaleString()}</span>
+                </div>
+              </div>
+
+              {/* 📊 INDIVIDUAL PER-EVENT REVENUE BREAKDOWN CARDS */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-400">
+                  INDIVIDUAL PER-EVENT REVENUE BREAKDOWN
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {masterEventsList.map((mEvt) => {
+                    const eventRev = getRevenueForEvent(mEvt.id);
+                    const eventCount = getTicketsSoldForEvent(mEvt.id);
+
+                    return (
+                      <div key={mEvt.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                        <div>
+                          <span className="text-[10px] font-black uppercase text-[#FF0055] block">{mEvt.date}</span>
+                          <h5 className="text-xs font-bold text-white uppercase line-clamp-1">{mEvt.title}</h5>
+                          <span className="text-[10px] text-slate-400 font-bold block">{eventCount} Tickets Sold</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-lg font-black font-syne text-[#00DFD8]">₹{eventRev.toLocaleString()}</span>
+                          <span className="text-[9px] text-slate-500 font-bold block">Event Revenue</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Event Roster Table */}
-              <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl mt-6">
+                <div className="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-300">
+                    COMPLETE TICKET PURCHASERS & ATTENDEE LIST
+                  </h4>
+                  <span className="text-[11px] font-bold text-slate-400">Showing {eventTickets.length} Attendees</span>
+                </div>
+
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
@@ -466,7 +572,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                         <th className="p-4">Person Name</th>
                         <th className="p-4">Phone & Email</th>
                         <th className="p-4">Event Title</th>
-                        <th className="p-4">Tier & Price</th>
+                        <th className="p-4">Tier & Revenue</th>
                         <th className="p-4">Status</th>
                         <th className="p-4 text-right">Action</th>
                       </tr>
