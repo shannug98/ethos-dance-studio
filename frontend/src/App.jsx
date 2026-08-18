@@ -15,6 +15,7 @@ import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
 import AdminLoginModal from './components/AdminLoginModal';
 import AdminDashboard from './components/AdminDashboard';
+import StudentPortalModal from './components/StudentPortalModal';
 
 const API_URL = 'http://localhost:5000';
 
@@ -26,6 +27,7 @@ export default function App() {
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
   const [adminLoginOpen, setAdminLoginOpen] = useState(false);
   const [adminDashboardOpen, setAdminDashboardOpen] = useState(false);
+  const [studentPortalOpen, setStudentPortalOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/api/events`)
@@ -54,6 +56,7 @@ export default function App() {
       {/* 1. Global Navigation Header */}
       <Navbar
         onOpenAdmin={() => setAdminLoginOpen(true)}
+        onOpenStudentPortal={() => setStudentPortalOpen(true)}
         onQuickBook={handleSelectItemForBooking}
       />
 
@@ -62,7 +65,7 @@ export default function App() {
         <EventTickerBanner onSelectEvent={handleSelectItemForBooking} />
       </div>
 
-      {/* 3. CLEAN MAIN HOME PAGE FLOW (Classes, Schedule, Passes, Sangeet & Gallery live in dedicated pages) */}
+      {/* 3. CLEAN MAIN HOME PAGE FLOW */}
       <main>
         {/* HERO SECTION */}
         <HeroSection
@@ -100,7 +103,7 @@ export default function App() {
       {/* FLOATING WHATSAPP BUTTON */}
       <FloatingWhatsApp />
 
-      {/* MODAL 1: CHECKOUT OVERLAY (when workshop or CTA clicked) */}
+      {/* MODAL 1: CHECKOUT OVERLAY */}
       {selectedItemForBooking && (
         <BookingPaymentModal
           item={selectedItemForBooking}
@@ -132,6 +135,13 @@ export default function App() {
           API_URL={API_URL}
           onClose={() => setAdminDashboardOpen(false)}
           onLogout={() => setAdminDashboardOpen(false)}
+        />
+      )}
+
+      {/* MODAL 5: STUDENT & PARENT MONTHLY PACKAGE MEMBER PORTAL */}
+      {studentPortalOpen && (
+        <StudentPortalModal
+          onClose={() => setStudentPortalOpen(false)}
         />
       )}
 

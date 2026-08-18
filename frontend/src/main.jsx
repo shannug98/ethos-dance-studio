@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import ClassesPage from './pages/ClassesPage.jsx'
+import EventsPage from './pages/EventsPage.jsx'
 import SchedulePage from './pages/SchedulePage.jsx'
 import EthosGalleryPage from './EthosGalleryPage.jsx'
 import SangeetPage from './pages/SangeetPage.jsx'
@@ -14,8 +14,8 @@ const hash = window.location.hash.toLowerCase();
 
 let ComponentToRender = App;
 
-if (pathname.includes('classes') || hash.includes('classes')) {
-  ComponentToRender = ClassesPage;
+if (pathname.includes('events') || hash.includes('events')) {
+  ComponentToRender = EventsPage;
 } else if (pathname.includes('schedule') || hash.includes('schedule')) {
   ComponentToRender = SchedulePage;
 } else if (pathname.includes('gallery') || hash.includes('gallery')) {
