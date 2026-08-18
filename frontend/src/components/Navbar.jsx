@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lock, Menu, X, UserCheck, LogOut, Sparkles, ChevronDown, User } from 'lucide-react';
-import ethosSymbol from '../assets/ethos_symbol_transparent.png';
+import ethosSideBySideLogo from '../assets/ethos_side_by_side.png';
 
 export default function Navbar({ onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,29 +48,14 @@ export default function Navbar({ onQuickBook }) {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-[76px] transition-all duration-300">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* LOGO SECTION: SYMBOL EMBLEM & ETHOS DANCE STUDIO SIDE-BY-SIDE (TRANSPARENT BG MATCHING WEBPAGE) */}
+        {/* LOGO SECTION: OFFICIAL SYMBOL & TEXT MATTER SIDE-BY-SIDE (NO WHITE BACKGROUND) */}
         <div className="flex items-center gap-3">
-          <a href="index.html" target="_self" className="flex items-center gap-3 group">
-            
-            {/* Transparent Pixel-Perfect Ethos Circular Emblem */}
-            <div className="relative w-10 h-10 shrink-0 flex items-center justify-center">
-              <img
-                src={ethosSymbol}
-                alt="Ethos Dance Studio Symbol"
-                className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,0,85,0.4)] group-hover:scale-105 transition-transform"
-              />
-            </div>
-
-            {/* Side-by-Side Text Typography */}
-            <div className="flex flex-col text-left leading-none">
-              <span className="font-display-giant text-2xl sm:text-3xl text-white tracking-tighter group-hover:text-[#FF0055] transition-colors">
-                ETHOS<span className="text-[#FF0055]">.</span>
-              </span>
-              <span className="text-[8px] font-extrabold uppercase tracking-[3px] text-slate-400">
-                DANCE STUDIO
-              </span>
-            </div>
-
+          <a href="index.html" target="_self" className="flex items-center gap-2 group">
+            <img
+              src={ethosSideBySideLogo}
+              alt="ETHOS DANCE STUDIO"
+              className="h-10 sm:h-12 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,0,85,0.3)] group-hover:scale-105 transition-transform"
+            />
           </a>
         </div>
 
