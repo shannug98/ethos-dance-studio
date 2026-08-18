@@ -3,8 +3,19 @@ import Navbar from './components/Navbar';
 import EventTickerBanner from './components/EventTickerBanner';
 import HeroSection from './components/HeroSection';
 import AboutSection from './components/AboutSection';
+import ClassesSection from './components/ClassesSection';
+import SchedulesSection from './components/SchedulesSection';
 import WorkshopsSection from './components/WorkshopsSection';
+import SangeethSection from './components/SangeethSection';
+import InstructorsSection from './components/InstructorsSection';
+import PackagesSection from './components/PackagesSection';
+import GallerySection from './components/GallerySection';
+import TestimonialsSection from './components/TestimonialsSection';
+import UnifiedCheckoutSection from './components/UnifiedCheckoutSection';
+import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
+
 import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
 import AdminLoginModal from './components/AdminLoginModal';
@@ -14,6 +25,8 @@ const API_URL = 'http://localhost:5000';
 
 export default function App() {
   const [events, setEvents] = useState([]);
+  const [schedules, setSchedules] = useState([]);
+  const [packages, setPackages] = useState([]);
 
   // Modals & State
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
@@ -25,6 +38,16 @@ export default function App() {
     fetch(`${API_URL}/api/events`)
       .then(res => res.json())
       .then(data => setEvents(data))
+      .catch(() => {});
+
+    fetch(`${API_URL}/api/schedules`)
+      .then(res => res.json())
+      .then(data => setSchedules(data))
+      .catch(() => {});
+
+    fetch(`${API_URL}/api/packages`)
+      .then(res => res.json())
+      .then(data => setPackages(data))
       .catch(() => {});
   }, []);
 
@@ -43,40 +66,85 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans">
+    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans relative">
       
-      {/* Global Navbar */}
+      {/* 1. Global Navigation Header */}
       <Navbar
         onOpenAdmin={() => setAdminLoginOpen(true)}
         onQuickBook={handleSelectItemForBooking}
       />
 
-      {/* 🚀 Sliding Upcoming Event Notification Banner placed right below Navigation Panel */}
+      {/* 2. Sliding Upcoming Event Notification Banner */}
       <div className="pt-[76px]">
         <EventTickerBanner onSelectEvent={handleSelectItemForBooking} />
       </div>
 
-      {/* 🌟 HOME PAGE CONTENT */}
+      {/* 3. BUSINESS-FOCUSED HIGH CONVERSION HOMEPAGE FLOW */}
       <main>
-        {/* 1. Hero Section (First Image + FIND YOUR FLOW) */}
+        {/* HERO SECTION */}
         <HeroSection
           onBookWorkshop={handleSelectItemForBooking}
         />
 
-        {/* 2. Vision & Who We Are (About Ethos) */}
+        {/* ABOUT ETHOS */}
         <AboutSection />
 
-        {/* 3. Upcoming Events & Masterclass Workshops */}
+        {/* DANCE CLASSES CATALOG */}
+        <ClassesSection
+          onSelectClass={handleSelectItemForBooking}
+        />
+
+        {/* LIVE MON-FRI TIMETABLE SCHEDULE & INR FEES */}
+        <SchedulesSection
+          schedules={schedules}
+          onSelectScheduleSlot={handleSelectItemForBooking}
+        />
+
+        {/* MEMBERSHIPS & PRICING PASSES */}
+        <PackagesSection
+          packages={packages}
+          onSelectPackage={handleSelectItemForBooking}
+        />
+
+        {/* SPECIAL UPCOMING EVENTS & WORKSHOPS */}
         <WorkshopsSection
           events={events}
           onSelectEvent={handleSelectItemForBooking}
         />
+
+        {/* ROYAL SANGEET HUB */}
+        <SangeethSection
+          onSelectSangeetPackage={handleSelectItemForBooking}
+        />
+
+        {/* MASTER CHOREOGRAPHERS & INSTRUCTORS */}
+        <InstructorsSection />
+
+        {/* COMMUNITIES & ANIMATED PHOTO GALLERY */}
+        <GallerySection
+          onBookPass={handleSelectItemForBooking}
+        />
+
+        {/* STUDENT TESTIMONIALS & REVIEWS */}
+        <TestimonialsSection />
+
+        {/* REAL ONLINE CLASS BOOKING & CHECKOUT HUB */}
+        <UnifiedCheckoutSection
+          API_URL={API_URL}
+          onSuccessPayment={handleSuccessPayment}
+        />
+
+        {/* LOCATION, MAP & CONTACT FORM */}
+        <ContactSection />
       </main>
 
-      {/* 4. Footer */}
+      {/* FOOTER */}
       <Footer onQuickBook={handleSelectItemForBooking} />
 
-      {/* MODAL 1: CHECKOUT OVERLAY (when card clicked) */}
+      {/* FLOATING WHATSAPP BUTTON */}
+      <FloatingWhatsApp />
+
+      {/* MODAL 1: CHECKOUT OVERLAY (when class/workshop/pass clicked) */}
       {selectedItemForBooking && (
         <BookingPaymentModal
           item={selectedItemForBooking}
@@ -102,7 +170,7 @@ export default function App() {
         />
       )}
 
-      {/* MODAL 4: PROTECTED ADMIN DASHBOARD */}
+      {/* MODAL 4: PROTECTED ADMIN DASHBOARD (.NET API persistence) */}
       {adminDashboardOpen && (
         <AdminDashboard
           API_URL={API_URL}
