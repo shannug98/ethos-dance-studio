@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lock, Menu, X, UserCheck, LogOut, Sparkles, ChevronDown, User } from 'lucide-react';
+import ethosSymbol from '../assets/ethos_symbol_transparent.png';
 
 export default function Navbar({ onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -47,15 +48,16 @@ export default function Navbar({ onQuickBook }) {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-[76px] transition-all duration-300">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* LOGO SECTION: SYMBOL EMBLEM & ETHOS DANCE STUDIO SIDE-BY-SIDE (NO WHITE BACKGROUND) */}
+        {/* LOGO SECTION: SYMBOL EMBLEM & ETHOS DANCE STUDIO SIDE-BY-SIDE (TRANSPARENT BG MATCHING WEBPAGE) */}
         <div className="flex items-center gap-3">
-          <a href="index.html" target="_self" className="flex items-center gap-2.5 group">
-            {/* Official Circular Ethos Symbol Emblem (Inverted so white bg vanishes into obsidian dark theme) */}
-            <div className="relative w-10 h-10 overflow-hidden shrink-0 flex items-center justify-center">
+          <a href="index.html" target="_self" className="flex items-center gap-3 group">
+            
+            {/* Transparent Pixel-Perfect Ethos Circular Emblem */}
+            <div className="relative w-10 h-10 shrink-0 flex items-center justify-center">
               <img
-                src="./ethos_logo.png"
+                src={ethosSymbol}
                 alt="Ethos Dance Studio Symbol"
-                className="w-14 h-14 max-w-none object-contain -translate-y-1.5 mix-blend-screen filter invert brightness-125 contrast-125"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,0,85,0.4)] group-hover:scale-105 transition-transform"
               />
             </div>
 
@@ -68,6 +70,7 @@ export default function Navbar({ onQuickBook }) {
                 DANCE STUDIO
               </span>
             </div>
+
           </a>
         </div>
 
