@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Menu, X, UserCheck, LogOut } from 'lucide-react';
+import { Lock, Menu, X, UserCheck, LogOut, Sparkles } from 'lucide-react';
 
 export default function Navbar({ onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,24 +31,25 @@ export default function Navbar({ onQuickBook }) {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#000000] border-b border-[#333333] h-[76px]">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-[78px] transition-all duration-300">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* Left Nav Links - Open seamlessly in the SAME TAB (_self) */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-xs lg:text-sm font-semibold tracking-tight text-white uppercase">
+        {/* Left Nav Links - Glass Pill Navigation */}
+        <div className="hidden md:flex items-center gap-1.5 p-1 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
           
           <a
             href="events.html"
             target="_self"
-            className="hover:text-[#D0FBF9] transition-colors font-bold text-[#FF0044]"
+            className="px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-[#FF0055] hover:bg-white/10 rounded-full transition-all flex items-center gap-1"
           >
-            Events
+            <Sparkles className="w-3 h-3 text-[#FF0055]" />
+            <span>Events</span>
           </a>
 
           <a
             href="schedule.html"
             target="_self"
-            className="hover:text-[#D0FBF9] transition-colors"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all"
           >
             Schedule
           </a>
@@ -56,7 +57,7 @@ export default function Navbar({ onQuickBook }) {
           <a
             href="gallery.html"
             target="_self"
-            className="hover:text-[#D0FBF9] transition-colors"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all"
           >
             Gallery
           </a>
@@ -64,7 +65,7 @@ export default function Navbar({ onQuickBook }) {
           <a
             href="sangeet.html"
             target="_self"
-            className="hover:text-[#D0FBF9] transition-colors"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all"
           >
             Sangeet Hub
           </a>
@@ -72,7 +73,7 @@ export default function Navbar({ onQuickBook }) {
           <a
             href="packages.html"
             target="_self"
-            className="hover:text-[#D0FBF9] transition-colors"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all"
           >
             Passes
           </a>
@@ -80,7 +81,7 @@ export default function Navbar({ onQuickBook }) {
           <a
             href="location.html"
             target="_self"
-            className="hover:text-[#D0FBF9] transition-colors"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all"
           >
             Location
           </a>
@@ -92,48 +93,48 @@ export default function Navbar({ onQuickBook }) {
           
           <button
             onClick={() => onQuickBook && onQuickBook({ id: 99, title: 'Ethos Studio All-Access Pass', price: 699, type: 'Pass' })}
-            className="btn-cyan text-xs py-2 px-3 sm:py-2.5 sm:px-4 font-bold uppercase tracking-wider hidden sm:inline-flex"
+            className="btn-cyan text-xs py-2.5 px-5 font-extrabold uppercase tracking-wider hidden sm:inline-flex shadow-lg"
           >
             Reserve Spot
           </button>
 
-          {/* IF USER IS LOGGED IN: MEMBER & ADMIN BUTTONS GONE! SHOW STUDENT PROFILE PIC & NAME */}
+          {/* IF USER IS LOGGED IN: SHOW STUDENT PROFILE PIC & NAME */}
           {loggedInUser ? (
-            <div className="flex items-center gap-3 bg-[#111111] border border-[#1F41FF] px-3 py-1.5 rounded-full shadow-lg">
-              <a href="student.html" target="_self" className="flex items-center gap-2 hover:opacity-95 transition-opacity">
+            <div className="flex items-center gap-3 bg-white/5 border border-[#7928CA]/50 px-3.5 py-1.5 rounded-full shadow-xl backdrop-blur-md">
+              <a href="student.html" target="_self" className="flex items-center gap-2.5 hover:opacity-95 transition-opacity">
                 <img
                   src={loggedInUser.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
                   alt={loggedInUser.name}
-                  className="w-8 h-8 rounded-full border border-[#FF0044] object-cover shrink-0"
+                  className="w-8 h-8 rounded-full border-2 border-[#FF0055] object-cover shrink-0"
                 />
                 <div className="flex flex-col text-left leading-none">
-                  <span className="text-xs font-black text-white uppercase font-display tracking-tight">
+                  <span className="text-xs font-extrabold text-white uppercase font-outfit tracking-tight">
                     {loggedInUser.name}
                   </span>
-                  <span className="text-[9px] font-bold text-[#D0FBF9] uppercase tracking-wider">
-                    Portal Active ({loggedInUser.classesLeft || 8} Left)
+                  <span className="text-[9px] font-bold text-[#00DFD8] uppercase tracking-wider mt-0.5">
+                    Active ({loggedInUser.classesLeft || 8} Left)
                   </span>
                 </div>
               </a>
 
               <button
                 onClick={handleLogout}
-                className="p-1.5 text-slate-400 hover:text-[#FF0044] transition-colors ml-1"
+                className="p-1.5 text-slate-400 hover:text-[#FF0055] transition-colors ml-1"
                 title="Log Out of Member Portal"
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           ) : (
-            /* IF NOT LOGGED IN: SHOW MEMBER LOGIN & ADMIN BUTTONS (OPEN IN SAME TAB) */
+            /* IF NOT LOGGED IN: SHOW MEMBER LOGIN & ADMIN BUTTONS */
             <>
               <a
                 href="student.html"
                 target="_self"
-                className="px-3 py-2 bg-[#1F41FF] hover:bg-[#3b5cff] text-xs font-bold text-white flex items-center gap-1.5 transition-all rounded-sm shadow-md"
+                className="btn-glow-primary px-4 py-2.5 text-xs font-extrabold uppercase flex items-center gap-1.5 transition-all shadow-lg"
                 title="Monthly Package Student & Parent Login Portal"
               >
-                <UserCheck className="w-3.5 h-3.5 text-[#D0FBF9]" />
+                <UserCheck className="w-3.5 h-3.5 text-white" />
                 <span className="hidden sm:inline">Member Login</span>
                 <span className="sm:hidden">Portal</span>
               </a>
@@ -141,19 +142,19 @@ export default function Navbar({ onQuickBook }) {
               <a
                 href="admin.html"
                 target="_self"
-                className="px-3 py-2 bg-[#1A1A1A] hover:bg-[#262626] text-xs font-semibold text-white border border-[#404040] flex items-center gap-1.5 transition-all"
+                className="btn-glass px-3.5 py-2.5 text-xs font-bold text-white flex items-center gap-1.5 transition-all"
                 title="Admin Login Portal"
               >
-                <Lock className="w-3.5 h-3.5 text-[#D900FF]" />
+                <Lock className="w-3.5 h-3.5 text-[#00DFD8]" />
                 <span className="hidden sm:inline">Admin</span>
               </a>
             </>
           )}
 
-          {/* Clean Stylized Ethos Dance Studio Text Logo -> Navigates to index.html */}
-          <a href="index.html" target="_self" className="flex flex-col text-right pl-2 leading-none">
-            <span className="font-display-giant text-2xl sm:text-3xl text-white tracking-tighter">
-              ETHOS<span className="text-[#FF0044]">.</span>
+          {/* Clean Stylized Ethos Dance Studio Text Logo */}
+          <a href="index.html" target="_self" className="flex flex-col text-right pl-2 leading-none group">
+            <span className="font-display-giant text-2xl sm:text-3xl text-white tracking-tighter group-hover:text-[#FF0055] transition-colors">
+              ETHOS<span className="text-[#FF0055]">.</span>
             </span>
             <span className="text-[8px] font-extrabold uppercase tracking-[3px] text-slate-400">
               DANCE STUDIO
@@ -173,13 +174,13 @@ export default function Navbar({ onQuickBook }) {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#000000] border-b border-[#333333] px-6 py-6 space-y-4 font-semibold text-base text-white">
+        <div className="md:hidden bg-[#090A0F]/95 border-b border-white/10 backdrop-blur-xl px-6 py-6 space-y-4 font-semibold text-base text-white">
           
           <a
             href="events.html"
             target="_self"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-[#FF0044] font-bold"
+            className="block text-[#FF0055] font-extrabold"
           >
             Events
           </a>
@@ -188,7 +189,7 @@ export default function Navbar({ onQuickBook }) {
             href="schedule.html"
             target="_self"
             onClick={() => setMobileMenuOpen(false)}
-            className="block hover:text-[#D0FBF9]"
+            className="block hover:text-[#00DFD8]"
           >
             Schedule
           </a>
@@ -197,7 +198,7 @@ export default function Navbar({ onQuickBook }) {
             href="gallery.html"
             target="_self"
             onClick={() => setMobileMenuOpen(false)}
-            className="block hover:text-[#D0FBF9]"
+            className="block hover:text-[#00DFD8]"
           >
             Gallery
           </a>
@@ -206,7 +207,7 @@ export default function Navbar({ onQuickBook }) {
             href="sangeet.html"
             target="_self"
             onClick={() => setMobileMenuOpen(false)}
-            className="block hover:text-[#D0FBF9]"
+            className="block hover:text-[#00DFD8]"
           >
             Sangeet Hub
           </a>
@@ -215,7 +216,7 @@ export default function Navbar({ onQuickBook }) {
             href="packages.html"
             target="_self"
             onClick={() => setMobileMenuOpen(false)}
-            className="block hover:text-[#D0FBF9]"
+            className="block hover:text-[#00DFD8]"
           >
             Passes
           </a>
@@ -224,37 +225,37 @@ export default function Navbar({ onQuickBook }) {
             href="location.html"
             target="_self"
             onClick={() => setMobileMenuOpen(false)}
-            className="block hover:text-[#D0FBF9]"
+            className="block hover:text-[#00DFD8]"
           >
             Location
           </a>
 
           {loggedInUser ? (
-            <div className="pt-4 border-t border-[#333333] space-y-3">
+            <div className="pt-4 border-t border-white/10 space-y-3">
               <a
                 href="student.html"
                 target="_self"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 p-3 bg-[#1F41FF]/20 border border-[#1F41FF] rounded-xl text-white font-bold"
+                className="flex items-center gap-3 p-3 bg-white/5 border border-[#7928CA]/50 rounded-2xl text-white font-bold"
               >
-                <img src={loggedInUser.profilePic} alt="" className="w-8 h-8 rounded-full border border-[#FF0044] object-cover" />
+                <img src={loggedInUser.profilePic} alt="" className="w-8 h-8 rounded-full border border-[#FF0055] object-cover" />
                 <span>{loggedInUser.name} (Member Portal)</span>
               </a>
 
               <button
                 onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
-                className="w-full py-3 bg-[#FF0044] text-xs font-bold text-white uppercase text-center block rounded-xl"
+                className="w-full py-3 bg-[#FF0055] text-xs font-extrabold text-white uppercase text-center block rounded-2xl shadow-lg"
               >
                 Log Out
               </button>
             </div>
           ) : (
-            <>
+            <div className="space-y-3 pt-2">
               <a
                 href="student.html"
                 target="_self"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 bg-[#1F41FF] text-xs font-bold text-white uppercase text-center block"
+                className="w-full py-3.5 btn-glow-primary text-xs font-extrabold text-white uppercase text-center block rounded-2xl shadow-lg"
               >
                 Member Portal Login
               </a>
@@ -263,11 +264,11 @@ export default function Navbar({ onQuickBook }) {
                 href="admin.html"
                 target="_self"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 bg-[#1A1A1A] text-xs font-bold text-white uppercase text-center block border border-[#404040]"
+                className="w-full py-3.5 btn-glass text-xs font-bold text-white uppercase text-center block rounded-2xl"
               >
                 Admin Portal Login
               </a>
-            </>
+            </div>
           )}
 
         </div>
