@@ -3,13 +3,8 @@ import Navbar from './components/Navbar';
 import EventTickerBanner from './components/EventTickerBanner';
 import HeroSection from './components/HeroSection';
 import AboutSection from './components/AboutSection';
-import ClassesSection from './components/ClassesSection';
-import SchedulesSection from './components/SchedulesSection';
 import WorkshopsSection from './components/WorkshopsSection';
-import SangeethSection from './components/SangeethSection';
 import InstructorsSection from './components/InstructorsSection';
-import PackagesSection from './components/PackagesSection';
-import GallerySection from './components/GallerySection';
 import TestimonialsSection from './components/TestimonialsSection';
 import UnifiedCheckoutSection from './components/UnifiedCheckoutSection';
 import ContactSection from './components/ContactSection';
@@ -25,8 +20,6 @@ const API_URL = 'http://localhost:5000';
 
 export default function App() {
   const [events, setEvents] = useState([]);
-  const [schedules, setSchedules] = useState([]);
-  const [packages, setPackages] = useState([]);
 
   // Modals & State
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
@@ -38,16 +31,6 @@ export default function App() {
     fetch(`${API_URL}/api/events`)
       .then(res => res.json())
       .then(data => setEvents(data))
-      .catch(() => {});
-
-    fetch(`${API_URL}/api/schedules`)
-      .then(res => res.json())
-      .then(data => setSchedules(data))
-      .catch(() => {});
-
-    fetch(`${API_URL}/api/packages`)
-      .then(res => res.json())
-      .then(data => setPackages(data))
       .catch(() => {});
   }, []);
 
@@ -79,7 +62,7 @@ export default function App() {
         <EventTickerBanner onSelectEvent={handleSelectItemForBooking} />
       </div>
 
-      {/* 3. BUSINESS-FOCUSED HIGH CONVERSION HOMEPAGE FLOW */}
+      {/* 3. CLEAN MAIN HOME PAGE FLOW (Classes, Schedule, Passes, Sangeet & Gallery live in dedicated pages) */}
       <main>
         {/* HERO SECTION */}
         <HeroSection
@@ -89,41 +72,14 @@ export default function App() {
         {/* ABOUT ETHOS */}
         <AboutSection />
 
-        {/* DANCE CLASSES CATALOG */}
-        <ClassesSection
-          onSelectClass={handleSelectItemForBooking}
-        />
-
-        {/* LIVE MON-FRI TIMETABLE SCHEDULE & INR FEES */}
-        <SchedulesSection
-          schedules={schedules}
-          onSelectScheduleSlot={handleSelectItemForBooking}
-        />
-
-        {/* MEMBERSHIPS & PRICING PASSES */}
-        <PackagesSection
-          packages={packages}
-          onSelectPackage={handleSelectItemForBooking}
-        />
-
         {/* SPECIAL UPCOMING EVENTS & WORKSHOPS */}
         <WorkshopsSection
           events={events}
           onSelectEvent={handleSelectItemForBooking}
         />
 
-        {/* ROYAL SANGEET HUB */}
-        <SangeethSection
-          onSelectSangeetPackage={handleSelectItemForBooking}
-        />
-
         {/* MASTER CHOREOGRAPHERS & INSTRUCTORS */}
         <InstructorsSection />
-
-        {/* COMMUNITIES & ANIMATED PHOTO GALLERY */}
-        <GallerySection
-          onBookPass={handleSelectItemForBooking}
-        />
 
         {/* STUDENT TESTIMONIALS & REVIEWS */}
         <TestimonialsSection />
@@ -144,7 +100,7 @@ export default function App() {
       {/* FLOATING WHATSAPP BUTTON */}
       <FloatingWhatsApp />
 
-      {/* MODAL 1: CHECKOUT OVERLAY (when class/workshop/pass clicked) */}
+      {/* MODAL 1: CHECKOUT OVERLAY (when workshop or CTA clicked) */}
       {selectedItemForBooking && (
         <BookingPaymentModal
           item={selectedItemForBooking}
