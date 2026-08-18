@@ -1,4 +1,5 @@
 import React from 'react';
+import logoTransparent from '../assets/ethos_logo_transparent.png';
 
 export default function Footer({ onQuickBook }) {
   return (
@@ -11,7 +12,7 @@ export default function Footer({ onQuickBook }) {
         <div className="space-y-4">
           <div className="h-20 w-auto">
             <img
-              src="/ethos_logo_transparent.png"
+              src={logoTransparent}
               alt="Ethos Dance Studio Logo"
               className="h-full w-auto object-contain"
             />

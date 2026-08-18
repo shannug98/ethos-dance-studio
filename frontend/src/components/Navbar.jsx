@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Menu, X } from 'lucide-react';
+import logoDark from '../assets/ethos_logo_dark.png';
 
 export default function Navbar({ onOpenAdmin, onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,7 +42,7 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
           <a href="#" className="flex items-center pl-2">
             <div className="h-12 w-auto shrink-0">
               <img
-                src="/ethos_logo_dark.png"
+                src={logoDark}
                 alt="Ethos Dance Studio Logo"
                 className="h-full w-auto object-contain filter drop-shadow-[0_0_10px_rgba(255,0,68,0.7)]"
               />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
+import logoDark from '../assets/ethos_logo_dark.png';
 
 export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
   return (
@@ -9,7 +10,7 @@ export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
       <div className="absolute inset-0 top-[76px] z-0 flex items-center justify-center overflow-hidden opacity-20 pointer-events-none">
         <div className="w-[500px] h-[500px] sm:w-[700px] sm:h-[700px] lg:w-[850px] lg:h-[850px]">
           <img
-            src="/ethos_logo_dark.png"
+            src={logoDark}
             alt="Ethos Logo Background"
             className="w-full h-full object-contain filter drop-shadow-[0_0_80px_rgba(255,0,68,0.6)]"
           />
@@ -61,7 +62,7 @@ export default function HeroSection({ onBookWorkshop, onScrollToQuiz }) {
             <div className="p-8 bg-[#111111]/90 border-2 border-[#333333] backdrop-blur-xl max-w-md w-full text-center space-y-4 shadow-2xl relative group hover:border-[#FF0044] transition-all">
               <div className="w-64 h-64 sm:w-80 sm:h-80 mx-auto">
                 <img
-                  src="/ethos_logo_dark.png"
+                  src={logoDark}
                   alt="Official Ethos Dance Studio Logo"
                   className="w-full h-full object-contain filter drop-shadow-[0_0_30px_rgba(255,0,68,0.7)] group-hover:scale-105 transition-transform duration-500"
                 />

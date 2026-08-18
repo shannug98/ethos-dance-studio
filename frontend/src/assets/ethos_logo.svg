@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 650" width="100%" height="100%">
+  <defs>
+    <style>
+      .ethos-text { font-family: 'Encode Sans Condensed', 'Arial Black', sans-serif; font-weight: 900; letter-spacing: 2px; text-anchor: middle; }
+      .sub-text { font-family: 'Encode Sans Expanded', 'Arial', sans-serif; font-weight: 800; letter-spacing: 5px; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Circular Symbol -->
+  <g transform="translate(50, 20)">
+    <!-- Circle Ring -->
+    <path d="M250,30 C360,30 440,110 440,220 C440,330 350,420 240,420 C130,420 60,330 60,210 C60,130 120,50 210,34 C150,60 100,120 100,200 C100,290 170,370 260,370 C340,370 400,300 400,220 C400,140 330,65 250,30 Z" fill="currentColor" />
+
+    <!-- Red Brush Stroke E -->
+    <path d="M 320 85 
+             C 280 100, 230 125, 175 140 
+             C 160 145, 150 155, 165 165 
+             C 210 185, 270 180, 310 170 
+             C 330 165, 340 175, 310 195 
+             C 250 235, 190 275, 140 315 
+             C 125 328, 145 338, 175 330 
+             C 230 315, 290 295, 350 280 
+             C 370 275, 380 290, 340 300 
+             C 270 320, 190 345, 130 352 
+             C 105 355, 95 330, 120 310 
+             C 175 265, 240 225, 300 185 
+             C 320 172, 300 155, 260 158 
+             C 210 162, 170 170, 135 175 
+             C 120 177, 125 162, 145 152 
+             C 200 125, 260 105, 335 78 
+             C 350 72, 340 78, 320 85 Z" 
+          fill="#FF0044" />
+  </g>
+
+  <!-- Typography matching logo -->
+  <text x="300" y="520" fill="currentColor" class="ethos-text" font-size="95">ETHOS</text>
+  <text x="300" y="575" fill="currentColor" class="sub-text" font-size="32">DANCE STUDIO</text>
+</svg>
