@@ -16,6 +16,7 @@ import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
 import AdminLoginModal from './components/AdminLoginModal';
 import AdminDashboard from './components/AdminDashboard';
+import EthosGalleryPage from './EthosGalleryPage';
 
 const API_URL = 'http://localhost:5000';
 
@@ -23,6 +24,13 @@ export default function App() {
   const [events, setEvents] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [packages, setPackages] = useState([]);
+
+  // View Routing: 'home' vs 'gallery'
+  const [view, setView] = useState(() => {
+    return window.location.hash.includes('gallery') || window.location.pathname.includes('gallery')
+      ? 'gallery'
+      : 'home';
+  });
 
   // Modals & State
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
@@ -61,6 +69,23 @@ export default function App() {
     setAdminDashboardOpen(true);
   };
 
+  if (view === 'gallery') {
+    return (
+      <div>
+        <div className="bg-black text-white px-4 py-2 flex items-center justify-between border-b border-slate-800 text-xs">
+          <button
+            onClick={() => { setView('home'); window.location.hash = ''; }}
+            className="font-bold text-[#FF0044] hover:underline flex items-center gap-1"
+          >
+            ← Back to Main Studio Home
+          </button>
+          <span>Ethos Communities & Clubs Gallery</span>
+        </div>
+        <EthosGalleryPage />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans">
       
@@ -68,6 +93,7 @@ export default function App() {
       <Navbar
         onOpenAdmin={() => setAdminLoginOpen(true)}
         onQuickBook={handleSelectItemForBooking}
+        onNavigateGallery={() => { setView('gallery'); window.location.hash = 'gallery'; }}
       />
 
       {/* Main Sections */}

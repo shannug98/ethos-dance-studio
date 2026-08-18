@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { Lock, Menu, X, ExternalLink } from 'lucide-react';
 
-export default function Navbar({ onOpenAdmin, onQuickBook }) {
+export default function Navbar({ onOpenAdmin, onQuickBook, onNavigateGallery }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleGalleryClick = (e) => {
+    if (onNavigateGallery) {
+      e.preventDefault();
+      onNavigateGallery();
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#000000] border-b border-[#333333] h-[76px]">
@@ -14,15 +21,13 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
           <a href="#about" className="hover:text-[#D0FBF9] transition-colors">About Ethos</a>
           <a href="#schedule" className="hover:text-[#D0FBF9] transition-colors">Schedule</a>
           
-          {/* Gallery opens dedicated ETHOS GALLERY PAGE in a NEW TAB */}
+          {/* Gallery Link -> Navigates to Communities Gallery Page */}
           <a
-            href="./gallery.html#gallery-page"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors text-[#FF0044] flex items-center gap-1 font-bold"
+            href="gallery.html"
+            onClick={handleGalleryClick}
+            className="hover:text-[#D0FBF9] transition-colors text-[#FF0044] font-bold flex items-center gap-1"
           >
             <span>Gallery</span>
-            <ExternalLink className="w-3.5 h-3.5" />
           </a>
 
           <a href="#sangeet" className="hover:text-[#D0FBF9] transition-colors">Sangeet Hub</a>
@@ -78,14 +83,11 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
           <a href="#schedule" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Schedule</a>
           
           <a
-            href="./gallery.html#gallery-page"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center gap-1 text-[#FF0044] font-bold"
+            href="gallery.html"
+            onClick={(e) => { setMobileMenuOpen(false); handleGalleryClick(e); }}
+            className="block text-[#FF0044] font-bold"
           >
             <span>Gallery</span>
-            <ExternalLink className="w-4 h-4" />
           </a>
 
           <a href="#sangeet" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D0FBF9]">Sangeet Hub</a>
