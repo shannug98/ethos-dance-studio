@@ -1,57 +1,81 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
-import { LOGO_DARK_BASE64 } from '../assets/logoBase64';
+import { Sparkles, ArrowRight } from 'lucide-react';
+import ethosPureLogo from '../assets/ethos_pure_logo.png';
 
 export default function HeroSection({ onBookWorkshop }) {
   const blueStripText = "ETHOS DANCE STUDIO KUKATPALLY • COMMERCIAL HIP-HOP • BOLLYWOOD COMMERCIAL FUSION • ROYAL WEDDING SANGEET • CONTEMPORARY STORYTELLING • HIGH HEELS CHOREO • ";
 
   return (
-    <section className="relative min-h-screen pt-[76px] bg-[#000000] text-white flex flex-col justify-between overflow-hidden">
+    <section className="relative pt-[76px] bg-[#090A0F] text-white flex flex-col justify-between overflow-hidden">
       
-      {/* Background Image: Official Ethos Logo Emblem Centered Behind Content */}
-      <div className="absolute inset-0 top-[76px] z-0 flex items-center justify-center overflow-hidden opacity-25 pointer-events-none">
-        <div className="w-[320px] h-[320px] sm:w-[750px] sm:h-[750px] lg:w-[900px] lg:h-[900px]">
-          <img
-            src={LOGO_DARK_BASE64}
-            alt="Ethos Logo Background"
-            className="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(255,0,68,0.7)]"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-transparent to-[#000000]" />
-      </div>
-
-      {/* Hero Central Content */}
-      <div className="w-full relative z-10 my-auto py-10 sm:py-16 px-4 sm:px-12 lg:px-16">
-        <div className="max-w-4xl space-y-6 sm:space-y-8 text-left">
+      {/* HERO CONTENT: MOBILE FLUID COLUMN (IMAGE TOP, TEXT DOWN) & DESKTOP 2-COLUMN */}
+      <div className="max-w-7xl mx-auto w-full py-8 sm:py-16 px-4 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 sm:px-4 sm:py-1.5 bg-[#FF0044] text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest rounded-sm">
-            <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            <span>ETHOS DANCE STUDIO • KUKATPALLY HYDERABAD</span>
+          {/* 1. HERO IMAGE CARD (FOR MOBILE: RENDERED ON TOP) */}
+          <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center">
+            <div className="relative w-full max-w-lg rounded-3xl overflow-hidden glass-card p-3 group border border-white/15 shadow-2xl">
+              <div className="relative h-[260px] sm:h-[380px] lg:h-[440px] rounded-2xl overflow-hidden bg-black/60">
+                <img
+                  src="https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1000&q=80"
+                  alt="Ethos Dance Studio Masterclass"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-black/30"></div>
+                
+                {/* Logo Badge Overlay on Image */}
+                <div className="absolute top-4 left-4 p-2 bg-black/50 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-2">
+                  <img src={ethosPureLogo} alt="Ethos" className="h-8 w-auto object-contain" />
+                  <span className="text-xs font-black text-white font-syne uppercase tracking-wider pr-2">Kukatpally</span>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4 p-4 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-extrabold text-[#00DFD8] uppercase tracking-wider block">Weekly Batches Live</span>
+                    <strong className="text-xs font-bold text-white">Mon-Fri Morning & Evening Sessions</strong>
+                  </div>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#00DFD8] animate-ping"></span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-7xl lg:text-9xl font-display-giant text-white uppercase leading-[0.92] sm:leading-[0.88] tracking-tighter">
-            FIND YOUR <br />
-            <span className="text-[#FF0044]">FLOW.</span>
-          </h1>
+          {/* 2. HERO TEXT MATTER (FOR MOBILE: RENDERED DOWN BELOW IMAGE) */}
+          <div className="lg:col-span-6 order-2 lg:order-1 space-y-5 text-left">
+            
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#FF0055]/20 border border-[#FF0055]/40 text-[#FF0055] text-[10px] sm:text-xs font-extrabold uppercase tracking-widest rounded-full">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
+              <span>ETHOS DANCE STUDIO • KUKATPALLY HYDERABAD</span>
+            </div>
 
-          <p className="text-sm sm:text-xl text-slate-200 font-normal max-w-2xl leading-relaxed">
-            Welcome to <strong>ETHOS DANCE STUDIO</strong>. Located at Kukatpally Hyderabad, we bring world-class training in Commercial Hip-Hop, Bollywood Fusion, and Royal Sangeet Choreography.
-          </p>
+            <h1 className="text-4xl sm:text-7xl lg:text-8xl font-black font-syne text-white uppercase leading-[0.95] tracking-tight">
+              FIND YOUR <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] italic">
+                FLOW.
+              </span>
+            </h1>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2 sm:pt-4">
-            <button
-              onClick={() => onBookWorkshop && onBookWorkshop({ id: 1, title: 'Free Demo Trial Pass', price: 0, type: 'Free Trial' })}
-              className="btn-cyan w-full sm:w-auto text-xs sm:text-base py-3.5 sm:py-4 px-6 sm:px-8 uppercase font-bold tracking-tight shadow-2xl justify-center"
-            >
-              Reserve Free Demo Spot
-            </button>
+            <p className="text-xs sm:text-base text-slate-300 font-medium leading-relaxed max-w-xl">
+              Welcome to <strong className="text-white font-bold">ETHOS DANCE STUDIO</strong>. Located at Kukatpally Hyderabad, we bring world-class training in Commercial Hip-Hop, Bollywood Fusion, and Royal Sangeet Choreography.
+            </p>
+
+            <div className="pt-2 sm:pt-4">
+              <button
+                onClick={() => onBookWorkshop && onBookWorkshop({ id: 1, title: 'Free Demo Trial Pass', price: 0, type: 'Free Trial' })}
+                className="w-full sm:w-auto btn-cyan text-xs sm:text-sm py-4 px-8 font-black uppercase tracking-wider shadow-xl shadow-[#00DFD8]/20 flex items-center justify-center gap-2"
+              >
+                <span>Reserve Free Demo Spot</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
           </div>
 
         </div>
       </div>
 
       {/* Solid Cobalt Blue Accent Strip with 100% Infinite Sliding Marquee */}
-      <div className="w-full h-10 sm:h-12 bg-[#1F41FF] flex items-center z-10 text-white text-[10px] sm:text-xs font-extrabold tracking-widest uppercase overflow-hidden relative border-t border-b border-[#1F41FF]">
+      <div className="w-full h-10 sm:h-12 bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] flex items-center z-10 text-white text-[10px] sm:text-xs font-extrabold tracking-widest uppercase overflow-hidden relative shadow-lg">
         <div className="animate-marquee flex items-center whitespace-nowrap">
           <span className="pr-8">{blueStripText}</span>
           <span className="pr-8">{blueStripText}</span>
