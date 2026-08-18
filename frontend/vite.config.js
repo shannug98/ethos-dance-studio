@@ -21,9 +21,9 @@ export default defineConfig({
         admin: resolve(__dirname, 'admin.html'),
       },
       output: {
-        entryFileNames: 'assets/ethos-app-v20260818-[hash].js',
-        chunkFileNames: 'assets/ethos-chunk-v20260818-[hash].js',
-        assetFileNames: 'assets/ethos-style-v20260818-[hash].[ext]'
+        entryFileNames: 'assets/ethos-app-v20260818-cb2108-[hash].js',
+        chunkFileNames: 'assets/ethos-chunk-v20260818-cb2108-[hash].js',
+        assetFileNames: 'assets/ethos-style-v20260818-cb2108-[hash].[ext]'
       }
     },
   },
