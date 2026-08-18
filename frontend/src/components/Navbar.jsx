@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Lock, Menu, X } from 'lucide-react';
-import { LOGO_DARK_BASE64 } from '../assets/logoBase64';
 
 export default function Navbar({ onOpenAdmin, onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,15 +37,14 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             <span>Admin</span>
           </button>
 
-          {/* Official Ethos Brand Logo Image */}
-          <a href="#" className="flex items-center pl-2">
-            <div className="h-12 w-auto shrink-0">
-              <img
-                src={LOGO_DARK_BASE64}
-                alt="Ethos Dance Studio Logo"
-                className="h-full w-auto object-contain filter drop-shadow-[0_0_10px_rgba(255,0,68,0.7)]"
-              />
-            </div>
+          {/* Clean Stylized Ethos Dance Studio Text Logo */}
+          <a href="#" className="flex flex-col text-right pl-2 leading-none">
+            <span className="font-display-giant text-2xl sm:text-3xl text-white tracking-tighter">
+              ETHOS<span className="text-[#FF0044]">.</span>
+            </span>
+            <span className="text-[8px] font-extrabold uppercase tracking-[3px] text-slate-400">
+              DANCE STUDIO
+            </span>
           </a>
 
           {/* Mobile Hamburger */}
