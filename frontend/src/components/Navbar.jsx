@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lock, Menu, X, UserCheck, LogOut, Sparkles, ChevronDown, User } from 'lucide-react';
-import ethosSideBySideLogo from '../assets/ethos_side_by_side.png';
+import ethosEmblemSymbol from '../assets/ethos_emblem_symbol.png';
 
 export default function Navbar({ onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,14 +48,22 @@ export default function Navbar({ onQuickBook }) {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-[76px] transition-all duration-300">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* LOGO SECTION: OFFICIAL SYMBOL & TEXT MATTER SIDE-BY-SIDE (NO WHITE BACKGROUND) */}
+        {/* LOGO SECTION: SYMBOL EMBLEM ON LEFT + UPSIDE ETHOS / UNDER DANCE STUDIO TEXT ON RIGHT */}
         <div className="flex items-center gap-3">
-          <a href="index.html" target="_self" className="flex items-center gap-2 group">
+          <a href="index.html" target="_self" className="flex items-center gap-3 group">
             <img
-              src={ethosSideBySideLogo}
-              alt="ETHOS DANCE STUDIO"
-              className="h-10 sm:h-12 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,0,85,0.3)] group-hover:scale-105 transition-transform"
+              src={ethosEmblemSymbol}
+              alt="Ethos Emblem"
+              className="h-10 sm:h-12 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,0,85,0.4)] group-hover:scale-105 transition-transform"
             />
+            <div className="flex flex-col justify-center leading-none">
+              <span className="text-xl sm:text-2xl font-black uppercase tracking-widest text-white font-syne group-hover:text-[#FF0055] transition-colors">
+                ETHOS
+              </span>
+              <span className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#00DFD8] mt-1">
+                DANCE STUDIO
+              </span>
+            </div>
           </a>
         </div>
 
