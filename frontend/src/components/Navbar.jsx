@@ -48,7 +48,7 @@ export default function Navbar({ onQuickBook }) {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-[76px] transition-all duration-300">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* LOGO SECTION: ONLY THE SHARED IMAGE AS IT IS */}
+        {/* LOGO SECTION */}
         <div className="flex items-center gap-3">
           <a href="index.html" target="_self" className="flex items-center group">
             <img
@@ -112,16 +112,9 @@ export default function Navbar({ onQuickBook }) {
 
         </div>
 
-        {/* DESKTOP RIGHT ACTIONS: RESERVE BUTTON + TOPDOWN DROPDOWN MENU */}
+        {/* DESKTOP RIGHT ACTIONS: PORTAL ACCESS DROPDOWN */}
         <div className="hidden md:flex items-center gap-3">
           
-          <button
-            onClick={() => onQuickBook && onQuickBook({ id: 99, title: 'Ethos Studio All-Access Pass', price: 699, type: 'Pass' })}
-            className="btn-cyan text-xs py-2.5 px-5 font-extrabold uppercase tracking-wider shadow-lg"
-          >
-            Reserve Spot
-          </button>
-
           {/* TOPDOWN DROPDOWN MENU FOR MEMBER & ADMIN PORTALS */}
           <div className="relative" ref={dropdownRef}>
             {loggedInUser ? (
@@ -221,7 +214,7 @@ export default function Navbar({ onQuickBook }) {
 
       </div>
 
-      {/* MOBILE DRAWER: SLIDES DOWN DISPLAYING ALL CONTENT */}
+      {/* MOBILE DRAWER */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#090A0F]/95 border-b border-white/15 backdrop-blur-2xl px-6 py-6 space-y-4 font-semibold text-base text-white animate-fadeIn">
           
@@ -281,16 +274,6 @@ export default function Navbar({ onQuickBook }) {
           </a>
 
           <div className="pt-4 border-t border-white/10 space-y-3">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (onQuickBook) onQuickBook({ id: 99, title: 'Ethos Studio All-Access Pass', price: 699, type: 'Pass' });
-              }}
-              className="btn-cyan w-full text-xs py-3.5 font-extrabold uppercase tracking-wider text-center block rounded-2xl shadow-lg"
-            >
-              Reserve Spot Now
-            </button>
-
             {loggedInUser ? (
               <div className="space-y-2">
                 <a

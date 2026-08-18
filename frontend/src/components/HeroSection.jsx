@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import ethosPureLogo from '../assets/ethos_pure_logo.png';
 
 export default function HeroSection({ onBookWorkshop }) {
@@ -59,16 +59,6 @@ export default function HeroSection({ onBookWorkshop }) {
             <p className="text-xs sm:text-base text-slate-300 font-medium leading-relaxed max-w-xl">
               Welcome to <strong className="text-white font-bold">ETHOS DANCE STUDIO</strong>. Located at Kukatpally Hyderabad, we bring world-class training in Commercial Hip-Hop, Bollywood Fusion, and Royal Sangeet Choreography.
             </p>
-
-            <div className="pt-2 sm:pt-4">
-              <button
-                onClick={() => onBookWorkshop && onBookWorkshop({ id: 1, title: 'Free Demo Trial Pass', price: 0, type: 'Free Trial' })}
-                className="w-full sm:w-auto btn-cyan text-xs sm:text-sm py-4 px-8 font-black uppercase tracking-wider shadow-xl shadow-[#00DFD8]/20 flex items-center justify-center gap-2"
-              >
-                <span>Reserve Free Demo Spot</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
 
           </div>
 
