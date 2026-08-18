@@ -65,10 +65,9 @@ export default function Navbar({ onQuickBook }) {
           <a
             href="events.html"
             target="_self"
-            className="px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-[#FF0055] hover:bg-white/10 rounded-full transition-all flex items-center gap-1"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#FF0055]" />
-            <span>Events</span>
+            Events
           </a>
 
           <a

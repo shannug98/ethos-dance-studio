@@ -21,15 +21,17 @@ export default function PackagesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#D900FF] selection:text-black font-sans">
+    <div className="min-h-screen bg-[#090A0F] text-white font-sans">
       
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
       <main className="pt-[76px]">
         {/* Page Banner */}
-        <div className="bg-gradient-to-r from-[#1F41FF] via-[#D900FF] to-[#FF0044] p-8 text-center text-white font-display uppercase tracking-widest">
-          <h1 className="text-4xl sm:text-6xl font-black font-display-giant">STUDIO MEMBERSHIPS & PASSES</h1>
-          <p className="text-xs sm:text-sm font-bold tracking-widest mt-2">Transparent Monthly Passes & All-Access Subscriptions</p>
+        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
+          <h1 className="text-4xl sm:text-6xl font-black font-syne">STUDIO MEMBERSHIPS & PASSES</h1>
+          <p className="text-xs sm:text-sm font-extrabold font-outfit tracking-widest mt-2 opacity-90">
+            Transparent Monthly Passes & All-Access Masterclass Subscriptions
+          </p>
         </div>
 
         <PackagesSection packages={packages} onSelectPackage={(item) => setSelectedItemForBooking(item)} />
