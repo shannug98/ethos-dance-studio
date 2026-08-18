@@ -5,8 +5,9 @@ import { resolve } from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Ensures relative assets work on GitHub Pages (github.io)
+  base: './', // Ensures relative assets work on GitHub Pages
   build: {
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
@@ -19,6 +20,11 @@ export default defineConfig({
         student: resolve(__dirname, 'student.html'),
         admin: resolve(__dirname, 'admin.html'),
       },
+      output: {
+        entryFileNames: 'assets/[name]-bundle-[hash].js',
+        chunkFileNames: 'assets/[name]-chunk-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
+      }
     },
   },
 })
