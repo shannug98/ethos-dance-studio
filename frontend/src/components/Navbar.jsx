@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lock, Menu, X, UserCheck, LogOut, Sparkles, ChevronDown, User } from 'lucide-react';
-import ethosEmblemSymbol from '../assets/ethos_emblem_symbol.png';
+import ethosPureLogo from '../assets/ethos_pure_logo.png';
 
 export default function Navbar({ onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,22 +48,14 @@ export default function Navbar({ onQuickBook }) {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-[76px] transition-all duration-300">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* LOGO SECTION: SYMBOL EMBLEM ON LEFT + UPSIDE ETHOS / UNDER DANCE STUDIO TEXT ON RIGHT */}
+        {/* LOGO SECTION: ONLY THE SHARED IMAGE AS IT IS */}
         <div className="flex items-center gap-3">
-          <a href="index.html" target="_self" className="flex items-center gap-3 group">
+          <a href="index.html" target="_self" className="flex items-center group">
             <img
-              src={ethosEmblemSymbol}
-              alt="Ethos Emblem"
-              className="h-10 sm:h-12 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,0,85,0.4)] group-hover:scale-105 transition-transform"
+              src={ethosPureLogo}
+              alt="Ethos Studio Logo"
+              className="h-11 sm:h-14 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,0,85,0.4)] group-hover:scale-105 transition-transform"
             />
-            <div className="flex flex-col justify-center leading-none">
-              <span className="text-xl sm:text-2xl font-black uppercase tracking-widest text-white font-syne group-hover:text-[#FF0055] transition-colors">
-                ETHOS
-              </span>
-              <span className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#00DFD8] mt-1">
-                DANCE STUDIO
-              </span>
-            </div>
           </a>
         </div>
 
