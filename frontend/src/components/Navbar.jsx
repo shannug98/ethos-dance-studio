@@ -8,7 +8,7 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#000000] border-b border-[#333333] h-[76px]">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
-        {/* Left Nav Links - Open Dedicated Pages in New Tab */}
+        {/* Left Nav Links - All standard white text opening dedicated pages in new tabs */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-xs lg:text-sm font-semibold tracking-tight text-white uppercase">
           
           <a
@@ -37,10 +37,10 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             href="gallery.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#D0FBF9] transition-colors text-[#FF0044] font-bold flex items-center gap-1"
+            className="hover:text-[#D0FBF9] transition-colors flex items-center gap-1"
           >
             <span>Gallery</span>
-            <ExternalLink className="w-3 h-3 text-[#FF0044]" />
+            <ExternalLink className="w-3 h-3 text-slate-400" />
           </a>
 
           <a
@@ -97,7 +97,7 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
           </button>
 
           {/* Clean Stylized Ethos Dance Studio Text Logo */}
-          <a href="#" className="flex flex-col text-right pl-2 leading-none">
+          <a href="/" className="flex flex-col text-right pl-2 leading-none">
             <span className="font-display-giant text-2xl sm:text-3xl text-white tracking-tighter">
               ETHOS<span className="text-[#FF0044]">.</span>
             </span>
@@ -150,10 +150,10 @@ export default function Navbar({ onOpenAdmin, onQuickBook }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between text-[#FF0044] font-bold"
+            className="flex items-center justify-between hover:text-[#D0FBF9]"
           >
             <span>Gallery</span>
-            <ExternalLink className="w-4 h-4 text-[#FF0044]" />
+            <ExternalLink className="w-4 h-4 text-slate-400" />
           </a>
 
           <a
