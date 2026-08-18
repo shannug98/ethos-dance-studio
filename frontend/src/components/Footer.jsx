@@ -7,11 +7,19 @@ export default function Footer({ onQuickBook }) {
       {/* Top Footer Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 pb-16 grid grid-cols-1 md:grid-cols-3 gap-12">
         
-        {/* Giant Logo Column */}
+        {/* Logo Column */}
         <div className="space-y-4">
-          <h2 className="text-5xl sm:text-7xl font-display-giant uppercase tracking-tighter text-[#000000]">
-            ETHOS.
-          </h2>
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 text-black shrink-0">
+              <img src="/ethos_symbol.svg" alt="Ethos Logo Emblem" className="w-full h-full object-contain filter invert" />
+            </div>
+            <div>
+              <h2 className="text-4xl sm:text-5xl font-display-giant uppercase tracking-tighter text-[#000000] leading-none">
+                ETHOS
+              </h2>
+              <span className="text-[10px] font-extrabold uppercase tracking-[4px] text-slate-800 block">DANCE STUDIO</span>
+            </div>
+          </div>
           <p className="text-xs font-bold uppercase tracking-wider text-slate-800">
             Ethos Dance Studio© 2026 All Rights Reserved
           </p>
