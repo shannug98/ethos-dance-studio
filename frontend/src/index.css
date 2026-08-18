@@ -26,6 +26,26 @@ body {
   background: #1F41FF;
 }
 
+/* 🌟 Horizontal Infinite Marquee Animation for Event Banner and Blue Strip */
+@keyframes marqueeHorizontal {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeHorizontal 22s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-fast {
+  display: flex;
+  width: max-content;
+  animation: marqueeHorizontal 16s linear infinite;
+  will-change: transform;
+}
+
 /* Vertical Infinite Marquee Animations for 3 Columns */
 @keyframes verticalScrollUp {
   0% { transform: translateY(0%); }

@@ -3,6 +3,8 @@ import { Sparkles } from 'lucide-react';
 import { LOGO_DARK_BASE64 } from '../assets/logoBase64';
 
 export default function HeroSection({ onBookWorkshop }) {
+  const blueStripText = "ETHOS DANCE STUDIO KUKATPALLY • COMMERCIAL HIP-HOP • BOLLYWOOD COMMERCIAL FUSION • ROYAL WEDDING SANGEET • CONTEMPORARY STORYTELLING • HIGH HEELS CHOREO • ";
+
   return (
     <section className="relative min-h-screen pt-[76px] bg-[#000000] text-white flex flex-col justify-between overflow-hidden">
       
@@ -48,21 +50,11 @@ export default function HeroSection({ onBookWorkshop }) {
         </div>
       </div>
 
-      {/* Solid Cobalt Blue Accent Strip */}
-      <div className="w-full h-10 sm:h-12 bg-[#1F41FF] flex items-center justify-between px-4 sm:px-6 z-10 text-white text-[10px] sm:text-xs font-extrabold tracking-widest uppercase overflow-hidden">
-        <div className="flex items-center gap-6 sm:gap-8 whitespace-nowrap animate-marquee">
-          <span>ETHOS DANCE STUDIO KUKATPALLY</span>
-          <span>•</span>
-          <span>COMMERCIAL HIP-HOP</span>
-          <span>•</span>
-          <span>BOLLYWOOD COMMERCIAL FUSION</span>
-          <span>•</span>
-          <span>ROYAL WEDDING SANGEET</span>
-          <span>•</span>
-          <span>CONTEMPORARY STORYTELLING</span>
-          <span>•</span>
-          <span>HIGH HEELS CHOREO</span>
-          <span>•</span>
+      {/* Solid Cobalt Blue Accent Strip with 100% Infinite Sliding Marquee */}
+      <div className="w-full h-10 sm:h-12 bg-[#1F41FF] flex items-center z-10 text-white text-[10px] sm:text-xs font-extrabold tracking-widest uppercase overflow-hidden relative border-t border-b border-[#1F41FF]">
+        <div className="animate-marquee flex items-center whitespace-nowrap">
+          <span className="pr-8">{blueStripText}</span>
+          <span className="pr-8">{blueStripText}</span>
         </div>
       </div>
 
