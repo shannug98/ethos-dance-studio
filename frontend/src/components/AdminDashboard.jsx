@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { X, Search, DollarSign, ShoppingBag, Send, RefreshCw, Lock, Bell, Settings, Key, ShieldCheck, CheckCircle2, Calendar, User, Star, Upload, MessageCircle, AlertTriangle, Image as ImageIcon, Ticket, Award, TrendingUp, CreditCard, LayoutDashboard, Layers, ShieldAlert, ChevronRight, Eye, EyeOff, Clock, History, Filter } from 'lucide-react';
+import { X, Search, DollarSign, ShoppingBag, Send, RefreshCw, Lock, Bell, Settings, Key, ShieldCheck, CheckCircle2, Calendar, User, Star, Upload, MessageCircle, AlertTriangle, Image as ImageIcon, Ticket, Award, TrendingUp, CreditCard, LayoutDashboard, Layers, ShieldAlert, ChevronRight, Eye, EyeOff, Clock, History, Filter, Users } from 'lucide-react';
 import ethosPureLogo from '../assets/ethos_pure_logo.png';
 
 export default function AdminDashboard({ API_URL, onClose, onLogout }) {
   const [activeTab, setActiveTab] = useState('OVERVIEW'); // 'OVERVIEW', 'PACKAGES', 'EVENTS', or 'SETTINGS'
   const [eventFilter, setEventFilter] = useState('ALL'); // 'ALL', 'LIVE', 'UPCOMING', 'PAST'
   const [selectedEventModal, setSelectedEventModal] = useState(null); // Selected Event for Attendee Detail Modal
+  const [selectedBatchModal, setSelectedBatchModal] = useState(null); // Selected Batch Card for Batch Roster Modal
   const [searchTerm, setSearchTerm] = useState('');
 
   // Gateway Settings Security Lock State
@@ -123,6 +124,50 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       ]
     }
   ]);
+
+  // Master Class Schedule Batches Catalog
+  const scheduleBatchesList = [
+    {
+      id: 'BATCH-ADULT',
+      category: 'Adults & Fitness Batch (Mon-Fri 7:30 AM & 8:00 PM)',
+      title: 'Adults & Fitness Monthly Batch',
+      timings: 'Mon - Fri (7:30 AM & 8:00 PM)',
+      instructor: 'Siddharth & Rahul',
+      monthlyFee: 2500,
+      badgeColor: 'bg-[#0088FF]/20 text-[#0088FF] border-[#0088FF]/40',
+      image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'BATCH-KIDS-46',
+      category: 'Kids Batch (Ages 4-6 Yrs • Mon-Fri 5:00 PM)',
+      title: 'Kids Beginner Batch (Ages 4-6 Yrs)',
+      timings: 'Mon - Fri (5:00 PM - 6:00 PM)',
+      instructor: 'Priya & Sneha',
+      monthlyFee: 2000,
+      badgeColor: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
+      image: 'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'BATCH-KIDS-612',
+      category: 'Kids Batch (Ages 6-12 Yrs • Mon-Fri 7:00 PM)',
+      title: 'Kids Intermediate Batch (Ages 6-12 Yrs)',
+      timings: 'Mon - Fri (7:00 PM - 8:00 PM)',
+      instructor: 'Ananya & Vikram',
+      monthlyFee: 2000,
+      badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'BATCH-BOLLYWOOD-6PM',
+      category: 'Bollywood Commercial Fusion (Mon-Fri 6:00 PM)',
+      title: 'Bollywood Commercial Fusion Batch',
+      timings: 'Mon - Fri (6:00 PM - 7:00 PM)',
+      instructor: 'Kavya & Shanmuka',
+      monthlyFee: 2500,
+      badgeColor: 'bg-[#FF0055]/20 text-[#FF0055] border-[#FF0055]/40',
+      image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80'
+    }
+  ];
 
   // Master Workshop Events Catalog (Past, Live, and Upcoming)
   const masterEventsList = [
@@ -358,14 +403,6 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
   const allEventsRevenue = masterEventsList.reduce((sum, e) => sum + e.revenue, 0);
   const grandTotalRevenue = monthlyPackagesRevenue + allEventsRevenue;
 
-  // Group Students by Schedule Batches
-  const batchCategories = [
-    'Adults & Fitness Batch (Mon-Fri 7:30 AM & 8:00 PM)',
-    'Kids Batch (Ages 4-6 Yrs • Mon-Fri 5:00 PM)',
-    'Kids Batch (Ages 6-12 Yrs • Mon-Fri 7:00 PM)',
-    'Bollywood Commercial Fusion (Mon-Fri 6:00 PM)'
-  ];
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/90 backdrop-blur-xl animate-fadeIn">
       
@@ -395,14 +432,14 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
           {/* Quick Revenue Summary Badges */}
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-4 py-2 rounded-2xl">
-              <div>
+              <button onClick={() => setActiveTab('PACKAGES')} className="text-left hover:opacity-80 transition-opacity">
                 <span className="text-[9px] text-slate-400 font-bold uppercase block">Monthly Pass Rev</span>
                 <span className="text-xs font-black font-syne text-[#0088FF]">₹{monthlyPackagesRevenue.toLocaleString()}</span>
-              </div>
-              <div className="border-l border-slate-800 pl-3">
+              </button>
+              <button onClick={() => setActiveTab('EVENTS')} className="border-l border-slate-800 pl-3 text-left hover:opacity-80 transition-opacity">
                 <span className="text-[9px] text-slate-400 font-bold uppercase block">All Events Rev</span>
                 <span className="text-xs font-black font-syne text-[#FF0055]">₹{allEventsRevenue.toLocaleString()}</span>
-              </div>
+              </button>
               <div className="border-l border-slate-800 pl-3">
                 <span className="text-[9px] text-slate-400 font-bold uppercase block">Total Studio Rev</span>
                 <span className="text-sm font-black font-syne text-[#00DFD8]">₹{grandTotalRevenue.toLocaleString()}</span>
@@ -509,30 +546,44 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
               <div className="space-y-6">
                 <h2 className="text-xl font-black font-syne uppercase text-white">ETHOS STUDIO FINANCIAL SUMMARY</h2>
 
+                {/* CLICKABLE KPI REVENUE CARDS */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   
-                  <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 space-y-3 shadow-xl">
+                  {/* CLICKABLE MONTHLY PACKAGES REVENUE CARD */}
+                  <div
+                    onClick={() => setActiveTab('PACKAGES')}
+                    className="bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 rounded-3xl p-6 space-y-3 shadow-xl cursor-pointer transition-all hover:border-[#0088FF]/50 group"
+                  >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-black uppercase text-slate-400 tracking-wider">MONTHLY PACKAGES REVENUE</span>
+                      <span className="text-xs font-black uppercase text-slate-400 tracking-wider group-hover:text-[#0088FF] transition-colors">
+                        MONTHLY PACKAGES REVENUE →
+                      </span>
                       <div className="w-10 h-10 rounded-2xl bg-[#0088FF]/20 text-[#0088FF] flex items-center justify-center">
                         <User className="w-5 h-5" />
                       </div>
                     </div>
                     <div className="text-3xl font-black font-syne text-[#0088FF]">₹{monthlyPackagesRevenue.toLocaleString()}</div>
-                    <div className="text-xs text-slate-400 font-medium">From {students.length} Active Pass Subscribers</div>
+                    <div className="text-xs text-slate-400 font-medium">From {students.length} Active Pass Subscribers (Click to Manage)</div>
                   </div>
 
-                  <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 space-y-3 shadow-xl">
+                  {/* CLICKABLE ALL EVENTS REVENUE CARD */}
+                  <div
+                    onClick={() => setActiveTab('EVENTS')}
+                    className="bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 rounded-3xl p-6 space-y-3 shadow-xl cursor-pointer transition-all hover:border-[#FF0055]/50 group"
+                  >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-black uppercase text-slate-400 tracking-wider">ALL EVENTS REVENUE</span>
+                      <span className="text-xs font-black uppercase text-slate-400 tracking-wider group-hover:text-[#FF0055] transition-colors">
+                        ALL EVENTS REVENUE →
+                      </span>
                       <div className="w-10 h-10 rounded-2xl bg-[#FF0055]/20 text-[#FF0055] flex items-center justify-center">
                         <Ticket className="w-5 h-5" />
                       </div>
                     </div>
                     <div className="text-3xl font-black font-syne text-[#FF0055]">₹{allEventsRevenue.toLocaleString()}</div>
-                    <div className="text-xs text-slate-400 font-medium">Across Past, Present & Future Workshops</div>
+                    <div className="text-xs text-slate-400 font-medium">Across Past, Present & Future Workshops (Click to Manage)</div>
                   </div>
 
+                  {/* GRAND TOTAL REVENUE CARD */}
                   <div className="bg-gradient-to-br from-[#7928CA]/30 via-slate-900 to-[#00DFD8]/20 border border-[#7928CA]/50 rounded-3xl p-6 space-y-3 shadow-xl">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-black uppercase text-[#00DFD8] tracking-wider">GRAND TOTAL REVENUE</span>
@@ -556,7 +607,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                       <h4 className="text-lg font-black uppercase font-syne text-white group-hover:text-[#0088FF] transition-colors">
                         Manage Class Batches & Students →
                       </h4>
-                      <p className="text-xs text-slate-400 font-medium mt-1">Divided into official class schedule batches with days left trackers.</p>
+                      <p className="text-xs text-slate-400 font-medium mt-1">Divided into official class schedule batch cards with student rosters.</p>
                     </div>
                     <User className="w-8 h-8 text-[#0088FF] shrink-0" />
                   </div>
@@ -578,165 +629,66 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
               </div>
             )}
 
-            {/* 1️⃣ MONTHLY PACKAGES TAB (DIVIDED BY CLASS SCHEDULE BATCHES) */}
+            {/* 1️⃣ MONTHLY PACKAGES TAB (PRESENTED AS BATCH CARDS LIKE EVENTS) */}
             {activeTab === 'PACKAGES' && (
-              <div className="space-y-8">
+              <div className="space-y-6">
                 
                 <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <h3 className="text-lg font-black uppercase font-syne text-white">
-                      MONTHLY PACKAGES BY CLASS SCHEDULE BATCHES
+                      MONTHLY CLASS SCHEDULE BATCH CARDS
                     </h3>
                     <p className="text-xs text-slate-400 font-medium">
-                      Subscribers divided into official studio schedule batches. Total Revenue: <strong className="text-[#0088FF]">₹{monthlyPackagesRevenue.toLocaleString()}</strong>
+                      Select any batch card below to view registered students, days left trackers, and renewal notices. Total Revenue: <strong className="text-[#0088FF]">₹{monthlyPackagesRevenue.toLocaleString()}</strong>
                     </p>
                   </div>
 
                   <div className="px-4 py-2 bg-[#0088FF]/20 border border-[#0088FF]/40 rounded-xl text-center">
-                    <span className="text-[10px] text-slate-300 uppercase font-bold block">Batch Subscribers</span>
-                    <span className="text-base font-black font-syne text-[#0088FF]">{students.length} Members</span>
+                    <span className="text-[10px] text-slate-300 uppercase font-bold block">Total Members</span>
+                    <span className="text-base font-black font-syne text-[#0088FF]">{students.length} Subscribers</span>
                   </div>
                 </div>
 
-                {/* DIVIDED CLASS SCHEDULE BATCH SECTIONS */}
-                {batchCategories.map((batchName, bIdx) => {
-                  const batchStudents = students.filter(s => s.batchCategory === batchName && (s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.phone.includes(searchTerm) || s.studentCode.toLowerCase().includes(searchTerm.toLowerCase())));
+                {/* BATCH CARDS GRID (LIKE EVENTS CARDS GRID!) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {scheduleBatchesList.map((batch) => {
+                    const batchStudents = students.filter(s => s.batchCategory === batch.category);
+                    const batchRevenue = batchStudents.reduce((sum, s) => sum + s.price, 0);
 
-                  const batchRevenue = batchStudents.reduce((sum, s) => sum + s.price, 0);
+                    return (
+                      <div
+                        key={batch.id}
+                        className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between space-y-4 shadow-xl relative overflow-hidden"
+                      >
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-full border ${batch.badgeColor}`}>
+                              {batch.timings}
+                            </span>
+                            <span className="text-xs font-mono font-black text-[#00DFD8]">₹{batchRevenue.toLocaleString()}</span>
+                          </div>
 
-                  return (
-                    <div key={bIdx} className="space-y-4">
-                      
-                      {/* Batch Header */}
-                      <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Clock className="w-5 h-5 text-[#0088FF]" />
-                          <div>
-                            <h4 className="text-sm font-black font-syne uppercase text-white">{batchName}</h4>
-                            <span className="text-[10px] text-slate-400 font-bold">{batchStudents.length} Enrolled Students</span>
+                          <h4 className="text-xl font-black font-syne text-white uppercase">{batch.title}</h4>
+
+                          <div className="text-xs text-slate-400 font-semibold space-y-1">
+                            <div>🕒 Timings: <strong className="text-slate-200">{batch.timings}</strong></div>
+                            <div>💃 Instructors: <strong className="text-slate-200">{batch.instructor}</strong></div>
+                            <div>💳 Monthly Pass Fee: <strong className="text-[#0088FF]">₹{batch.monthlyFee} / Month</strong></div>
+                            <div>👥 Registered Students: <strong className="text-white">{batchStudents.length} Active Subscribers</strong></div>
                           </div>
                         </div>
 
-                        <div className="text-right">
-                          <span className="text-sm font-black font-syne text-[#00DFD8]">₹{batchRevenue.toLocaleString()}</span>
-                          <span className="text-[9px] text-slate-500 font-bold block">Batch Revenue</span>
-                        </div>
+                        <button
+                          onClick={() => setSelectedBatchModal(batch)}
+                          className="w-full py-3 bg-[#0088FF] hover:bg-[#0077EE] text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2"
+                        >
+                          <Users className="w-4 h-4" />
+                          <span>View Batch Roster & Registered Students ({batchStudents.length}) →</span>
+                        </button>
                       </div>
-
-                      {/* Students in Batch */}
-                      <div className="grid grid-cols-1 gap-4 pl-0 sm:pl-4">
-                        {batchStudents.map((student) => {
-                          const isExpired = student.daysRemaining <= 0;
-                          const isExpiringSoon = student.daysRemaining > 0 && student.daysRemaining <= 5;
-
-                          return (
-                            <div
-                              key={student.id}
-                              className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-xl relative overflow-hidden"
-                            >
-                              
-                              {/* Student Details & Days Remaining Badge */}
-                              <div className="space-y-3 lg:max-w-md">
-                                <div className="flex items-center gap-3">
-                                  <span className="text-lg font-black font-syne text-white uppercase">{student.name}</span>
-                                  <span className="px-2.5 py-0.5 bg-[#0088FF]/20 border border-[#0088FF]/40 text-[#0088FF] text-[10px] font-black rounded-full uppercase">
-                                    {student.studentCode}
-                                  </span>
-                                  
-                                  {/* Days Left Renewal Badge */}
-                                  <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-full border ${
-                                    isExpired 
-                                      ? 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
-                                      : isExpiringSoon
-                                      ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
-                                      : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
-                                  }`}>
-                                    {isExpired ? '🔴 EXPIRED TODAY' : isExpiringSoon ? `🟡 ${student.daysRemaining} DAYS LEFT` : `🟢 ${student.daysRemaining} DAYS LEFT`}
-                                  </span>
-                                </div>
-
-                                <div className="text-xs text-slate-400 font-medium space-y-1">
-                                  <div>📦 Pass: <strong className="text-slate-200">{student.packageName}</strong> • Revenue Paid: <strong className="text-[#0088FF]">₹{student.price}</strong></div>
-                                  <div>👨‍👩‍👦 Parent/Phone: <strong className="text-slate-200">{student.parentName} ({student.phone})</strong></div>
-                                  <div>🎟️ Classes Left: <strong className="text-[#00DFD8]">{student.classesLeft} Classes</strong> • Expiry: {student.passExpiryDate}</div>
-                                </div>
-                              </div>
-
-                              {/* Interactive 5-Star Rating & Choreography Feedback */}
-                              <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-3 flex-1">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">STUDENT RATING & FEEDBACK</span>
-                                  <div className="flex items-center gap-1">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                      <button
-                                        key={star}
-                                        onClick={() => handleRatingChange(student.id, star)}
-                                        className="focus:outline-none transition-transform hover:scale-125"
-                                      >
-                                        <Star
-                                          className={`w-4 h-4 ${
-                                            star <= student.rating
-                                              ? 'text-amber-400 fill-amber-400'
-                                              : 'text-slate-600'
-                                          }`}
-                                        />
-                                      </button>
-                                    ))}
-                                    <span className="text-xs font-black text-amber-400 ml-1">{student.rating}.0</span>
-                                  </div>
-                                </div>
-
-                                <textarea
-                                  rows="2"
-                                  value={student.feedback}
-                                  onChange={(e) => handleFeedbackChange(student.id, e.target.value)}
-                                  placeholder="Add private performance feedback for student..."
-                                  className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2 text-xs text-slate-200 focus:outline-none focus:border-[#0088FF]"
-                                />
-                              </div>
-
-                              {/* Private Photo Upload & WhatsApp Renewal Action */}
-                              <div className="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end justify-between gap-3 shrink-0">
-                                
-                                <div className="flex items-center gap-2">
-                                  <div className="flex -space-x-2">
-                                    {(student.privatePhotos || []).map((photo, pIdx) => (
-                                      <img key={pIdx} src={photo} alt="" className="w-8 h-8 rounded-full border-2 border-slate-900 object-cover" />
-                                    ))}
-                                  </div>
-
-                                  <label className="cursor-pointer px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-extrabold uppercase rounded-xl flex items-center gap-1.5 transition-colors">
-                                    <ImageIcon className="w-3.5 h-3.5 text-[#00DFD8]" />
-                                    <span>Upload Photo</span>
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      className="hidden"
-                                      onChange={(e) => handlePhotoUpload(student.id, e)}
-                                    />
-                                  </label>
-                                </div>
-
-                                <a
-                                  href={getStudentWhatsappUrl(student)}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-black uppercase tracking-wider rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/20 transition-all"
-                                >
-                                  <MessageCircle className="w-4 h-4 fill-white" />
-                                  <span>WhatsApp Renewal Notice</span>
-                                </a>
-
-                              </div>
-
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
 
               </div>
             )}
@@ -778,8 +730,6 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                   {masterEventsList
                     .filter(e => eventFilter === 'ALL' || e.status === eventFilter)
                     .map((evt) => {
-                      const evtTickets = eventTickets.filter(t => t.eventId === evt.id);
-
                       return (
                         <div key={evt.id} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between space-y-4 shadow-xl relative overflow-hidden">
                           
@@ -949,6 +899,140 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
         </div>
 
       </div>
+
+      {/* 👥 BATCH ROSTER MODAL (WHEN A BATCH CARD IS CLICKED!) */}
+      {selectedBatchModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl text-white flex flex-col max-h-[88vh]">
+            
+            <div className="bg-slate-950 p-6 border-b border-slate-800 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-black uppercase text-[#0088FF] block">{selectedBatchModal.timings}</span>
+                <h3 className="text-xl font-black font-syne text-white uppercase">{selectedBatchModal.title}</h3>
+                <p className="text-xs text-slate-400 font-semibold">
+                  Instructor: {selectedBatchModal.instructor} • Fee: ₹{selectedBatchModal.monthlyFee}/month
+                </p>
+              </div>
+
+              <button onClick={() => setSelectedBatchModal(null)} className="p-2 bg-slate-800 text-slate-300 hover:text-white rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto flex-1 space-y-6">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-400">REGISTERED STUDENTS IN THIS BATCH</h4>
+
+              <div className="grid grid-cols-1 gap-6">
+                {students
+                  .filter(s => s.batchCategory === selectedBatchModal.category)
+                  .map((student) => {
+                    const isExpired = student.daysRemaining <= 0;
+                    const isExpiringSoon = student.daysRemaining > 0 && student.daysRemaining <= 5;
+
+                    return (
+                      <div
+                        key={student.id}
+                        className="bg-slate-950 border border-slate-800 rounded-3xl p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-xl relative overflow-hidden"
+                      >
+                        {/* Student Details & Days Left */}
+                        <div className="space-y-3 lg:max-w-md">
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg font-black font-syne text-white uppercase">{student.name}</span>
+                            <span className="px-2.5 py-0.5 bg-[#0088FF]/20 border border-[#0088FF]/40 text-[#0088FF] text-[10px] font-black rounded-full uppercase">
+                              {student.studentCode}
+                            </span>
+                            
+                            <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-full border ${
+                              isExpired 
+                                ? 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
+                                : isExpiringSoon
+                                ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
+                                : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+                            }`}>
+                              {isExpired ? '🔴 EXPIRED TODAY' : isExpiringSoon ? `🟡 ${student.daysRemaining} DAYS LEFT` : `🟢 ${student.daysRemaining} DAYS LEFT`}
+                            </span>
+                          </div>
+
+                          <div className="text-xs text-slate-400 font-medium space-y-1">
+                            <div>📦 Pass: <strong className="text-slate-200">{student.packageName}</strong> • Revenue: <strong className="text-[#0088FF]">₹{student.price}</strong></div>
+                            <div>👨‍👩‍👦 Parent/Phone: <strong className="text-slate-200">{student.parentName} ({student.phone})</strong></div>
+                            <div>🎟️ Classes Left: <strong className="text-[#00DFD8]">{student.classesLeft} Classes</strong> • Expiry: {student.passExpiryDate}</div>
+                          </div>
+                        </div>
+
+                        {/* Rating & Choreography Feedback */}
+                        <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3 flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">STUDENT RATING & FEEDBACK</span>
+                            <div className="flex items-center gap-1">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                  key={star}
+                                  onClick={() => handleRatingChange(student.id, star)}
+                                  className="focus:outline-none transition-transform hover:scale-125"
+                                >
+                                  <Star
+                                    className={`w-4 h-4 ${
+                                      star <= student.rating
+                                        ? 'text-amber-400 fill-amber-400'
+                                        : 'text-slate-600'
+                                    }`}
+                                  />
+                                </button>
+                              ))}
+                              <span className="text-xs font-black text-amber-400 ml-1">{student.rating}.0</span>
+                            </div>
+                          </div>
+
+                          <textarea
+                            rows="2"
+                            value={student.feedback}
+                            onChange={(e) => handleFeedbackChange(student.id, e.target.value)}
+                            placeholder="Add private performance feedback for student..."
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-xs text-slate-200 focus:outline-none focus:border-[#0088FF]"
+                          />
+                        </div>
+
+                        {/* Private Photo & WhatsApp Notice */}
+                        <div className="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end justify-between gap-3 shrink-0">
+                          <div className="flex items-center gap-2">
+                            <div className="flex -space-x-2">
+                              {(student.privatePhotos || []).map((photo, pIdx) => (
+                                <img key={pIdx} src={photo} alt="" className="w-8 h-8 rounded-full border-2 border-slate-900 object-cover" />
+                              ))}
+                            </div>
+
+                            <label className="cursor-pointer px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-extrabold uppercase rounded-xl flex items-center gap-1.5 transition-colors">
+                              <ImageIcon className="w-3.5 h-3.5 text-[#00DFD8]" />
+                              <span>Upload Photo</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handlePhotoUpload(student.id, e)}
+                              />
+                            </label>
+                          </div>
+
+                          <a
+                            href={getStudentWhatsappUrl(student)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-black uppercase tracking-wider rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/20 transition-all"
+                          >
+                            <MessageCircle className="w-4 h-4 fill-white" />
+                            <span>WhatsApp Renewal Notice</span>
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* 🎟️ EVENT ATTENDEES ROSTER MODAL */}
       {selectedEventModal && (
