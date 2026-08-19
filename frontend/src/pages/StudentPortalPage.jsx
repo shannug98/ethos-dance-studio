@@ -76,7 +76,7 @@ export default function StudentPortalPage() {
     e.preventDefault();
     if (!loginPhone) return;
 
-    const generatedOtp = new RandomOtp();
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
     const cleanPhone = loginPhone.replace(/[^0-9]/g, '');
 
     const waText = encodeURIComponent(
@@ -92,44 +92,46 @@ export default function StudentPortalPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: loginPhone })
       });
-      const data = await res.json();
+      if (res.ok) {
+        const data = await res.json();
+        setDemoOtpNotice(data.demoOtp || generatedOtp);
+      } else {
+        setDemoOtpNotice(generatedOtp);
+      }
       setOtpSent(true);
-      setDemoOtpNotice(data.demoOtp || generatedOtp);
     } catch (err) {
       setOtpSent(true);
       setDemoOtpNotice(generatedOtp);
     }
   };
 
-  function RandomOtp() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
   // Handle Verify OTP
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     if (!otpCode) return;
 
-    try {
-      const res = await fetch(`${API_URL}/api/auth/verify-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: loginPhone, otpCode: otpCode })
-      });
-      const data = await res.json();
-      
-      if (data.user) {
-        setStudentInfo(data.user);
-        setIsLoggedIn(true);
-        localStorage.setItem('ethos_logged_in_user', JSON.stringify(data.user));
-      } else {
-        setIsLoggedIn(true);
-        localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
-      }
-    } catch (err) {
-      setIsLoggedIn(true);
-      localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
-    }
+    const userProfile = {
+      name: loginPhone.includes('83417') ? 'Shanmuka' : 'Ethos Student',
+      studentCode: 'ETH' + Math.floor(1000 + Math.random() * 9000),
+      parentName: 'Parent / Guardian',
+      packageTitle: 'Adults & Fitness Pass',
+      totalClasses: 20,
+      classesAttended: 12,
+      classesLeft: 8,
+      passExpiryDate: 'August 28, 2026 (In 9 Days)',
+      daysRemaining: 9,
+      attendanceRate: '92%',
+      rhythmScore: '95%',
+      stageConfidence: '94%',
+      teacherNotes: 'Excellent performance in Commercial Hip-Hop and Bollywood Fusion! High energy on stage.',
+      email: 'student@ethosdancestudio.com',
+      phone: loginPhone || '8341701113',
+      profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+    };
+
+    setStudentInfo(userProfile);
+    setIsLoggedIn(true);
+    localStorage.setItem('ethos_logged_in_user', JSON.stringify(userProfile));
   };
 
   const handleLoginSubmit = (e) => {

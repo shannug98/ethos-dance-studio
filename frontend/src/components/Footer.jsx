@@ -1,5 +1,5 @@
 import React from 'react';
-import { LOGO_TRANSPARENT_BASE64 } from '../assets/logoBase64';
+import ethosPureLogo from '../assets/ethos_pure_logo.png';
 
 export default function Footer({ onQuickBook }) {
   return (
@@ -10,9 +10,9 @@ export default function Footer({ onQuickBook }) {
         
         {/* Logo Column */}
         <div className="space-y-4">
-          <div className="h-20 w-auto">
+          <div className="h-16 w-auto flex items-center">
             <img
-              src={LOGO_TRANSPARENT_BASE64}
+              src={ethosPureLogo}
               alt="Ethos Dance Studio Logo"
               className="h-full w-auto object-contain"
             />
@@ -26,21 +26,21 @@ export default function Footer({ onQuickBook }) {
         <div className="space-y-4 text-xs font-semibold">
           <div>
             <span className="block opacity-60 uppercase">Email:</span>
-            <a href="mailto:hello@ethosdancestudio.com" className="font-bold text-sm underline text-[#000000]">
-              hello@ethosdancestudio.com
+            <a href="mailto:ethosdancestudio@gmail.com" className="font-bold text-sm underline text-[#000000] hover:text-[#1F41FF]">
+              ethosdancestudio@gmail.com
             </a>
           </div>
 
           <div>
             <span className="block opacity-60 uppercase">Instagram:</span>
-            <a href="https://instagram.com/ethosdancestudio" target="_blank" rel="noreferrer" className="font-bold text-sm underline text-[#000000]">
+            <a href="https://instagram.com/ethosdancestudio" target="_blank" rel="noreferrer" className="font-bold text-sm underline text-[#000000] hover:text-[#1F41FF]">
               @ethosdancestudio
             </a>
           </div>
 
           <div>
             <span className="block opacity-60 uppercase">Call / WhatsApp:</span>
-            <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="font-bold text-base text-[#FF0044] underline block mt-0.5">
+            <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="font-black text-base text-slate-900 hover:text-[#1F41FF] underline block mt-0.5">
               +91 83417 01113
             </a>
           </div>
@@ -56,7 +56,7 @@ export default function Footer({ onQuickBook }) {
           </div>
 
           <div className="pt-2">
-            <a href="schedule.html" target="_self" className="underline font-bold text-xs">View Class Schedules & Timetable</a>
+            <a href="schedule.html" target="_self" className="underline font-bold text-xs hover:text-[#1F41FF]">View Class Schedules & Timetable</a>
           </div>
         </div>
 
@@ -67,27 +67,28 @@ export default function Footer({ onQuickBook }) {
         
         {/* Block 1: Cobalt Blue */}
         <a href="https://instagram.com/ethosdancestudio" target="_blank" rel="noreferrer" className="bg-[#1F41FF] text-white p-10 flex items-center justify-center hover:bg-[#3353ff] transition-all">
-          <span className="font-display-giant text-3xl sm:text-4xl uppercase tracking-tight">
+          <span className="font-syne text-3xl sm:text-4xl font-black uppercase tracking-tight">
             Our Socials
           </span>
         </a>
 
         {/* Block 2: Black */}
         <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="bg-[#000000] text-white p-10 flex items-center justify-center hover:bg-[#1a1a1a] transition-all border-y md:border-y-0 md:border-x border-[#333333]">
-          <span className="font-display-giant text-3xl sm:text-4xl uppercase tracking-tight text-[#D0FBF9]">
+          <span className="font-syne text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#D0FBF9]">
             WhatsApp Us
           </span>
         </a>
 
         {/* Block 3: Magenta */}
-        <button
-          onClick={() => onQuickBook && onQuickBook({ id: 99, title: 'Ethos Studio All-Access Pass', price: 699, type: 'Pass' })}
+        <a
+          href="packages.html"
+          target="_self"
           className="bg-[#D900FF] text-[#000000] p-10 flex items-center justify-center hover:bg-[#e433ff] transition-all text-left"
         >
-          <span className="font-display-giant text-3xl sm:text-4xl uppercase tracking-tight">
-            Book With Us
+          <span className="font-syne text-3xl sm:text-4xl font-black uppercase tracking-tight">
+            Passes & Pricing
           </span>
-        </button>
+        </a>
 
       </div>
 

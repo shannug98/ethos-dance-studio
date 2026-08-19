@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { MessageCircle, Send } from 'lucide-react';
 
 export default function ContactSection() {
   const [sent, setSent] = useState(false);
@@ -7,6 +8,19 @@ export default function ContactSection() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSent(true);
+
+    // Format WhatsApp message to studio number 8341701113
+    const waText = encodeURIComponent(
+      `📩 *NEW ETHOS STUDIO WEBSITE INQUIRY*\n\n` +
+      `👤 *Name*: ${form.name}\n` +
+      `📱 *Phone*: ${form.phone}\n` +
+      `✉️ *Email*: ${form.email}\n\n` +
+      `💬 *Inquiry Message*:\n"${form.message}"`
+    );
+
+    // Open WhatsApp directly to +91 83417 01113
+    window.open(`https://wa.me/918341701113?text=${waText}`, '_blank');
+
     setTimeout(() => setSent(false), 5000);
     setForm({ name: '', phone: '', email: '', message: '' });
   };
@@ -36,8 +50,15 @@ export default function ContactSection() {
 
               <div className="p-4 bg-white border border-slate-200 shadow-md rounded-2xl">
                 <strong className="text-slate-900 text-sm block mb-1 uppercase">Phone & WhatsApp</strong>
-                <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="text-[#FF0055] font-black text-base hover:underline">
+                <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="text-slate-900 font-black text-base hover:text-[#0088FF] underline">
                   +91 83417 01113
+                </a>
+              </div>
+
+              <div className="p-4 bg-white border border-slate-200 shadow-md rounded-2xl">
+                <strong className="text-slate-900 text-sm block mb-1 uppercase">Email Support</strong>
+                <a href="mailto:ethosdancestudio@gmail.com" className="text-[#0088FF] font-black text-sm hover:underline">
+                  ethosdancestudio@gmail.com
                 </a>
               </div>
 
@@ -49,11 +70,13 @@ export default function ContactSection() {
           </div>
 
           <div className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 space-y-4">
-            <h3 className="text-2xl font-black uppercase font-syne text-slate-900">SEND A MESSAGE TO ETHOS</h3>
-            
+            <h3 className="text-2xl font-black uppercase font-syne text-slate-900">SEND INQUIRY TO STUDIO WHATSAPP</h3>
+            <p className="text-xs text-slate-500 font-medium">Submitting this form directly dispatches your inquiry to our studio WhatsApp (+91 83417 01113).</p>
+
             {sent && (
-              <div className="p-3 bg-[#0088FF] text-white text-xs font-bold rounded-xl">
-                ✓ Thank you! Your message has been sent to Ethos Studio. Our team will respond shortly.
+              <div className="p-3 bg-[#25D366] text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md">
+                <MessageCircle className="w-4 h-4 fill-white" />
+                <span>✓ Redirecting inquiry directly to Ethos Studio WhatsApp (+91 83417 01113)...</span>
               </div>
             )}
 
@@ -104,9 +127,10 @@ export default function ContactSection() {
 
               <button
                 type="submit"
-                className="w-full py-4 bg-[#0088FF] hover:bg-[#0077EE] text-white text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-lg shadow-[#0088FF]/20"
+                className="w-full py-4 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-lg shadow-[#25D366]/20 flex items-center justify-center gap-2"
               >
-                Send Message
+                <MessageCircle className="w-4 h-4 fill-white" />
+                <span>Send Inquiry via WhatsApp (+91 83417 01113)</span>
               </button>
             </form>
           </div>
