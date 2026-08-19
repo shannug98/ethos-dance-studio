@@ -64,7 +64,8 @@ export default function EventsPage() {
     { name: 'Jan', active: false, status: 'Jan 1' }
   ];
 
-  const eventsList = [
+  // Default Events List + Custom Admin Created Events
+  const defaultEvents = [
     {
       id: 301,
       month: 'AUGUST • LIVE',
@@ -74,7 +75,7 @@ export default function EventsPage() {
       subtext: '• World Dance Day Masterclass - Aug 19',
       desc: "See the world differently. This month's challenge is all about observation, storytelling, speed isolations, and capturing stage moments.",
       daysLeft: '14 days left',
-      ticketsSold: 7, // 7 out of first 10 claimed -> Active Tier 1 = ₹549
+      ticketsSold: 7,
       status: 'open',
       icon: Camera,
       btnText: 'Register for ₹549 →'
@@ -104,44 +105,32 @@ export default function EventsPage() {
       ticketsSold: 0,
       icon: Palette,
       btnText: '🔒 Unlocks Oct 1'
-    },
-    {
-      id: 304,
-      month: 'NOVEMBER',
-      pill: '⚪ COMING NOV',
-      title: 'Heels & Stage Performance',
-      subtext: '• International Students\' Day - Nov 17',
-      desc: 'Performance begins with understanding rhythm. Step into the world of stage presence and discover how dance brings music to life.',
-      status: 'locked',
-      ticketsSold: 0,
-      icon: Smartphone,
-      btnText: '🔒 Unlocks Nov 1'
-    },
-    {
-      id: 305,
-      month: 'DECEMBER',
-      pill: '⚪ COMING DEC',
-      title: 'Social Impact Flashmob',
-      subtext: '• Intl Volunteer Day - Dec 5',
-      desc: 'The best routines solve real challenges. Work on a meaningful group dance inspired by real-world issues and discover how creativity can create positive impact.',
-      status: 'locked',
-      ticketsSold: 0,
-      icon: Lightbulb,
-      btnText: '🔒 Unlocks Dec 1'
-    },
-    {
-      id: 306,
-      month: 'JANUARY',
-      pill: '⚪ COMING JAN',
-      title: 'Street Style & House Battle',
-      subtext: '• World Logic & Groove Day - Jan 14',
-      desc: 'Great freestyle battles are designed, not discovered. Explore the art of gameplay, strategy, and creative thinking in this month\'s challenge.',
-      status: 'locked',
-      ticketsSold: 0,
-      icon: Dices,
-      btnText: '🔒 Unlocks Jan 1'
     }
   ];
+
+  const [eventsList, setEventsList] = useState(() => {
+    const saved = localStorage.getItem('ethos_master_events_catalog');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.map(e => ({
+          id: e.id,
+          month: e.date.toUpperCase(),
+          pill: e.statusBadge || '🟢 LIVE NOW',
+          ribbon: 'SPECIAL EVENT PASS',
+          title: e.title,
+          subtext: `• ${e.choreographer || 'Ethos Instructor'} - ${e.date}`,
+          desc: e.desc || 'Join this exclusive workshop at Ethos Dance Studio Kukatpally.',
+          daysLeft: 'Limited spots left',
+          ticketsSold: e.passesSold || 0,
+          status: 'open',
+          icon: Camera,
+          btnText: `Register for ₹${e.price || 549} →`
+        }));
+      } catch {}
+    }
+    return defaultEvents;
+  });
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans">
