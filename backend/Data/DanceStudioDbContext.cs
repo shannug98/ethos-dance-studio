@@ -26,6 +26,13 @@ namespace DanceStudio.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Configure Decimal Precisions for SQL Server & SQLite
+            modelBuilder.Entity<DanceClass>().Property(p => p.PricePerSession).HasPrecision(18, 2);
+            modelBuilder.Entity<DancePackage>().Property(p => p.Price).HasPrecision(18, 2);
+            modelBuilder.Entity<EventWorkshop>().Property(p => p.Price).HasPrecision(18, 2);
+            modelBuilder.Entity<BookingRequest>().Property(p => p.PricePaid).HasPrecision(18, 2);
+            modelBuilder.Entity<PaymentRecord>().Property(p => p.Amount).HasPrecision(18, 2);
+
             // Seed Initial Settings
             modelBuilder.Entity<StudioSetting>().HasData(
                 new StudioSetting { Id = 1, Key = "RazorpayKeyId", Value = "rzp_test_RhythmPulse2025" },

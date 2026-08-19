@@ -9,10 +9,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure SQLite Database
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=dancestudio.db";
+// Configure Azure SQL Database or Local SQLite Database
+var azureConnectionString = builder.Configuration.GetConnectionString("AzureSqlConnection") 
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<DanceStudioDbContext>(options =>
-    options.UseSqlite(connectionString));
+{
+    if (!string.IsNullOrEmpty(azureConnectionString) 
+        && azureConnectionString.Contains("database.windows.net") 
+        && !azureConnectionString.Contains("YOUR_AZURE_SERVER"))
+    {
+        options.UseSqlServer(azureConnectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
+    }
+    else
+    {
+        var localSqliteConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=dancestudio.db";
+        options.UseSqlite(localSqliteConn);
+    }
+});
 
 // Register Application Services
 builder.Services.AddScoped<IPaymentService, PaymentService>();
