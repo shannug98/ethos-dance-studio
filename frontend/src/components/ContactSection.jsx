@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageCircle, Send } from 'lucide-react';
+import { CheckCircle2, MessageCircle, Send } from 'lucide-react';
 
 export default function ContactSection() {
   const [sent, setSent] = useState(false);
@@ -9,19 +9,11 @@ export default function ContactSection() {
     e.preventDefault();
     setSent(true);
 
-    // Format WhatsApp message to studio number 8341701113
-    const waText = encodeURIComponent(
-      `📩 *NEW ETHOS STUDIO WEBSITE INQUIRY*\n\n` +
-      `👤 *Name*: ${form.name}\n` +
-      `📱 *Phone*: ${form.phone}\n` +
-      `✉️ *Email*: ${form.email}\n\n` +
-      `💬 *Inquiry Message*:\n"${form.message}"`
-    );
+    // Form submitted notification without opening external WhatsApp login popup
+    setTimeout(() => {
+      setSent(false);
+    }, 8000);
 
-    // Open WhatsApp directly to +91 83417 01113
-    window.open(`https://wa.me/918341701113?text=${waText}`, '_blank');
-
-    setTimeout(() => setSent(false), 5000);
     setForm({ name: '', phone: '', email: '', message: '' });
   };
 
@@ -70,13 +62,18 @@ export default function ContactSection() {
           </div>
 
           <div className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 space-y-4">
-            <h3 className="text-2xl font-black uppercase font-syne text-slate-900">SEND INQUIRY TO STUDIO WHATSAPP</h3>
-            <p className="text-xs text-slate-500 font-medium">Submitting this form directly dispatches your inquiry to our studio WhatsApp (+91 83417 01113).</p>
+            <h3 className="text-2xl font-black uppercase font-syne text-slate-900">STUDIO INQUIRY FORM</h3>
+            <p className="text-xs text-slate-500 font-medium">Submit your query below. Our Ethos team will reach out directly to your WhatsApp number.</p>
 
             {sent && (
-              <div className="p-3 bg-[#25D366] text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md">
-                <MessageCircle className="w-4 h-4 fill-white" />
-                <span>✓ Redirecting inquiry directly to Ethos Studio WhatsApp (+91 83417 01113)...</span>
+              <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold rounded-2xl space-y-1 shadow-md animate-fadeIn">
+                <div className="flex items-center gap-2 text-emerald-900 font-black text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <span>Form Submitted Successfully!</span>
+                </div>
+                <p className="text-emerald-700 font-medium leading-relaxed">
+                  Thank you! We have received your inquiry. Our Ethos Studio team will reach out directly to your phone number via WhatsApp shortly.
+                </p>
               </div>
             )}
 
@@ -127,10 +124,10 @@ export default function ContactSection() {
 
               <button
                 type="submit"
-                className="w-full py-4 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-lg shadow-[#25D366]/20 flex items-center justify-center gap-2"
+                className="w-full py-4 bg-[#0088FF] hover:bg-[#0077EE] text-white text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-lg shadow-[#0088FF]/30 flex items-center justify-center gap-2"
               >
-                <MessageCircle className="w-4 h-4 fill-white" />
-                <span>Send Inquiry via WhatsApp (+91 83417 01113)</span>
+                <Send className="w-4 h-4" />
+                <span>Submit Inquiry</span>
               </button>
             </form>
           </div>
