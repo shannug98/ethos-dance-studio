@@ -24,44 +24,63 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
     setStep('PAYMENT');
   };
 
-  const handleCompletePayment = () => {
+  const handleCompletePayment = async () => {
     setLoading(true);
     setStep('PROCESSING');
 
+    const mockTxId = 'PAY-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+    const mockCode = 'ETH' + Math.floor(1000 + Math.random() * 9000);
+
+    const bookingPayload = {
+      customerName: formData.fullName,
+      customerPhone: formData.phone,
+      customerEmail: formData.email,
+      itemTitle: itemTitle,
+      pricePaid: itemPrice,
+      paymentMethod: paymentOption,
+      transactionId: mockTxId,
+      bookingType: 'Pass'
+    };
+
+    try {
+      await fetch(`${API_URL || 'http://localhost:5000'}/api/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingPayload)
+      });
+    } catch (err) {
+      console.log('Database post backup');
+    }
+
+    try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); } catch (err) {}
+
+    localStorage.setItem('ethos_logged_in_user', JSON.stringify({
+      id: 1025,
+      customerCode: mockCode,
+      name: formData.fullName,
+      phone: formData.phone,
+      email: formData.email,
+      packageTitle: itemTitle,
+      classesLeft: 20,
+      daysRemaining: 30,
+      passExpiryDate: 'September 18, 2026',
+      profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+    }));
+
+    setStep('DONE');
+
     setTimeout(() => {
-      try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); } catch (err) {}
-
-      const mockTxId = 'PAY-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-      const mockCode = 'ETH' + Math.floor(1000 + Math.random() * 9000);
-
-      localStorage.setItem('ethos_logged_in_user', JSON.stringify({
-        id: 1025,
-        customerCode: mockCode,
-        name: formData.fullName,
-        phone: formData.phone,
-        email: formData.email,
-        packageTitle: itemTitle,
-        classesLeft: 20,
-        daysRemaining: 30,
-        passExpiryDate: 'September 18, 2026',
-        profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
-      }));
-
-      setStep('DONE');
-
-      setTimeout(() => {
-        if (onSuccessPayment) {
-          onSuccessPayment({
-            transactionId: mockTxId,
-            itemTitle: itemTitle,
-            pricePaid: itemPrice,
-            customerName: formData.fullName,
-            customerEmail: formData.email,
-            customerPhone: formData.phone,
-            customerCode: mockCode
-          });
-        }
-      }, 2000);
+      if (onSuccessPayment) {
+        onSuccessPayment({
+          transactionId: mockTxId,
+          itemTitle: itemTitle,
+          pricePaid: itemPrice,
+          customerName: formData.fullName,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          customerCode: mockCode
+        });
+      }
     }, 1500);
   };
 

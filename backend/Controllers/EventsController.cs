@@ -29,5 +29,19 @@ namespace DanceStudio.API.Controllers
             if (eventItem == null) return NotFound();
             return eventItem;
         }
+
+        [HttpPost]
+        public async Task<ActionResult<EventWorkshop>> CreateEvent([FromBody] EventWorkshop newEvent)
+        {
+            if (string.IsNullOrEmpty(newEvent.Title))
+            {
+                return BadRequest(new { Message = "Event title is required." });
+            }
+
+            _context.Workshops.Add(newEvent);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
+        }
     }
 }
