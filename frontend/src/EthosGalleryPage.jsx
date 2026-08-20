@@ -315,7 +315,7 @@ export default function EthosGalleryPage() {
             </div>
           </div>
 
-          {/* SEAMLESS ZERO-GAP MOSAIC PHOTO WALL (MATCHING IMG 3 - DENSE LAYOUT) */}
+          {/* SEAMLESS ZERO-GAP MOSAIC PHOTO WALL (PURE CLEAN IMAGES) */}
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {filteredPhotos.map((item) => (
               <div
@@ -326,21 +326,8 @@ export default function EthosGalleryPage() {
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                 />
-
-                {/* Dark Hover Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
-
-                {/* Content Overlay */}
-                <div className="absolute bottom-4 left-4 right-4 text-left">
-                  <span className="text-[10px] font-mono font-black uppercase text-[#00DFD8] bg-black/70 backdrop-blur-md px-2.5 py-0.5 rounded-md inline-block mb-1 border border-white/10">
-                    {item.category}
-                  </span>
-                  <h3 className="text-sm font-black font-syne text-white uppercase leading-snug">
-                    {item.title}
-                  </h3>
-                </div>
               </div>
             ))}
           </div>
