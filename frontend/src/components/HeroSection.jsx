@@ -11,7 +11,7 @@ export default function HeroSection({ onBookWorkshop }) {
       {/* ── FULL-BLEED BACKGROUND PHOTO ── */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
-          src="/ethos_hero_bg.jpg"
+          src={`${import.meta.env.BASE_URL}ethos_hero_bg.jpg`}
           alt=""
           className="w-full h-full object-cover object-center"
         />
