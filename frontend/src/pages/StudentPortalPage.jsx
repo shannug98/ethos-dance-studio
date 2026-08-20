@@ -382,7 +382,7 @@ export default function StudentPortalPage() {
                     PASS EXPIRING SOON: EXPIRES IN {studentInfo.daysRemaining} DAYS!
                   </h3>
                   <p className="text-xs text-slate-200">
-                    Customer ID: <strong className="text-[#D0FBF9]">{studentInfo.customerCode || 'ETH1025'}</strong> • Expiry Date: <strong>{studentInfo.passExpiryDate}</strong> • Balance: <strong>{studentInfo.classesLeft} Classes Left</strong>
+                    Expiry Date: <strong>{studentInfo.passExpiryDate}</strong> • Balance: <strong>{studentInfo.classesLeft} Classes Left</strong>
                   </p>
                 </div>
               </div>
@@ -445,9 +445,6 @@ export default function StudentPortalPage() {
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-2xl font-extrabold uppercase text-white font-display">{studentInfo.name}</h2>
-                    <span className="px-2.5 py-0.5 bg-[#FF0044] text-white text-[10px] font-extrabold uppercase rounded-full">
-                      ID: {studentInfo.customerCode || 'ETH1025'}
-                    </span>
                     <span className="px-2.5 py-0.5 bg-[#1F41FF] text-white text-[10px] font-extrabold uppercase rounded-full">
                       Age: {studentInfo.age}
                     </span>

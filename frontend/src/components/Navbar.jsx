@@ -130,12 +130,24 @@ export default function Navbar({ onQuickBook }) {
         {/* DESKTOP RIGHT ACTIONS: PERSISTENT LOGIN DROPDOWN */}
         <div className="hidden md:flex items-center gap-3">
           
+          {/* Direct Member Dashboard Button when Logged In */}
+          {loggedInUser && (
+            <a
+              href="student.html"
+              target="_self"
+              className="px-4 py-2 bg-[#FF0055] hover:bg-[#D00044] text-white text-xs font-black uppercase tracking-wider rounded-full shadow-lg flex items-center gap-1.5 transition-all"
+            >
+              <User className="w-3.5 h-3.5 text-white" />
+              <span>Member Dashboard</span>
+            </a>
+          )}
+
           {/* TOPDOWN DROPDOWN MENU FOR MEMBER & ADMIN LOGINS */}
           <div className="relative" ref={dropdownRef}>
             {loggedInUser ? (
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2.5 bg-gradient-to-r from-[#FF0055]/20 via-[#7928CA]/20 to-[#00DFD8]/20 border border-[#FF0055]/60 hover:border-[#FF0055] px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md shadow-lg group cursor-pointer"
+                className="flex items-center gap-2.5 bg-white/10 hover:bg-white/15 border border-white/20 px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md shadow-lg group cursor-pointer"
               >
                 <div className="relative">
                   <img
@@ -149,9 +161,6 @@ export default function Navbar({ onQuickBook }) {
                 <div className="text-left leading-none">
                   <span className="text-[11px] font-black text-white font-syne uppercase tracking-wider block">
                     {loggedInUser.name ? loggedInUser.name.split(' ')[0] : 'Shanmuka'}
-                  </span>
-                  <span className="text-[9px] font-bold text-[#00DFD8] block">
-                    {loggedInUser.customerCode || 'ETH1025'}
                   </span>
                 </div>
 
@@ -196,7 +205,7 @@ export default function Navbar({ onQuickBook }) {
                           {loggedInUser.name || 'Shanmuka Gaddam'}
                         </h4>
                         <span className="text-[10px] text-[#00DFD8] font-bold block">
-                          ID: {loggedInUser.customerCode || 'ETH1025'} • {loggedInUser.classesLeft || 8} Classes Left
+                          {loggedInUser.classesLeft || 8} Classes Remaining
                         </span>
                       </div>
                     </div>
