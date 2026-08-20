@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
-import { Sparkles, ChevronRight, Camera, Filter } from 'lucide-react';
+import { Sparkles, ChevronRight, Camera, Filter, X } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000';
 
@@ -12,11 +12,11 @@ export default function EthosGalleryPage() {
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
 
-  // Active Selected Category (studio | workshops | events | corporate)
-  const [activeCategory, setActiveCategory] = useState('studio');
+  // Lightbox Enlarged Image State (Matching img 4 - Full view popup)
+  const [activeLightboxImage, setActiveLightboxImage] = useState(null);
 
-  // Filter for Below Dense Photo Masonry Collage (all | studio | workshops | events | corporate)
-  const [photoFilter, setPhotoFilter] = useState('all');
+  // Active Selected Category - Defaults to 'studio' (NO "All Stories")
+  const [photoFilter, setPhotoFilter] = useState('studio');
 
   const photoCollageRef = useRef(null);
 
@@ -47,7 +47,7 @@ export default function EthosGalleryPage() {
     'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
   ];
 
-  // 🌟 4 MAIN CATEGORIES (DANCE IN STUDIO, WORKSHOPS, EVENTS, CORPORATE EVENTS)
+  // 🌟 4 MAIN CATEGORIES (DANCE IN STUDIO, WORKSHOPS, EVENTS, CORPORATE EVENTS) - IMG 2 MATCHING
   const categoryCards = [
     {
       id: 'studio',
@@ -71,7 +71,7 @@ export default function EthosGalleryPage() {
     }
   ];
 
-  // 🌟 RICH MASONRY PHOTO COLLAGE DATA (SPECIFIC PHOTOS FOR EVERY CATEGORY)
+  // 🌟 CATEGORY SPECIFIC PHOTO COLLAGE DATA (ARRANGED DENSELY LIKE IMG 3)
   const densePhotoCollage = [
     // 💃 DANCE IN STUDIO PHOTOS (8 PHOTOS)
     { id: 101, category: 'studio', title: 'Studio Rehearsal Vibes', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
@@ -107,16 +107,14 @@ export default function EthosGalleryPage() {
   ];
 
   const handleCardClick = (catId) => {
-    setActiveCategory(catId);
     setPhotoFilter(catId);
     if (photoCollageRef.current) {
       photoCollageRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const filteredPhotos = photoFilter === 'all'
-    ? densePhotoCollage
-    : densePhotoCollage.filter(p => p.category === photoFilter);
+  // Only photos matching the selected category are displayed!
+  const filteredPhotos = densePhotoCollage.filter(p => p.category === photoFilter);
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans overflow-x-hidden">
@@ -162,7 +160,7 @@ export default function EthosGalleryPage() {
             </div>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-lg">
-              Hyderabad just got a lot more fun! Explore studio batches, special workshops, stage events, and corporate sessions below.
+              Hyderabad just got a lot more fun! Select a category below to explore authentic photos from our studio, workshops, events, and corporate sessions.
             </p>
 
             <div className="pt-2">
@@ -214,7 +212,7 @@ export default function EthosGalleryPage() {
 
         </section>
 
-        {/* 🌟 1. 4 CATEGORY SHOWCASE GRID ("Looking for something more?") 🌟 */}
+        {/* 🌟 1. 4 CATEGORY SHOWCASE GRID ("Looking for something more?" - IMG 2) 🌟 */}
         <section id="explore-categories" className="py-16 px-4 sm:px-8 max-w-7xl mx-auto border-t border-slate-200">
           
           <div className="mb-10 text-left">
@@ -223,7 +221,7 @@ export default function EthosGalleryPage() {
             </h2>
           </div>
 
-          {/* 4 ROUNDED CARDS GRID WITH WHITE PILL BADGES & CUTE DOODLES */}
+          {/* 4 ROUNDED CARDS GRID WITH WHITE PILL BADGES (MATCHING IMG 2) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categoryCards.map((card) => {
               const isActive = photoFilter === card.id;
@@ -233,7 +231,7 @@ export default function EthosGalleryPage() {
                   key={card.id}
                   onClick={() => handleCardClick(card.id)}
                   className={`relative h-[340px] sm:h-[380px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-xl transition-all duration-500 group border-4 ${
-                    isActive ? 'border-[#0088FF] scale-[1.02]' : 'border-transparent hover:scale-[1.02]'
+                    isActive ? 'border-[#0088FF] ring-4 ring-[#0088FF]/30 scale-[1.03]' : 'border-transparent hover:scale-[1.02]'
                   }`}
                 >
                   {/* Photo background */}
@@ -254,7 +252,7 @@ export default function EthosGalleryPage() {
                     </button>
                   </div>
 
-                  {/* Cute Doodle Accent */}
+                  {/* Cute Sparkle Accent */}
                   <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-black">
                     ✨
                   </div>
@@ -266,7 +264,7 @@ export default function EthosGalleryPage() {
         </section>
 
 
-        {/* 🌟 2. DENSE PHOTO MOSAIC WALL (FAIRY LIGHTS + "EVERY BEAT TELLS A STORY!") 🌟 */}
+        {/* 🌟 2. DENSE PHOTO MOSAIC WALL (FAIRY LIGHTS + "WHERE PASSION MEETS THE STAGE!") 🌟 */}
         <section ref={photoCollageRef} id="photo-collage" className="bg-[#000000] text-white py-16 px-2 sm:px-6 mt-16 relative overflow-hidden">
           
           {/* Fairy String Lights SVG Header Banner */}
@@ -288,36 +286,27 @@ export default function EthosGalleryPage() {
             </svg>
           </div>
 
-          {/* ATTRACTIVE CATCHY HEADLINE: EVERY BEAT TELLS A STORY! */}
+          {/* ATTRACTIVE CATCHY HEADLINE: WHERE PASSION MEETS THE STAGE! */}
           <div className="text-center max-w-4xl mx-auto mb-10 space-y-3">
             <span className="text-xs font-mono font-black uppercase tracking-widest text-[#FF0055] block">
               ETHOS DANCE STUDIO VISUAL LOOKBOOK
             </span>
 
             <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-syne text-white tracking-tight leading-tight uppercase">
-              EVERY BEAT <br />
+              WHERE PASSION <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0055] via-amber-300 to-[#00DFD8]">
-                TELLS A STORY!
+                MEETS THE STAGE!
               </span>
             </h2>
 
-            {/* Filter Tabs */}
+            {/* Filter Tabs (NO "All Stories" - ONLY Specific Categories) */}
             <div className="flex flex-wrap justify-center gap-2 pt-4">
-              <button
-                onClick={() => setPhotoFilter('all')}
-                className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all ${
-                  photoFilter === 'all' ? 'bg-white text-slate-950 shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'
-                }`}
-              >
-                All Stories
-              </button>
-
               {categoryCards.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setPhotoFilter(cat.id)}
-                  className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all ${
-                    photoFilter === cat.id ? 'bg-[#0088FF] text-white shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'
+                  className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all ${
+                    photoFilter === cat.id ? 'bg-[#0088FF] text-white shadow-xl ring-2 ring-white/30' : 'bg-white/10 text-white hover:bg-white/20'
                   }`}
                 >
                   {cat.title}
@@ -326,11 +315,12 @@ export default function EthosGalleryPage() {
             </div>
           </div>
 
-          {/* SEAMLESS ZERO-GAP MOSAIC PHOTO WALL */}
+          {/* SEAMLESS ZERO-GAP MOSAIC PHOTO WALL (MATCHING IMG 3 - DENSE LAYOUT) */}
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {filteredPhotos.map((item) => (
               <div
                 key={item.id}
+                onClick={() => setActiveLightboxImage(item)}
                 className={`relative overflow-hidden shadow-2xl bg-slate-900 group cursor-pointer border border-white/10 ${item.size}`}
               >
                 <img
@@ -360,6 +350,62 @@ export default function EthosGalleryPage() {
       </main>
 
       <Footer onQuickBook={(item) => setSelectedItemForBooking(item)} />
+
+      {/* 🌟 LIGHTBOX MODAL FULL IMAGE POPUP (MATCHING IMG 4) 🌟 */}
+      {activeLightboxImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 animate-fade-in"
+          onClick={() => setActiveLightboxImage(null)}
+        >
+          {/* Close Button Top Right */}
+          <button
+            onClick={() => setActiveLightboxImage(null)}
+            className="absolute top-6 right-6 text-white/80 hover:text-white p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all shadow-xl z-10"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Enlarged Photo Container (Matching img 4) */}
+          <div
+            className="relative max-w-5xl w-full max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 flex flex-col justify-between"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative flex-1 max-h-[75vh] overflow-hidden bg-black flex items-center justify-center">
+              <img
+                src={activeLightboxImage.image}
+                alt={activeLightboxImage.title}
+                className="w-full h-full max-h-[75vh] object-contain"
+              />
+            </div>
+
+            <div className="p-4 sm:p-6 bg-slate-900 text-white flex items-center justify-between border-t border-white/10">
+              <div>
+                <span className="text-[10px] font-mono uppercase text-[#00DFD8] bg-white/10 px-2.5 py-0.5 rounded">
+                  {activeLightboxImage.category}
+                </span>
+                <h3 className="text-lg font-black font-syne uppercase mt-1">
+                  {activeLightboxImage.title}
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  const imgItem = activeLightboxImage;
+                  setActiveLightboxImage(null);
+                  setSelectedItemForBooking({
+                    id: imgItem.id,
+                    title: `${imgItem.title} Pass`,
+                    price: 449,
+                    imageUrl: imgItem.image
+                  });
+                }}
+                className="py-2.5 px-5 bg-[#FF0055] hover:bg-[#D00044] text-white text-xs font-black uppercase rounded-xl shadow-lg transition-all"
+              >
+                Book Pass • ₹449
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedItemForBooking && (
         <BookingPaymentModal
