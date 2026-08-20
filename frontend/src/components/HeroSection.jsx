@@ -6,32 +6,34 @@ export default function HeroSection({ onBookWorkshop }) {
   const blueStripText = "ETHOS DANCE STUDIO KUKATPALLY • COMMERCIAL HIP-HOP • BOLLYWOOD COMMERCIAL FUSION • ROYAL WEDDING SANGEET • CONTEMPORARY STORYTELLING • HIGH HEELS CHOREO • ";
 
   return (
-    <section className="relative pt-[76px] bg-[#090A0F] text-white flex flex-col justify-between overflow-hidden">
+    <section className="relative pt-[76px] text-white flex flex-col justify-between overflow-hidden">
 
-      {/* Subtle dark radial ambient */}
-      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_70%_50%,rgba(255,0,85,0.08),transparent_60%)]" />
+      {/* ── FULL-BLEED BACKGROUND PHOTO ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img
+          src="/ethos_hero_bg.jpg"
+          alt=""
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Heavy dark overlay — left heavier so text is readable */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-black/60" />
+      </div>
 
       {/* HERO CONTENT */}
       <div className="max-w-7xl mx-auto w-full py-8 sm:py-16 px-4 sm:px-8 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
-          {/* RIGHT: STUDIO EVENT PHOTO */}
+          {/* RIGHT: LOGO */}
           <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center items-center relative py-4">
-
-            {/* Pink glow behind photo */}
-            <div className="absolute w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] bg-gradient-to-tr from-[#FF0055]/25 via-transparent to-[#00DFD8]/15 rounded-full blur-3xl pointer-events-none" />
-
-            {/* Studio event photo — rounded with glow border */}
-            <div className="relative z-10 w-full max-w-[340px] sm:max-w-[460px] lg:max-w-[520px]">
+            <div className="absolute w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] bg-gradient-to-tr from-[#FF0055]/30 via-transparent to-[#00DFD8]/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 w-full max-w-[300px] sm:max-w-[420px] lg:max-w-[460px] flex items-center justify-center p-2 filter drop-shadow-[0_0_40px_rgba(255,0,85,0.5)] hover:scale-105 transition-transform duration-500">
               <img
-                src="/ethos_hero_bg.jpg"
-                alt="Ethos Dance Studio — Live Event"
-                className="w-full h-auto rounded-2xl object-cover shadow-2xl shadow-[#FF0055]/20 ring-2 ring-white/10 hover:scale-[1.02] transition-transform duration-500"
+                src={ethosPureLogo}
+                alt="Ethos Dance Studio Emblem Logo"
+                className="w-full h-auto object-contain bg-transparent"
               />
-              {/* Subtle gradient fade on bottom of photo */}
-              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#090A0F]/60 to-transparent rounded-b-2xl pointer-events-none" />
             </div>
-
           </div>
 
           {/* 2. HERO TEXT MATTER (FOR MOBILE: RENDERED DOWN BELOW LOGO) */}
