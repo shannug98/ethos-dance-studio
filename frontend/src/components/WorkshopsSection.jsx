@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShareModal from './ShareModal';
 import { Calendar, Clock, MapPin, Sparkles, UserCheck, Flame, Share2 } from 'lucide-react';
 
 export default function WorkshopsSection({ events = [], onSelectEvent }) {
   const [sharingItem, setSharingItem] = useState(null);
+
+  // ── Read admin-created events directly from localStorage (real-time) ──
+  const readAdminEvents = () => {
+    try {
+      const saved = localStorage.getItem('ethos_master_events_catalog');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  };
+  const [adminEvents, setAdminEvents] = useState(readAdminEvents);
+  useEffect(() => {
+    const handler = () => setAdminEvents(readAdminEvents());
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
+  }, []);
+
   // Default fallback workshops if no admin events fall within 28 days
   const defaultWorkshops = [
     {
@@ -38,46 +53,47 @@ export default function WorkshopsSection({ events = [], onSelectEvent }) {
     }
   ];
 
-  // Helper function to check if an event date falls within 28 days (1 month) from today
-  const isWithin28Days = (dateStr, status) => {
-    // Past events are explicitly excluded
-    if (status === 'PAST' || (dateStr && dateStr.includes('Past Event'))) return false;
-
-    if (!dateStr) return true;
-    try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const maxDate = new Date();
-      maxDate.setDate(today.getDate() + 28);
-      maxDate.setHours(23, 59, 59, 999);
-
-      // Clean date string (e.g. "Aug 29, 2026", "Saturday, Aug 29")
-      const cleaned = dateStr.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s*/i, '');
-      let parsedDate = new Date(cleaned);
-
-      // If missing year (e.g. "Aug 29"), assume current year 2026
-      if (isNaN(parsedDate.getTime())) {
-        parsedDate = new Date(`${cleaned}, ${today.getFullYear()}`);
-      }
-
-      if (!isNaN(parsedDate.getTime())) {
-        return parsedDate >= today && parsedDate <= maxDate;
-      }
-    } catch {
-      return true;
-    }
-    return true;
+  // Helper: parse flexible date formats including DD-MM-YYYY from admin
+  const parseEventDate = (dateStr) => {
+    if (!dateStr) return null;
+    // DD-MM-YYYY (admin form format e.g. "21-08-2026")
+    const ddmmyyyy = dateStr.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+    if (ddmmyyyy) return new Date(`${ddmmyyyy[3]}-${ddmmyyyy[2]}-${ddmmyyyy[1]}`);
+    // YYYY-MM-DD
+    const yyyymmdd = dateStr.match(/^\d{4}-\d{2}-\d{2}$/);
+    if (yyyymmdd) return new Date(dateStr);
+    // Natural language: "Aug 29, 2026", "Saturday, Aug 29"
+    const cleaned = dateStr.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s*/i, '');
+    let d = new Date(cleaned);
+    if (isNaN(d.getTime())) d = new Date(`${cleaned}, ${new Date().getFullYear()}`);
+    return isNaN(d.getTime()) ? null : d;
   };
 
-  // Combine events from props (admin catalog & backend) + defaults
-  const allAvailableEvents = events.length > 0 ? events : defaultWorkshops;
+  // Helper: check event is within next 28 days and not past
+  const isWithin28Days = (dateStr, status) => {
+    if (status === 'PAST' || (dateStr && dateStr.includes('Past Event'))) return false;
+    if (!dateStr) return true;
+    const parsed = parseEventDate(dateStr);
+    if (!parsed) return true;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const maxDate = new Date(); maxDate.setDate(today.getDate() + 28); maxDate.setHours(23, 59, 59, 999);
+    return parsed >= today && parsed <= maxDate;
+  };
 
-  // Filter events to ONLY include those scheduled within the next 28 days
-  const eventsWithin28Days = allAvailableEvents.filter(item => isWithin28Days(item.date, item.status));
+  // Merge: admin localStorage events take priority, de-duplicate by id
+  const mergedMap = new Map();
+  defaultWorkshops.forEach(e => mergedMap.set(e.id, e));
+  events.forEach(e => mergedMap.set(e.id, e));
+  adminEvents.forEach(e => mergedMap.set(e.id, e)); // admin always wins
+  const allAvailableEvents = Array.from(mergedMap.values());
 
-  // If no admin events fall within 28 days, use defaults so homepage is never empty
-  const displayEvents = eventsWithin28Days.length > 0 ? eventsWithin28Days : defaultWorkshops;
+  // Show LIVE + events within 28 days
+  const displayEvents = allAvailableEvents.filter(item =>
+    item.status === 'LIVE' || isWithin28Days(item.date, item.status)
+  );
+
+  // Never leave homepage empty — fallback to defaults
+  const finalEvents = displayEvents.length > 0 ? displayEvents : defaultWorkshops;
 
   return (
     <section id="workshops" className="bg-[#000000] text-[#FFFFFF] py-16 sm:py-20 border-b border-[#333333]">
@@ -100,13 +116,13 @@ export default function WorkshopsSection({ events = [], onSelectEvent }) {
 
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold text-slate-300 backdrop-blur-md">
             <Flame className="w-4 h-4 text-[#FF0044] animate-pulse" />
-            <span>{displayEvents.length} Active Event{displayEvents.length > 1 ? 's' : ''} Open for Registration</span>
+            <span>{finalEvents.length} Active Event{finalEvents.length > 1 ? 's' : ''} Open for Registration</span>
           </div>
         </div>
 
         {/* Workshop Cards Grid (Renders ALL events occurring within 28 days - Matching Screenshot Design) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayEvents.map((item) => (
+          {finalEvents.map((item) => (
             <div
               key={item.id}
               className="bg-white text-slate-900 border border-slate-200/90 rounded-[1.5rem] p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl group"
