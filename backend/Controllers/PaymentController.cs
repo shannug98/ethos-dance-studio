@@ -128,6 +128,18 @@ namespace DanceStudio.API.Controllers
             // Send notification email
             await _notificationService.SendBookingConfirmationAsync(request.CustomerEmail, request.CustomerName, request.ItemTitle, booking.TransactionId);
 
+            // 🚀 AUTOMATED BACKGROUND WHATSAPP RECEIPT DISPATCH VIA TWILIO
+            string waReceiptText = $"🎟️ *ETHOS DANCE STUDIO — BOOKING CONFIRMED*\n\n" +
+                                   $"Hi *{request.CustomerName}*,\n" +
+                                   $"Your payment for *{request.ItemTitle}* is verified!\n\n" +
+                                   $"🆔 Ticket ID: *{booking.TransactionId}*\n" +
+                                   $"💰 Paid: *₹{request.PricePaid}*\n" +
+                                   $"👤 Member Code: *{user.CustomerCode}*\n" +
+                                   $"📍 Studio: Nizampet Rd, Kukatpally, Hyderabad\n\n" +
+                                   $"Show this message at entrance. See you on stage!\n*Ethos Dance Studio Team*";
+
+            _ = _notificationService.SendWhatsAppMessageAsync(request.CustomerPhone, waReceiptText);
+
             return Ok(new
             {
                 booking = booking,

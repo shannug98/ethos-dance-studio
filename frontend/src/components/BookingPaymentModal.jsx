@@ -89,6 +89,18 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
       window.dispatchEvent(new Event('storage'));
     } catch (e) {}
 
+    // Send 100% automated background WhatsApp message via Twilio API
+    try {
+      fetch('http://localhost:5000/api/payment/send-whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: formData.phone,
+          message: `🎟️ *ETHOS DANCE STUDIO — TICKET CONFIRMED*\n\nHi *${formData.fullName}*,\nYour payment for *${itemTitle}* is verified!\n\n🆔 Ticket ID: *${mockTxId}*\n💰 Paid: *₹${itemPrice}*\n👤 Member Code: *${mockCode}*\n📍 Studio: Nizampet Rd, Kukatpally, Hyderabad\n\nShow this ticket at entrance scanner. See you on stage!\n*Ethos Dance Studio Team*`
+        })
+      }).catch(() => {});
+    } catch (err) {}
+
     setStep('DONE');
 
     setTimeout(() => {
