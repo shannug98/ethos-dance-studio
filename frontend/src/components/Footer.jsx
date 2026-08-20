@@ -72,18 +72,20 @@ export default function Footer({ onQuickBook }) {
         className="max-w-7xl mx-auto px-6 sm:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 border-b border-slate-800/80 relative z-20 text-left"
       >
         
-        {/* COLUMN 1: Explore */}
+        {/* COLUMN 1: Explore (Actual Website Pages) */}
         <div className="space-y-4">
           <h3 className="text-xl font-black text-white font-syne tracking-tight">Explore</h3>
           <ul className="space-y-3 text-sm font-medium text-slate-300">
-            <li><a href="index.html#communities" className="hover:text-white transition-colors">Communities</a></li>
-            <li><a href="events.html" className="hover:text-white transition-colors">Events</a></li>
-            <li><a href="https://wa.me/918341701113?text=Hi%20Ethos!%20I%20want%20to%20collaborate%20with%20your%20dance%20studio." target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Collab with us</a></li>
-            <li><a href="https://wa.me/918341701113?text=Hi%20Ethos!%20I%20am%20interested%20in%20Careers%20/%20Instructor%20roles." target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Careers</a></li>
+            <li><a href="events.html" className="hover:text-white transition-colors">Events & Workshops</a></li>
+            <li><a href="schedule.html" className="hover:text-white transition-colors">Class Schedule</a></li>
+            <li><a href="gallery.html" className="hover:text-white transition-colors">Gallery & Lookbook</a></li>
+            <li><a href="packages.html" className="hover:text-white transition-colors">Passes & Packages</a></li>
+            <li><a href="location.html" className="hover:text-white transition-colors">Studio Location</a></li>
+            <li><a href="sangeet.html" className="hover:text-white transition-colors">Sangeet & Wedding</a></li>
           </ul>
         </div>
 
-        {/* COLUMN 2: Socials (Matching exact layout in img 1) */}
+        {/* COLUMN 2: Socials (Instagram & YouTube Only) */}
         <div className="space-y-4">
           <h3 className="text-xl font-black text-white font-syne tracking-tight">Socials</h3>
           <ul className="space-y-3 text-sm font-medium text-slate-300">
@@ -96,27 +98,11 @@ export default function Footer({ onQuickBook }) {
               </a>
             </li>
             <li>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
+              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
                 <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  <path d="M23.498 6.186c-.273-.997-1.06-1.783-2.057-2.058-1.818-.487-9.441-.487-9.441-.487s-7.623 0-9.44.487c-.997.275-1.784 1.061-2.058 2.058-.487 1.819-.487 5.682-.487 5.682s0 3.863.487 5.682c.274.997 1.061 1.783 2.058 2.058 1.817.487 9.44.487 9.44.487s7.623 0 9.441-.487c.997-.275 1.784-1.061 2.057-2.058.487-1.819.487-5.682.487-5.682s0-3.863-.487-5.682zm-13.498 9.314v-7l6 3.5-6 3.5z"/>
                 </svg>
-                <span>ethosdancestudio</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
-                <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                <span>ethosdancehyd</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://reddit.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
-                <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2.033 16.012c-.564.564-1.332.884-2.133.884s-1.569-.32-2.133-.884c-.564-.564-.884-1.332-.884-2.133 0-.801.32-1.569.884-2.133.564-.564 1.332-.884 2.133-.884s1.569.32 2.133.884c.564.564.884 1.332.884 2.133 0 .801-.32 1.569-.884 2.133zm6.333 0c-.564.564-1.332.884-2.133.884s-1.569-.32-2.133-.884c-.564-.564-.884-1.332-.884-2.133 0-.801.32-1.569.884-2.133.564-.564 1.332-.884 2.133-.884s1.569.32 2.133.884c.564.564.884 1.332.884 2.133 0 .801-.32 1.569-.884 2.133z"/>
-                </svg>
-                <span>ethosdancehyd</span>
+                <span>Ethos Dance Studio</span>
               </a>
             </li>
           </ul>
