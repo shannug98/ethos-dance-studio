@@ -135,16 +135,26 @@ export default function Navbar({ onQuickBook }) {
             {loggedInUser ? (
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2.5 bg-[#FF0055]/10 border border-[#FF0055]/50 px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md"
+                className="flex items-center gap-2.5 bg-gradient-to-r from-[#FF0055]/20 via-[#7928CA]/20 to-[#00DFD8]/20 border border-[#FF0055]/60 hover:border-[#FF0055] px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md shadow-lg group cursor-pointer"
               >
-                <img
-                  src={loggedInUser.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
-                  alt={loggedInUser.name}
-                  className="w-7 h-7 rounded-full border-2 border-[#FF0055] object-cover shrink-0"
-                />
-                <span className="text-xs font-extrabold text-white font-outfit uppercase">
-                  {loggedInUser.name.split(' ')[0]}
-                </span>
+                <div className="relative">
+                  <img
+                    src={loggedInUser.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
+                    alt={loggedInUser.name}
+                    className="w-7 h-7 rounded-full border-2 border-[#FF0055] object-cover shrink-0 group-hover:scale-105 transition-transform"
+                  />
+                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#090A0F]" />
+                </div>
+
+                <div className="text-left leading-none">
+                  <span className="text-[11px] font-black text-white font-syne uppercase tracking-wider block">
+                    {loggedInUser.name ? loggedInUser.name.split(' ')[0] : 'Shanmuka'}
+                  </span>
+                  <span className="text-[9px] font-bold text-[#00DFD8] block">
+                    {loggedInUser.customerCode || 'ETH1025'}
+                  </span>
+                </div>
+
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-300 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
             ) : isAdminLoggedIn ? (
@@ -171,26 +181,55 @@ export default function Navbar({ onQuickBook }) {
 
             {/* TOPDOWN DROPDOWN MENU CONTAINER */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-[#090A0F]/95 border border-white/15 rounded-2xl shadow-2xl backdrop-blur-2xl p-2.5 z-50 space-y-1.5 animate-fadeIn">
+              <div className="absolute right-0 mt-2 w-72 bg-[#090A0F]/95 border border-white/20 rounded-2xl shadow-2xl backdrop-blur-2xl p-3 z-50 space-y-2 animate-fadeIn text-left">
                 {loggedInUser ? (
                   <>
-                    <a
-                      href="student.html"
-                      target="_self"
-                      onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-white/10 text-xs font-bold text-white transition-colors"
-                    >
-                      <User className="w-4 h-4 text-[#00DFD8]" />
-                      <span>Member Dashboard ({loggedInUser.classesLeft || 8} Left)</span>
-                    </a>
+                    {/* User Card Header in Dropdown */}
+                    <div className="p-3 bg-white/5 border border-white/10 rounded-xl flex items-center gap-3">
+                      <img
+                        src={loggedInUser.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
+                        alt=""
+                        className="w-10 h-10 rounded-full border-2 border-[#FF0055] object-cover"
+                      />
+                      <div className="overflow-hidden">
+                        <h4 className="text-xs font-black text-white uppercase font-syne truncate">
+                          {loggedInUser.name || 'Shanmuka Gaddam'}
+                        </h4>
+                        <span className="text-[10px] text-[#00DFD8] font-bold block">
+                          ID: {loggedInUser.customerCode || 'ETH1025'} • {loggedInUser.classesLeft || 8} Classes Left
+                        </span>
+                      </div>
+                    </div>
 
-                    <button
-                      onClick={() => { setDropdownOpen(false); handleLogoutUser(); }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-[#FF0055]/20 text-xs font-bold text-[#FF0055] transition-colors text-left"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Log Out Member</span>
-                    </button>
+                    <div className="space-y-1 pt-1">
+                      <a
+                        href="student.html"
+                        target="_self"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 text-xs font-bold text-white transition-colors"
+                      >
+                        <User className="w-4 h-4 text-[#00DFD8]" />
+                        <span>Member Dashboard</span>
+                      </a>
+
+                      <a
+                        href="student.html#attendance"
+                        target="_self"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 text-xs font-bold text-white transition-colors"
+                      >
+                        <Sparkles className="w-4 h-4 text-pink-400" />
+                        <span>Classes & Attendance ({loggedInUser.classesLeft || 8} Left)</span>
+                      </a>
+
+                      <button
+                        onClick={() => { setDropdownOpen(false); handleLogoutUser(); }}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#FF0055]/20 text-xs font-bold text-[#FF0055] transition-colors text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Log Out Member</span>
+                      </button>
+                    </div>
                   </>
                 ) : null}
 

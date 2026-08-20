@@ -8,13 +8,7 @@ import { User, Lock, Calendar, Award, Image, Settings, CheckCircle2, Key, AlertT
 const API_URL = 'http://localhost:5000';
 
 export default function StudentPortalPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    try {
-      return localStorage.getItem('ethos_logged_in_user') !== null;
-    } catch {
-      return false;
-    }
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const [loginMode, setLoginMode] = useState('OTP'); // 'OTP' or 'ID'
   const [loginPhone, setLoginPhone] = useState('');
@@ -36,38 +30,40 @@ export default function StudentPortalPage() {
   const [confirmedRenewal, setConfirmedRenewal] = useState(null);
 
   // Student Profile & Pass Data
+  const defaultMemberData = {
+    id: 1025,
+    customerCode: 'ETH1025',
+    name: 'Shanmuka Gaddam',
+    age: '24 Years',
+    parentName: 'Suresh Gaddam',
+    packageTitle: 'Royal Celebration / Adults Monthly Pass',
+    totalClasses: 20,
+    classesAttended: 12,
+    classesLeft: 8,
+    passExpiryDate: 'August 28, 2026 (In 9 Days)',
+    daysRemaining: 9,
+    attendanceRate: '90%',
+    rhythmScore: '94%',
+    stageConfidence: '92%',
+    teacherNotes: 'Shanmuka is performing exceptionally well in Commercial Hip-Hop isolations and Bollywood fusion sync. Ready for upcoming stage performance!',
+    email: 'shanmuka@gmail.com',
+    phone: '8341701113',
+    profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+  };
+
   const [studentInfo, setStudentInfo] = useState(() => {
     try {
       const saved = localStorage.getItem('ethos_logged_in_user');
       if (saved) return JSON.parse(saved);
     } catch {}
-    return {
-      id: 1025,
-      customerCode: 'ETH1025',
-      name: 'Shanmuka Gaddam',
-      age: '24 Years',
-      parentName: 'Suresh Gaddam',
-      packageTitle: 'Royal Celebration / Adults Monthly Pass',
-      totalClasses: 20,
-      classesAttended: 12,
-      classesLeft: 8,
-      passExpiryDate: 'August 23, 2026 (In 5 Days)',
-      daysRemaining: 5,
-      attendanceRate: '90%',
-      rhythmScore: '94%',
-      stageConfidence: '92%',
-      teacherNotes: 'Shanmuka is performing exceptionally well in Commercial Hip-Hop isolations and Bollywood fusion sync. Ready for upcoming stage performance!',
-      email: 'shanmuka@gmail.com',
-      phone: '8341701113',
-      profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
-    };
+    localStorage.setItem('ethos_logged_in_user', JSON.stringify(defaultMemberData));
+    return defaultMemberData;
   });
 
   useEffect(() => {
-    if (isLoggedIn) {
-      localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
-    }
-  }, [isLoggedIn, studentInfo]);
+    localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
+    window.dispatchEvent(new Event('storage'));
+  }, [studentInfo]);
 
   // Handle Send OTP (Generate WhatsApp OTP link as well)
   const handleSendOtp = async (e) => {
