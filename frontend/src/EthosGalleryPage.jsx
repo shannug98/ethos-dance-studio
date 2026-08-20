@@ -1,337 +1,350 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
-import { Sparkles, Play, Pause, Volume2, VolumeX, Maximize2, Terminal, Film, Award, Flame } from 'lucide-react';
+import { Sparkles, Play, Pause, Volume2, VolumeX, Maximize2, ExternalLink, ArrowRight, Film, Award, Layers } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000';
 
 export default function EthosGalleryPage() {
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
-  const [activePlayingId, setActivePlayingId] = useState(null);
+
+  // Active Interactive Rotonde Carousel Index (Lucas Aufrère Style)
+  const [activeRotondeIndex, setActiveRotondeIndex] = useState(0);
   const [mutedStates, setMutedStates] = useState({});
 
-  // Photos for Column 1 (Scrolls DOWN ⬇️)
-  const col1Photos = [
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80',
-  ];
-
-  // Photos for Column 2 (Scrolls UP ⬆️)
-  const col2Photos = [
-    'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80',
-  ];
-
-  // Photos for Column 3 (Scrolls DOWN ⬇️)
-  const col3Photos = [
-    'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
-  ];
-
-  // 🌟 HEYCLICKY RETRO MACOS ALL-TIME FAMOUS ETHOS VIDEO GALLERY 🌟
-  const ethosVideoGallery = [
+  // 🌟 ETHOS ALL-TIME FAMOUS PROJECTS & HIGHLIGHTS (LUCAS AUFRÈRE STYLE)
+  const ethosProjects = [
     {
-      id: 'street-jam',
-      fileName: 'ethos_street_jam.mov',
-      title: 'Urban Hip-Hop Stage Showcase',
-      category: '🔥 ALL-TIME FAMOUS',
-      kao: '(🔥_🔥)',
+      id: '01',
+      title: 'Urban Hip-Hop Showcase',
+      role: 'Stage Choreography & Execution',
+      category: 'Stage Production',
+      year: '2026',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-group-of-young-people-dancing-hip-hop-41484-large.mp4',
-      poster: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
-      tagline: 'High-speed isolations, bounce, and group stage sync performance.',
-      year: '2026 HIGHLIGHT',
-      badgeColor: 'bg-[#FF0055] text-white',
+      poster: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1200&q=80',
+      description: 'Massive group stage sync performance featuring high-speed body isolations, hard bounce grooves, and commercial lighting at Ethos Arena.',
+      stack: ['Hip-Hop', 'Commercial Sync', 'Stage Lights', 'Lighthouse 98+'],
+      tagline: '500K+ Reel Views • All-Time Famous'
     },
     {
-      id: 'sangeet-duet',
-      fileName: 'royal_sangeet_duet.mov',
-      title: 'Grand Royal Sangeet Couple Entry',
-      category: '👑 WEDDING HIGHLIGHT',
-      kao: '{ ^-^ }',
+      id: '02',
+      title: 'Royal Wedding Sangeet',
+      role: 'Bespoke Duet & Family Flashmob',
+      category: 'Wedding Hub',
+      year: '2026',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-couple-dancing-at-a-wedding-reception-42868-large.mp4',
-      poster: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-      tagline: 'Bespoke bridal entrance choreography and viral family flashmob.',
-      year: 'ALL-TIME FAVORITE',
-      badgeColor: 'bg-amber-500 text-slate-950',
+      poster: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80',
+      description: 'Grand royal wedding couple entrance choreography. Custom audio tracks mixed with traditional dhol beats and cinematic family entry transitions.',
+      stack: ['Royal Sangeet', 'Couple Entry', 'Custom Track Mix', '120+ Families'],
+      tagline: 'Featured Bridal Showcase'
     },
     {
-      id: 'stage-showcase',
-      fileName: 'annual_gala_finale.mov',
-      title: 'Annual Grand Stage Performance',
-      category: '✨ STAGE FINALE',
-      kao: '¯\\_(ツ)_/¯',
+      id: '03',
+      title: 'Annual Arena Gala Finale',
+      role: 'Full Studio All-Stars Finale',
+      category: 'Grand Gala',
+      year: '2025',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-dancers-performing-on-stage-41486-large.mp4',
-      poster: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
-      tagline: 'End-of-year all-stars performance at Ethos Arena Hyderabad.',
-      year: 'HALL OF FAME',
-      badgeColor: 'bg-purple-600 text-white',
+      poster: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1200&q=80',
+      tagline: 'Annual All-Stars Hall of Fame',
+      description: 'The flagship annual showcase featuring over 200 Ethos dancers across Bollywood Fusion, Contemporary storytelling, and Hip-Hop cyphers.',
+      stack: ['Gala Finale', '200+ Dancers', 'Live Stage', 'Full Production']
     },
     {
-      id: 'contemporary-solo',
-      fileName: 'contemporary_flow.mov',
-      title: 'Lyrical Contemporary & Floorwork',
-      category: '🎭 ARTISTIC EXPRESSION',
-      kao: '(¬_¬)',
+      id: '04',
+      title: 'Contemporary Expression',
+      role: 'Lyrical Storytelling & Floorwork',
+      category: 'Artistic Masterclass',
+      year: '2025',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-girl-dancing-sensually-in-a-studio-41485-large.mp4',
-      poster: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80',
-      tagline: 'Emotional storytelling, fluid momentum, and balance transitions.',
-      year: 'FEATURED MASTERCLASS',
-      badgeColor: 'bg-[#0088FF] text-white',
+      poster: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=1200&q=80',
+      description: 'Deep emotional storytelling through fluid momentum, floorwork transitions, and expressive body extension masterclasses.',
+      stack: ['Contemporary', 'Lyrical Flow', 'Floorwork', 'Masterclass'],
+      tagline: 'Curated Masterclass'
     },
     {
-      id: 'heels-commercial',
-      fileName: 'commercial_heels_glam.mov',
-      title: 'Commercial High Heels Intensive',
-      category: '💃 GLAM INTENSIVE',
-      kao: '(★_★)',
+      id: '05',
+      title: 'Commercial Heels Glam',
+      role: 'Confidence, Posture & Lines',
+      category: 'Glam Intensive',
+      year: '2025',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-young-woman-dancing-in-a-studio-41483-large.mp4',
-      poster: 'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
-      tagline: 'Postural lines, confidence posture, and video-style commercial heels.',
-      year: 'VIRAL REEL',
-      badgeColor: 'bg-pink-500 text-white',
+      poster: 'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=1200&q=80',
+      description: 'High-heels choreography focusing on postural alignment, sleek camera-ready lines, and high-confidence performance attitude.',
+      stack: ['Commercial Heels', 'Posture & Lines', 'Camera Ready', 'Glam Squad'],
+      tagline: 'Viral Reels Favorite'
     },
     {
-      id: 'street-battle',
-      fileName: 'street_freestyle_battle.mov',
-      title: 'Ethos Street Dance Jam & Battle',
-      category: '⚡ FREESTYLE BATTLE',
-      kao: '^ ω ^',
+      id: '06',
+      title: 'Street Jam & Freestyle Cypher',
+      role: 'Live Battle & Rhythm Grooves',
+      category: 'Cypher Battle',
+      year: '2025',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-breakdancers-performing-in-the-street-41482-large.mp4',
-      poster: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-      tagline: 'High-octane cypher battle, live DJ beats, and student showcases.',
-      year: 'CYPHER CHAMPIONSHIP',
-      badgeColor: 'bg-emerald-500 text-slate-950',
+      poster: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80',
+      description: 'Raw street freestyle cypher battle powered by live DJ beats, student improvs, and explosive breakdance power moves.',
+      stack: ['Freestyle Battle', 'Live DJ', 'Cypher', 'Breakdance'],
+      tagline: 'Ethos Street Championship'
     }
   ];
+
+  const currentProject = ethosProjects[activeRotondeIndex];
 
   const toggleMute = (id) => {
     setMutedStates(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#090A0F] text-white font-sans overflow-x-hidden selection:bg-[#FF0055] selection:text-white">
       
       {/* Standard Unified Navbar */}
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
       <main className="pt-[76px]">
         
-        {/* Page Banner */}
-        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
-          <h1 className="text-4xl sm:text-6xl font-black font-syne">ETHOS GALLERY & VIDEO HIGHLIGHTS</h1>
-          <p className="text-xs sm:text-sm font-extrabold tracking-widest mt-2 opacity-90">All-Time Famous Performance Video Clips & Masterclass Moments</p>
-        </div>
-
-        {/* 🌟 3-COLUMN VERTICAL MARQUEE HERO SECTION */}
-        <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* 🌟 1. HERO ROTONDE SHOWCASE (LUCAS AUFRÈRE 3D ROTONDE SLIDER STYLE) 🌟 */}
+        <section className="relative min-h-[85vh] flex flex-col justify-between py-12 px-4 sm:px-8 border-b border-white/10 overflow-hidden bg-gradient-to-b from-[#090A0F] via-[#11131F] to-[#090A0F]">
           
-          {/* Left Side Text Content */}
-          <div className="lg:col-span-6 space-y-4 sm:space-y-6 text-left">
+          {/* Ambient Glow Watermarks */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-r from-[#FF0055]/20 via-[#7928CA]/20 to-[#0088FF]/20 rounded-full blur-[120px] pointer-events-none" />
+
+          {/* Rotonde Header Bar */}
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-between z-10">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-white/5 border border-white/15 text-white/90 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest rounded-full backdrop-blur-md">
+              <Sparkles className="w-3.5 h-3.5 text-[#FF0055]" />
+              <span>ETHOS CREATIVE GALLERY • SELECTED PRODUCTIONS</span>
+            </div>
+
+            <div className="font-mono text-xs font-bold text-white/60 tracking-widest">
+              <span>{currentProject.id}</span> / <span>06</span>
+            </div>
+          </div>
+
+          {/* Rotonde Main Active Featured Stage Card */}
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-8 z-10">
             
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#0088FF]/10 border border-[#0088FF]/30 text-[#0088FF] text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-full">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>ETHOS ALL-TIME VIDEO ARCHIVE</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black font-syne tracking-tight text-slate-900 leading-[1.02] sm:leading-[0.95] uppercase">
-              Relive the magic— <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0055] to-[#0088FF]">famous performance clips</span> <br className="hidden sm:block" />
-              from Ethos history!
-            </h1>
-
-            {/* Joined Counter Badge with Overlapping Avatars */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-slate-200 shadow-md rounded-full">
-              <div className="flex -space-x-2">
-                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="" />
-                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="" />
-                <img className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="" />
+            {/* Left Column: Massive Editorial Typography & Project Details */}
+            <div className="lg:col-span-5 space-y-6 text-left">
+              <div className="space-y-2">
+                <span className="text-xs font-mono font-bold text-[#00DFD8] uppercase tracking-widest block">
+                  {currentProject.category} • {currentProject.year}
+                </span>
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black font-syne tracking-tight text-white uppercase leading-[0.95]">
+                  {currentProject.title}
+                </h1>
+                <p className="text-xs sm:text-sm font-mono font-bold text-white/70 tracking-wider pt-1 border-b border-white/10 pb-3">
+                  {currentProject.role}
+                </p>
               </div>
-              <span className="text-[11px] sm:text-xs font-black text-slate-800 uppercase tracking-wide">
-                500K+ Reel Views 🔥
-              </span>
+
+              <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
+                {currentProject.description}
+              </p>
+
+              {/* Technical Stack Tags */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                {currentProject.stack.map((tech, i) => (
+                  <span key={i} className="px-3 py-1 bg-white/5 border border-white/15 text-slate-300 text-[11px] font-mono rounded-lg">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              {/* Rotonde Controls & Indicators */}
+              <div className="pt-4 flex items-center gap-4">
+                <button
+                  onClick={() => setActiveRotondeIndex((prev) => (prev === 0 ? ethosProjects.length - 1 : prev - 1))}
+                  className="px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full font-mono text-xs font-bold transition-all hover:scale-105"
+                >
+                  ← PREV
+                </button>
+                <button
+                  onClick={() => setActiveRotondeIndex((prev) => (prev === ethosProjects.length - 1 ? 0 : prev + 1))}
+                  className="px-6 py-2.5 bg-gradient-to-r from-[#FF0055] to-[#7928CA] text-white font-mono text-xs font-extrabold rounded-full transition-all hover:scale-105 shadow-lg shadow-[#FF0055]/30 flex items-center gap-2"
+                >
+                  <span>NEXT PROJECT</span>
+                  <span>→</span>
+                </button>
+              </div>
+
             </div>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-lg">
-              Explore Ethos Dance Studio's legendary masterclasses, stage showcases, and Sangeet duets captured in high-definition video clips below!
-            </p>
+            {/* Right Column: High-Impact Full-Height Cinema Video Player Card */}
+            <div className="lg:col-span-7 relative h-[360px] sm:h-[480px] lg:h-[520px] rounded-3xl overflow-hidden border border-white/20 shadow-[0_25px_80px_rgba(0,0,0,0.8)] bg-slate-950 group">
+              <video
+                key={currentProject.id}
+                src={currentProject.videoUrl}
+                poster={currentProject.poster}
+                autoPlay
+                loop
+                muted={mutedStates[currentProject.id] !== false}
+                playsInline
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
 
-            <div className="pt-2">
-              <a
-                href="#video-showcase"
-                className="py-4 px-8 bg-[#0088FF] hover:bg-[#0077EE] text-white text-xs sm:text-sm font-black uppercase tracking-wider rounded-2xl transition-all shadow-lg shadow-[#0088FF]/30 inline-flex items-center justify-center gap-2"
-              >
-                <span>Watch Video Showcase</span>
-              </a>
+              {/* Gradient Vignette Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-transparent opacity-80" />
+
+              {/* Top Right Floating Badge */}
+              <span className="absolute top-4 right-4 px-3.5 py-1 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[10px] font-mono font-extrabold uppercase rounded-full shadow-lg">
+                {currentProject.tagline}
+              </span>
+
+              {/* Bottom Floating Control Bar */}
+              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-10">
+                <div className="text-left">
+                  <span className="text-[10px] font-mono font-bold text-[#00DFD8] block">ETHOS SHOWCASE #{currentProject.id}</span>
+                  <h3 className="text-lg font-black font-syne text-white uppercase">{currentProject.title}</h3>
+                </div>
+
+                <button
+                  onClick={() => toggleMute(currentProject.id)}
+                  className="p-3 bg-black/80 hover:bg-black text-white rounded-full backdrop-blur-md border border-white/20 shadow-lg transition-transform hover:scale-110"
+                >
+                  {mutedStates[currentProject.id] === false ? (
+                    <Volume2 className="w-5 h-5 text-emerald-400 animate-pulse" />
+                  ) : (
+                    <VolumeX className="w-5 h-5 text-slate-300" />
+                  )}
+                </button>
+              </div>
+
             </div>
 
           </div>
 
-          {/* Right Side: 3 Infinite Sliding Columns */}
-          <div className="lg:col-span-6 h-[460px] sm:h-[540px] overflow-hidden relative rounded-3xl border border-slate-200 shadow-2xl bg-white p-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-            
-            {/* Top & Bottom Fade Overlays */}
-            <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white via-white/80 to-transparent z-10 pointer-events-none rounded-t-3xl" />
-            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white via-white/80 to-transparent z-10 pointer-events-none rounded-b-3xl" />
-
-            {/* COLUMN 1: SLIDES DOWN ⬇️ */}
-            <div className="flex flex-col gap-3 animate-vertical-down">
-              {[...col1Photos, ...col1Photos].map((imgUrl, i) => (
-                <div key={i} className="h-44 sm:h-52 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-md">
-                  <img src={imgUrl} alt="Ethos Dance Moment" className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-
-            {/* COLUMN 2: SLIDES UP ⬆️ */}
-            <div className="flex flex-col gap-3 animate-vertical-up">
-              {[...col2Photos, ...col2Photos].map((imgUrl, i) => (
-                <div key={i} className="h-44 sm:h-52 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-md">
-                  <img src={imgUrl} alt="Ethos Dance Moment" className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-
-            {/* COLUMN 3: SLIDES DOWN ⬇️ */}
-            <div className="hidden sm:flex flex-col gap-3 animate-vertical-down">
-              {[...col3Photos, ...col3Photos].map((imgUrl, i) => (
-                <div key={i} className="h-44 sm:h-52 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-md">
-                  <img src={imgUrl} alt="Ethos Dance Moment" className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-
+          {/* Rotonde Segment Progress Bar */}
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-6 gap-2 pt-6 z-10">
+            {ethosProjects.map((p, idx) => (
+              <button
+                key={p.id}
+                onClick={() => setActiveRotondeIndex(idx)}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  idx === activeRotondeIndex ? 'bg-gradient-to-r from-[#FF0055] to-[#00DFD8]' : 'bg-white/15 hover:bg-white/30'
+                }`}
+              />
+            ))}
           </div>
 
         </section>
 
-        {/* 🌟 HEYCLICKY-INSPIRED RETRO macOS VIDEO WINDOW SHOWCASE SECTION 🌟 */}
-        <section id="video-showcase" className="py-16 px-4 sm:px-8 max-w-7xl mx-auto border-t border-slate-200/80">
-          
-          <div className="mb-12 text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FF0055]/10 border border-[#FF0055]/30 text-[#FF0055] text-[10px] font-black uppercase tracking-widest rounded-full">
-              <Film className="w-3.5 h-3.5" />
-              <span>ETHOS MACOS VIDEO WINDOW GALLERY</span>
-            </div>
 
-            <h2 className="text-4xl sm:text-6xl font-black font-syne text-slate-900 uppercase tracking-tight">
-              ALL-TIME FAMOUS HIGHLIGHTS
+        {/* 🌟 2. LUCAS AUFRÈRE DETAILED LINEAR GRID VIEW (VUE DÉTAILLÉE) 🌟 */}
+        <section className="py-20 px-4 sm:px-8 max-w-7xl mx-auto border-t border-white/10">
+          
+          {/* Section Header */}
+          <div className="mb-16 text-left max-w-3xl space-y-3">
+            <span className="text-xs font-mono font-extrabold uppercase tracking-widest text-[#FF0055] block">
+              VUE DÉTAILLÉE • ALL PRODUCTIONS
+            </span>
+            <h2 className="text-4xl sm:text-6xl font-black font-syne text-white uppercase tracking-tight">
+              TOUS LES PROJETS
             </h2>
-            <p className="text-slate-600 text-sm font-medium">
-              Click into any active Ethos macOS video window to play legendary performance clips and masterclass routines!
+            <p className="text-slate-400 text-sm font-medium leading-relaxed">
+              Une lecture linéaire des productions et masterclasses présentées dans la rotonde — chorégraphies sur-mesure, animations de scène et expériences visuelles portées par Ethos Studio.
             </p>
           </div>
 
-          {/* RETRO MACOS VIDEO WINDOWS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {ethosVideoGallery.map((item) => {
-              const isMuted = mutedStates[item.id] !== false; // default muted
+          {/* Linear Project Cards Grid */}
+          <div className="space-y-16">
+            {ethosProjects.map((proj, index) => {
+              const isMuted = mutedStates[`grid-${proj.id}`] !== false;
 
               return (
-                <div
-                  key={item.id}
-                  className="bg-white border border-slate-300 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.08)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.15)] transition-all duration-300 flex flex-col justify-between overflow-hidden group hover:-translate-y-1.5 relative"
+                <article
+                  key={proj.id}
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-[#12131C]/60 border border-white/10 rounded-3xl p-6 sm:p-10 hover:border-white/20 transition-all duration-300"
                 >
                   
-                  {/* 🌟 HEYCLICKY RETRO MACOS TITLEBAR HEADER 🌟 */}
-                  <div className="bg-[#E4E4E7] border-b border-slate-300 px-4 py-2.5 flex items-center justify-between select-none shrink-0">
+                  {/* Media Column (Alternates Left/Right layout) */}
+                  <div className={`lg:col-span-7 relative h-[320px] sm:h-[400px] rounded-2xl overflow-hidden border border-white/15 bg-slate-950 group ${
+                    index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'
+                  }`}>
+                    <video
+                      src={proj.videoUrl}
+                      poster={proj.poster}
+                      autoPlay
+                      loop
+                      muted={isMuted}
+                      playsInline
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+                    {/* Audio Toggle Button */}
+                    <button
+                      onClick={() => toggleMute(`grid-${proj.id}`)}
+                      className="absolute bottom-4 right-4 p-2.5 bg-black/80 hover:bg-black text-white rounded-full backdrop-blur-md border border-white/20 shadow-md transition-transform hover:scale-110"
+                    >
+                      {isMuted ? <VolumeX className="w-4 h-4 text-slate-300" /> : <Volume2 className="w-4 h-4 text-emerald-400 animate-pulse" />}
+                    </button>
+
+                    {/* Top Index Badge */}
+                    <span className="absolute top-4 left-4 font-mono font-black text-xs text-[#00DFD8] bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                      {proj.id}
+                    </span>
+                  </div>
+
+                  {/* Body Info Column */}
+                  <div className={`lg:col-span-5 space-y-5 text-left ${
+                    index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'
+                  }`}>
                     
-                    {/* macOS Window Control Dots (Red, Yellow, Green) */}
-                    <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] shadow-xs inline-block"></span>
-                      <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] shadow-xs inline-block"></span>
-                      <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] shadow-xs inline-block"></span>
+                    {/* Meta line */}
+                    <div className="flex items-center gap-2 text-xs font-mono font-bold text-slate-400">
+                      <span className="text-[#FF0055]">{proj.id}</span>
+                      <span>·</span>
+                      <span>{proj.category}</span>
+                      <span>·</span>
+                      <span>{proj.year}</span>
                     </div>
 
-                    {/* Retro Window File Name & Kaomoji */}
-                    <div className="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-700">
-                      <span className="opacity-60">{item.kao}</span>
-                      <span>{item.fileName}</span>
-                    </div>
+                    <h3 className="text-2xl sm:text-4xl font-black font-syne text-white uppercase leading-tight">
+                      {proj.title}
+                    </h3>
 
-                    {/* Window Action Icon */}
-                    <span className="text-slate-400 text-xs font-mono font-bold">⌘</span>
+                    <p className="text-xs font-mono font-bold text-[#00DFD8] uppercase tracking-wider">
+                      {proj.role}
+                    </p>
+
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                      {proj.description}
+                    </p>
+
+                    {/* Stack List */}
+                    <ul className="flex flex-wrap gap-2 pt-2" aria-label="Technical stack">
+                      {proj.stack.map((item, i) => (
+                        <li key={i} className="px-3 py-1 bg-white/5 border border-white/15 text-slate-300 text-[11px] font-mono rounded-lg">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Direct Booking Link */}
+                    <div className="pt-3">
+                      <button
+                        onClick={() => setSelectedItemForBooking({
+                          id: proj.id,
+                          title: proj.title,
+                          price: 449,
+                          imageUrl: proj.poster
+                        })}
+                        className="py-3 px-6 bg-white/10 hover:bg-[#FF0055] text-white text-xs font-extrabold font-mono uppercase tracking-wider rounded-xl transition-all border border-white/20 hover:border-[#FF0055] inline-flex items-center gap-2 group"
+                      >
+                        <span>BOOK STAGE PASS</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </div>
 
                   </div>
 
-                  {/* WINDOW MAIN BODY CONTENT */}
-                  <div className="p-5 flex-1 flex flex-col justify-between">
-                    
-                    <div>
-                      {/* High-Res Video Container with Retro Window Border */}
-                      <div className="h-56 rounded-xl overflow-hidden mb-4 relative border border-slate-200 shadow-inner bg-slate-950 group/vid">
-                        
-                        <video
-                          src={item.videoUrl}
-                          poster={item.poster}
-                          autoPlay
-                          loop
-                          muted={isMuted}
-                          playsInline
-                          className="w-full h-full object-cover"
-                        />
-
-                        {/* Top Right Category Badge */}
-                        <span className={`absolute top-3 right-3 px-3 py-1 text-[9.5px] font-black uppercase rounded-full shadow-md tracking-wider ${item.badgeColor}`}>
-                          {item.category}
-                        </span>
-
-                        {/* Bottom Left Live Status Pill */}
-                        <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-white text-[10px] font-bold flex items-center gap-1.5 border border-white/20 shadow-md">
-                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                          <span>{item.year}</span>
-                        </div>
-
-                        {/* Mute / Unmute Floating Audio Control Button */}
-                        <button
-                          onClick={() => toggleMute(item.id)}
-                          className="absolute bottom-3 right-3 p-2 bg-black/80 hover:bg-black text-white rounded-full backdrop-blur-md border border-white/20 shadow-md transition-transform hover:scale-110"
-                          title={isMuted ? "Unmute Audio" : "Mute Audio"}
-                        >
-                          {isMuted ? (
-                            <VolumeX className="w-4 h-4 text-slate-300" />
-                          ) : (
-                            <Volume2 className="w-4 h-4 text-emerald-400 animate-pulse" />
-                          )}
-                        </button>
-                      </div>
-
-                      {/* Video Title */}
-                      <h3 className="text-xl font-black font-syne text-slate-900 uppercase mb-2 group-hover:text-[#FF0055] transition-colors leading-snug">
-                        {item.title}
-                      </h3>
-
-                      {/* Description Note Box */}
-                      <p className="text-xs text-slate-600 font-medium leading-relaxed mb-4 bg-slate-50 border border-slate-200/90 rounded-xl p-3">
-                        <span className="text-[10px] font-mono font-bold text-slate-400 block mb-1">// ETHOS HIGHLIGHT REEL</span>
-                        {item.tagline}
-                      </p>
-                    </div>
-
-                    {/* Bottom Action Footer */}
-                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500">
-                      <span className="flex items-center gap-1 text-slate-700">
-                        <Award className="w-3.5 h-3.5 text-[#FF0055]" />
-                        <span>Ethos Original</span>
-                      </span>
-                      <span className="font-mono text-[10px] text-slate-400">HD 1080P</span>
-                    </div>
-
-                  </div>
-
-                </div>
+                </article>
               );
             })}
           </div>
