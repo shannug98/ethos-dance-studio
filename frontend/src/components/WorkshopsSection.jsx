@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ShareModal from './ShareModal';
 import { Calendar, Clock, MapPin, Sparkles, UserCheck, Flame, Share2 } from 'lucide-react';
 
 export default function WorkshopsSection({ events = [], onSelectEvent }) {
+  const [sharingItem, setSharingItem] = useState(null);
   // Default fallback workshops if no admin events fall within 28 days
   const defaultWorkshops = [
     {
@@ -118,11 +120,6 @@ export default function WorkshopsSection({ events = [], onSelectEvent }) {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
 
-                  {/* ★ OG BADGE */}
-                  <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-black text-slate-900 shadow-md">
-                    ★ OG
-                  </span>
-
                   {/* STATUS BADGE */}
                   <span className="absolute top-3 right-3 px-2.5 py-1 bg-[#FF0055] text-white text-[9px] font-black uppercase rounded-full shadow-md">
                     🔥 {item.seatsLeft || 5} Seats Left
@@ -177,7 +174,7 @@ export default function WorkshopsSection({ events = [], onSelectEvent }) {
                   </button>
 
                   <button
-                    onClick={(e) => { e.stopPropagation(); navigator.share ? navigator.share({ title: item.title, url: window.location.href }) : alert(`Link for ${item.title} copied!`); }}
+                    onClick={(e) => { e.stopPropagation(); setSharingItem(item); }}
                     className="p-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs"
                     title="Share Event"
                   >
@@ -191,6 +188,14 @@ export default function WorkshopsSection({ events = [], onSelectEvent }) {
         </div>
 
       </div>
+
+      {/* SHARE MODAL POPUP */}
+      {sharingItem && (
+        <ShareModal
+          item={sharingItem}
+          onClose={() => setSharingItem(null)}
+        />
+      )}
     </section>
   );
 }

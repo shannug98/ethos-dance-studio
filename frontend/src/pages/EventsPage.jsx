@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
+import ShareModal from '../components/ShareModal';
 import { Camera, Sparkles, Palette, Calendar, Clock, MapPin, CheckCircle, Flame, ArrowRight, ShieldCheck, Ticket, Users, Lock, ChevronDown, Crown, Tag, Share2 } from 'lucide-react';
 
 export function getEventPricingTier(ticketsSold = 6, customTiers = null) {
@@ -58,6 +59,7 @@ export function getEventPricingTier(ticketsSold = 6, customTiers = null) {
 export default function EventsPage() {
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
+  const [sharingItem, setSharingItem] = useState(null);
   
   // Active Logged In Member Session State
   const [currentUser, setCurrentUser] = useState(() => {
@@ -450,11 +452,6 @@ export default function EventsPage() {
                           alt={evt.title}
                           className={`w-full h-full object-cover ${isPast ? 'grayscale contrast-125' : 'group-hover:scale-105 transition-transform duration-500'}`}
                         />
-                        
-                        {/* ★ OG BADGE */}
-                        <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-black text-slate-900 shadow-md">
-                          ★ OG
-                        </span>
 
                         {/* Ribbon Badge */}
                         {evt.ribbon && (
@@ -542,7 +539,7 @@ export default function EventsPage() {
                         )}
 
                         <button
-                          onClick={() => navigator.share ? navigator.share({ title: evt.title, url: window.location.href }) : alert(`Link for ${evt.title} copied!`)}
+                          onClick={() => setSharingItem(evt)}
                           className="p-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs"
                           title="Share Event"
                         >
@@ -566,6 +563,14 @@ export default function EventsPage() {
 
       {/* FLOATING WHATSAPP CHAT BUTTON */}
       <FloatingWhatsApp />
+
+      {/* SHARE MODAL */}
+      {sharingItem && (
+        <ShareModal
+          item={sharingItem}
+          onClose={() => setSharingItem(null)}
+        />
+      )}
 
       {/* PAYMENT & RECEIPT MODALS */}
       {selectedItemForBooking && (
