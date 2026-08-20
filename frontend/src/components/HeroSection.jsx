@@ -7,17 +7,18 @@ export default function HeroSection({ onBookWorkshop }) {
 
   return (
     <section className="relative pt-[76px] bg-[#090A0F] text-white flex flex-col justify-between overflow-hidden">
-      
-      {/* 🌟 TRANSPARENT BACKGROUND WATERMARK (IMG 3 AS BACKGROUND) 🌟 */}
-      <div className="absolute inset-0 top-[76px] z-0 flex items-center justify-center overflow-hidden opacity-15 pointer-events-none">
-        <div className="w-[340px] h-[340px] sm:w-[650px] sm:h-[650px] lg:w-[850px] lg:h-[850px] flex items-center justify-center">
-          <img
-            src={ethosPureLogo}
-            alt="Ethos Watermark Background"
-            className="w-full h-full object-contain filter drop-shadow-[0_0_80px_rgba(255,0,85,0.6)]"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-[#090A0F]" />
+
+      {/* 🌟 FULL-BLEED STUDIO PHOTO BACKGROUND 🌟 */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Real studio event photo */}
+        <img
+          src="/ethos_hero_bg.jpg"
+          alt="Ethos Dance Studio"
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Dark gradient overlay so text is readable */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#090A0F]/95 via-[#090A0F]/75 to-[#090A0F]/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-transparent to-[#090A0F]/60" />
       </div>
 
       {/* HERO CONTENT: MOBILE FLUID COLUMN (LOGO TOP, TEXT DOWN) & DESKTOP 2-COLUMN */}
