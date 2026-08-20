@@ -127,8 +127,9 @@ export default function App() {
       {selectedItemForBooking && (
         <BookingPaymentModal
           item={selectedItemForBooking}
+          API_URL={API_URL}
           onClose={() => setSelectedItemForBooking(null)}
-          onSuccess={handleSuccessPayment}
+          onSuccessPayment={handleSuccessPayment}
         />
       )}
 

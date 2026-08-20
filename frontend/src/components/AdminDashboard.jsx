@@ -294,6 +294,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
 
   useEffect(() => {
     localStorage.setItem('ethos_master_events_catalog', JSON.stringify(masterEventsList));
+    window.dispatchEvent(new Event('storage')); // 🔴 Notify homepage to reload events instantly
   }, [masterEventsList]);
 
   // Initial Events & Masterclass Tickets State

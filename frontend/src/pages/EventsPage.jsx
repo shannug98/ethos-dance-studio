@@ -86,7 +86,22 @@ export default function EventsPage() {
 
   const isMemberSubscriber = currentUser && (currentUser.packageTitle || currentUser.customerCode || currentUser.classesLeft > 0);
 
-  // Year & Month Selection States (Default to Current Month 'Aug' when opened)
+  // ── LIVE ADMIN EVENTS: Load from Admin Dashboard localStorage & react to changes in real-time ──
+  const loadAdminEvents = () => {
+    try {
+      const saved = localStorage.getItem('ethos_master_events_catalog');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  };
+  const [adminEvents, setAdminEvents] = useState(loadAdminEvents);
+
+  useEffect(() => {
+    const handleStorage = () => setAdminEvents(loadAdminEvents());
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+
   const [selectedYear, setSelectedYear] = useState(2026);
   const [selectedMonth, setSelectedMonth] = useState('Aug'); // Default to August 2026 current month
 
@@ -286,14 +301,27 @@ export default function EventsPage() {
     }
   ];
 
+  // Normalize and merge admin-created events into the catalog
+  const normalizedAdminEvents = adminEvents.map(ev => ({
+    ...ev,
+    year: ev.year || (ev.date ? new Date(ev.date).getFullYear() : 2026),
+    monthCode: ev.monthCode || (ev.date ? new Date(ev.date).toLocaleString('en-US', { month: 'short' }) : 'Aug'),
+    isTicketsOpen: true,
+    pill: ev.statusBadge || '🔴 LIVE NOW',
+    ticketsSold: ev.passesSold || 0,
+    subtext: `• ${ev.choreographer || 'Ethos Studio'}`,
+  }));
+
+  // Merge and de-duplicate by ID (admin events take priority)
+  const allEventsMap = new Map();
+  masterEventsCatalog.forEach(ev => allEventsMap.set(ev.id, ev));
+  normalizedAdminEvents.forEach(ev => allEventsMap.set(ev.id, ev));
+  const allEvents = Array.from(allEventsMap.values());
+
   // Filter events based on Year & Month selection
-  const filteredEvents = masterEventsCatalog.filter(evt => {
-    // 1. Year Filter
+  const filteredEvents = allEvents.filter(evt => {
     if (evt.year !== Number(selectedYear)) return false;
-
-    // 2. Month Filter
     if (selectedMonth !== 'ALL' && evt.monthCode !== selectedMonth) return false;
-
     return true;
   });
 
