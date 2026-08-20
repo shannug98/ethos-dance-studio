@@ -302,7 +302,7 @@ export default function EventsPage() {
       
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
-      <main className="pt-[76px] pb-24">
+      <main className="pt-[104px] pb-24">
         
         {/* HEADER SECTION */}
         <div className="max-w-5xl mx-auto px-4 sm:px-8 pt-10 pb-6 text-center space-y-4">

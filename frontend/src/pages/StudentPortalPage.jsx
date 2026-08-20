@@ -182,7 +182,7 @@ export default function StudentPortalPage() {
       {/* Navbar */}
       <Navbar />
 
-      <main className="pt-[76px] max-w-7xl mx-auto px-4 sm:px-8 py-12 w-full flex-1">
+      <main className="pt-[104px] max-w-7xl mx-auto px-4 sm:px-8 py-12 w-full flex-1">
         
         {/* Page Banner Header */}
         <div className="bg-gradient-to-r from-[#1F41FF] via-[#FF0044] to-[#D900FF] p-8 rounded-3xl mb-8 text-center text-white shadow-2xl uppercase font-display">

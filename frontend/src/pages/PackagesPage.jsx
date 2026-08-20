@@ -25,7 +25,7 @@ export default function PackagesPage() {
       
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
-      <main className="pt-[76px]">
+      <main className="pt-[104px]">
         {/* Page Banner */}
         <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
           <h1 className="text-4xl sm:text-6xl font-black font-syne">STUDIO MEMBERSHIPS & PASSES</h1>

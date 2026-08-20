@@ -130,7 +130,7 @@ export default function EthosGalleryPage() {
       {/* Standard Unified Navbar */}
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
-      <main className="pt-[76px]">
+      <main className="pt-[104px]">
         
         {/* Page Banner */}
         <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white uppercase tracking-widest shadow-2xl">

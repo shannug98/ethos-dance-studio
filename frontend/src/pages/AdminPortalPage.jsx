@@ -39,7 +39,7 @@ export default function AdminPortalPage() {
       
       <Navbar />
 
-      <main className="pt-[76px] w-full max-w-7xl mx-auto px-4 sm:px-8 py-12 flex-1">
+      <main className="pt-[104px] w-full max-w-7xl mx-auto px-4 sm:px-8 py-12 flex-1">
         
         {!isAuthenticated ? (
           <div className="max-w-md mx-auto bg-[#111111] border border-[#262626] rounded-3xl p-8 sm:p-12 space-y-6 shadow-2xl my-8">

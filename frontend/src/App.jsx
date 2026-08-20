@@ -83,7 +83,7 @@ export default function App() {
       />
 
       {/* 2. Sliding Upcoming Event Notification Banner */}
-      <div className="pt-[76px]">
+      <div className="pt-[104px]">
         <EventTickerBanner onSelectEvent={handleSelectItemForBooking} />
       </div>
 
