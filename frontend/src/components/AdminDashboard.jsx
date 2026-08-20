@@ -1035,6 +1035,11 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                           <input type="file" accept="image/*" className="hidden" onChange={handlePosterFileUpload} />
                         </label>
                       </div>
+                      
+                      {/* RECOMMENDED DIMENSIONS GUIDELINE FOR ADMIN */}
+                      <div className="mt-2 p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] font-bold text-emerald-800 flex items-center gap-2">
+                        <span>💡 <strong>Recommended Poster Dimensions:</strong> 800 × 1000 px (4:5 Portrait Ratio) or 800 × 1200 px (2:3 Portrait Ratio). The website automatically renders all images with <code>object-cover</code> touching all card borders completely without gaps!</span>
+                      </div>
                     </div>
 
                     {/* Poster Preview */}

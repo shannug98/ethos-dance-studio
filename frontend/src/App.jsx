@@ -29,10 +29,33 @@ export default function App() {
   const [studentPortalOpen, setStudentPortalOpen] = useState(false);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/events`)
-      .then(res => res.json())
-      .then(data => setEvents(data))
-      .catch(() => {});
+    const loadEvents = () => {
+      // 1. Check LocalStorage Admin Catalog first
+      const savedAdminEvents = localStorage.getItem('ethos_master_events_catalog');
+      let adminCatalog = [];
+      if (savedAdminEvents) {
+        try { adminCatalog = JSON.parse(savedAdminEvents); } catch {}
+      }
+
+      // 2. Fetch API events
+      fetch(`${API_URL}/api/events`)
+        .then(res => res.json())
+        .then(data => {
+          const combined = [...data, ...adminCatalog];
+          // Remove duplicates by ID
+          const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
+          setEvents(unique);
+        })
+        .catch(() => {
+          if (adminCatalog.length > 0) {
+            setEvents(adminCatalog);
+          }
+        });
+    };
+
+    loadEvents();
+    window.addEventListener('storage', loadEvents);
+    return () => window.removeEventListener('storage', loadEvents);
   }, []);
 
   const handleSelectItemForBooking = (item) => {
@@ -74,7 +97,7 @@ export default function App() {
         {/* ABOUT ETHOS */}
         <AboutSection />
 
-        {/* SPECIAL UPCOMING EVENTS & WORKSHOPS */}
+        {/* SPECIAL UPCOMING EVENTS & WORKSHOPS (FILTERED WITHIN 28 DAYS) */}
         <WorkshopsSection
           events={events}
           onSelectEvent={handleSelectItemForBooking}
@@ -104,24 +127,22 @@ export default function App() {
       {selectedItemForBooking && (
         <BookingPaymentModal
           item={selectedItemForBooking}
-          API_URL={API_URL}
           onClose={() => setSelectedItemForBooking(null)}
-          onSuccessPayment={handleSuccessPayment}
+          onSuccess={handleSuccessPayment}
         />
       )}
 
       {confirmedRegistration && (
         <ConfirmationReceiptModal
-          registration={confirmedRegistration}
+          data={confirmedRegistration}
           onClose={() => setConfirmedRegistration(null)}
         />
       )}
 
       {adminLoginOpen && (
         <AdminLoginModal
-          API_URL={API_URL}
           onClose={() => setAdminLoginOpen(false)}
-          onSuccessLogin={handleAdminLoginSuccess}
+          onSuccess={handleAdminLoginSuccess}
         />
       )}
 
@@ -129,12 +150,12 @@ export default function App() {
         <AdminDashboard
           API_URL={API_URL}
           onClose={() => setAdminDashboardOpen(false)}
+          onLogout={() => setAdminDashboardOpen(false)}
         />
       )}
 
       {studentPortalOpen && (
         <StudentPortalModal
-          API_URL={API_URL}
           onClose={() => setStudentPortalOpen(false)}
         />
       )}

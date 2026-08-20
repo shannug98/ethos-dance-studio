@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DanceStudio.API.Data;
@@ -16,12 +19,16 @@ namespace DanceStudio.API.Controllers
             _context = context;
         }
 
+        // Public Catalog - Allow anonymous visitors to view upcoming masterclasses
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EventWorkshop>>> GetEvents()
         {
             return await _context.Workshops.ToListAsync();
         }
 
+        // Public Details - Allow anonymous visitors to view single event
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<EventWorkshop>> GetEvent(int id)
         {
@@ -30,6 +37,8 @@ namespace DanceStudio.API.Controllers
             return eventItem;
         }
 
+        // 🛡️ Protected Endpoint - Requires 'Admin' Role via JWT Token
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<EventWorkshop>> CreateEvent([FromBody] EventWorkshop newEvent)
         {

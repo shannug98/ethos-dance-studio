@@ -66,8 +66,6 @@ export default function StudentPortalPage() {
   useEffect(() => {
     if (isLoggedIn) {
       localStorage.setItem('ethos_logged_in_user', JSON.stringify(studentInfo));
-    } else {
-      localStorage.removeItem('ethos_logged_in_user');
     }
   }, [isLoggedIn, studentInfo]);
 

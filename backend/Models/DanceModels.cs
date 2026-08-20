@@ -85,7 +85,7 @@ namespace DanceStudio.API.Models
         public string InstagramHandle { get; set; } = string.Empty;
     }
 
-    // 🌟 PRODUCTION ARCHITECTURE DOMAIN MODELS
+    // 🌟 PRODUCTION ARCHITECTURE DOMAIN MODELS WITH ROLE-BASED ACCESS CONTROL (RBAC)
 
     public class User
     {
@@ -95,6 +95,7 @@ namespace DanceStudio.API.Models
         public string Phone { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
+        public string Role { get; set; } = "Student"; // "Admin", "Instructor", "Student"
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
@@ -141,5 +142,21 @@ namespace DanceStudio.API.Models
         public string OtpCode { get; set; } = string.Empty;
         public DateTime ExpiryTime { get; set; } = DateTime.UtcNow.AddMinutes(10);
         public bool IsUsed { get; set; } = false;
+    }
+
+    public class OtpRequest
+    {
+        public string Phone { get; set; } = string.Empty;
+    }
+
+    public class OtpVerifyRequest
+    {
+        public string Phone { get; set; } = string.Empty;
+        public string OtpCode { get; set; } = string.Empty;
+    }
+
+    public class AdminLoginRequest
+    {
+        public string Password { get; set; } = string.Empty;
     }
 }

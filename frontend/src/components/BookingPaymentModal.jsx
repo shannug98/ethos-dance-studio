@@ -269,8 +269,14 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
               <div className="space-y-1.5 text-xs font-semibold text-slate-300 pt-1 border-t border-white/10">
                 <div className="flex justify-between">
                   <span>Entry fee</span>
-                  <span className="text-white">₹{itemPrice}.00</span>
+                  <span className="text-white">₹{item?.originalPrice || itemPrice}.00</span>
                 </div>
+                {item?.isMemberDiscounted && (
+                  <div className="flex justify-between text-[#FF0055] font-extrabold bg-[#FF0055]/10 p-1.5 rounded-lg border border-[#FF0055]/30">
+                    <span className="flex items-center gap-1">👑 Monthly Member Perk</span>
+                    <span>-₹100.00</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Platform fee</span>
                   <span className="text-white">₹0.00</span>

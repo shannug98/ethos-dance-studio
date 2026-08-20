@@ -7,7 +7,14 @@ import { Lock, ShieldCheck } from 'lucide-react';
 const API_URL = 'http://localhost:5000';
 
 export default function AdminPortalPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return localStorage.getItem('ethos_admin_authenticated') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -15,10 +22,16 @@ export default function AdminPortalPage() {
     e.preventDefault();
     if (password === 'admin123' || password === 'admin') {
       setIsAuthenticated(true);
+      localStorage.setItem('ethos_admin_authenticated', 'true');
       setError('');
     } else {
       setError('Invalid master password. Please try again.');
     }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('ethos_admin_authenticated');
   };
 
   return (
@@ -77,8 +90,8 @@ export default function AdminPortalPage() {
           <div className="bg-[#111111] border border-[#262626] rounded-3xl p-6 sm:p-8 shadow-2xl">
             <AdminDashboard
               API_URL={API_URL}
-              onClose={() => setIsAuthenticated(false)}
-              onLogout={() => setIsAuthenticated(false)}
+              onClose={() => {}}
+              onLogout={handleLogout}
             />
           </div>
         )}

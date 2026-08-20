@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Lock, Menu, X, UserCheck, LogOut, Sparkles, ChevronDown, User } from 'lucide-react';
+import { Lock, Menu, X, UserCheck, LogOut, Sparkles, ChevronDown, User, ShieldCheck } from 'lucide-react';
 import ethosPureLogo from '../assets/ethos_pure_logo.png';
 
 export default function Navbar({ onQuickBook }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -17,8 +18,16 @@ export default function Navbar({ onQuickBook }) {
         } else {
           setLoggedInUser(null);
         }
+
+        const savedAdmin = localStorage.getItem('ethos_admin_authenticated');
+        if (savedAdmin === 'true') {
+          setIsAdminLoggedIn(true);
+        } else {
+          setIsAdminLoggedIn(false);
+        }
       } catch {
         setLoggedInUser(null);
+        setIsAdminLoggedIn(false);
       }
     };
 
@@ -38,9 +47,15 @@ export default function Navbar({ onQuickBook }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogoutUser = () => {
     localStorage.removeItem('ethos_logged_in_user');
     setLoggedInUser(null);
+    window.location.reload();
+  };
+
+  const handleLogoutAdmin = () => {
+    localStorage.removeItem('ethos_admin_authenticated');
+    setIsAdminLoggedIn(false);
     window.location.reload();
   };
 
@@ -112,15 +127,15 @@ export default function Navbar({ onQuickBook }) {
 
         </div>
 
-        {/* DESKTOP RIGHT ACTIONS: PORTAL ACCESS DROPDOWN */}
+        {/* DESKTOP RIGHT ACTIONS: PERSISTENT LOGIN DROPDOWN */}
         <div className="hidden md:flex items-center gap-3">
           
-          {/* TOPDOWN DROPDOWN MENU FOR MEMBER & ADMIN PORTALS */}
+          {/* TOPDOWN DROPDOWN MENU FOR MEMBER & ADMIN LOGINS */}
           <div className="relative" ref={dropdownRef}>
             {loggedInUser ? (
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-[#7928CA]/50 px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md"
+                className="flex items-center gap-2.5 bg-[#FF0055]/10 border border-[#FF0055]/50 px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md"
               >
                 <img
                   src={loggedInUser.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
@@ -132,20 +147,31 @@ export default function Navbar({ onQuickBook }) {
                 </span>
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-300 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
+            ) : isAdminLoggedIn ? (
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center gap-2 bg-[#00DFD8]/10 border border-[#00DFD8]/50 px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md"
+              >
+                <ShieldCheck className="w-4 h-4 text-[#00DFD8]" />
+                <span className="text-xs font-extrabold text-white font-outfit uppercase">
+                  Studio Admin
+                </span>
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-300 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
             ) : (
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="btn-glow-primary px-4 py-2.5 text-xs font-extrabold uppercase flex items-center gap-1.5 transition-all shadow-lg"
+                className="bg-[#FF0055] hover:bg-[#D00044] text-white px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-colors shadow-lg"
               >
-                <UserCheck className="w-3.5 h-3.5 text-white" />
-                <span>Portal Access</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-white transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                <UserCheck className="w-4 h-4 text-white" />
+                <span>Login</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-white transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
             )}
 
             {/* TOPDOWN DROPDOWN MENU CONTAINER */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-[#090A0F]/95 border border-white/15 rounded-2xl shadow-2xl backdrop-blur-2xl p-2 z-50 space-y-1 animate-fadeIn">
+              <div className="absolute right-0 mt-2 w-64 bg-[#090A0F]/95 border border-white/15 rounded-2xl shadow-2xl backdrop-blur-2xl p-2.5 z-50 space-y-1.5 animate-fadeIn">
                 {loggedInUser ? (
                   <>
                     <a
@@ -159,25 +185,49 @@ export default function Navbar({ onQuickBook }) {
                     </a>
 
                     <button
-                      onClick={() => { setDropdownOpen(false); handleLogout(); }}
+                      onClick={() => { setDropdownOpen(false); handleLogoutUser(); }}
                       className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-[#FF0055]/20 text-xs font-bold text-[#FF0055] transition-colors text-left"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span>Log Out</span>
+                      <span>Log Out Member</span>
                     </button>
                   </>
-                ) : (
+                ) : null}
+
+                {isAdminLoggedIn ? (
+                  <>
+                    <a
+                      href="admin.html"
+                      target="_self"
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-white/10 text-xs font-bold text-[#00DFD8] transition-colors"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-[#00DFD8]" />
+                      <span>Admin Management Console</span>
+                    </a>
+
+                    <button
+                      onClick={() => { setDropdownOpen(false); handleLogoutAdmin(); }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-[#FF0055]/20 text-xs font-bold text-[#FF0055] transition-colors text-left"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Log Out Admin</span>
+                    </button>
+                  </>
+                ) : null}
+
+                {!loggedInUser && !isAdminLoggedIn ? (
                   <>
                     <a
                       href="student.html"
                       target="_self"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-3.5 py-3 rounded-xl hover:bg-[#FF0055]/20 text-xs font-extrabold text-white transition-colors border-b border-white/5"
+                      className="flex items-center gap-3 px-3.5 py-3 rounded-xl hover:bg-[#FF0055]/20 text-xs font-extrabold text-white transition-colors border-b border-white/5 group"
                     >
-                      <UserCheck className="w-4 h-4 text-[#FF0055]" />
+                      <UserCheck className="w-4.5 h-4.5 text-[#FF0055] group-hover:scale-110 transition-transform" />
                       <div>
-                        <span className="block font-outfit uppercase">Member Portal</span>
-                        <span className="text-[10px] text-slate-400 font-normal">Student & Parent Login</span>
+                        <span className="block font-outfit uppercase">Student & Member Login</span>
+                        <span className="text-[10px] text-slate-400 font-normal">Attendance, Passes & Schedule</span>
                       </div>
                     </a>
 
@@ -185,23 +235,23 @@ export default function Navbar({ onQuickBook }) {
                       href="admin.html"
                       target="_self"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-3.5 py-3 rounded-xl hover:bg-[#00DFD8]/20 text-xs font-extrabold text-white transition-colors"
+                      className="flex items-center gap-3 px-3.5 py-3 rounded-xl hover:bg-[#00DFD8]/20 text-xs font-extrabold text-white transition-colors group"
                     >
-                      <Lock className="w-4 h-4 text-[#00DFD8]" />
+                      <ShieldCheck className="w-4.5 h-4.5 text-[#00DFD8] group-hover:scale-110 transition-transform" />
                       <div>
-                        <span className="block font-outfit uppercase">Admin Portal</span>
-                        <span className="text-[10px] text-slate-400 font-normal">Studio Management</span>
+                        <span className="block font-outfit uppercase">Studio Management</span>
+                        <span className="text-[10px] text-slate-400 font-normal">Admin & Staff Console</span>
                       </div>
                     </a>
                   </>
-                )}
+                ) : null}
               </div>
             )}
           </div>
 
         </div>
 
-        {/* MOBILE VIEW: RIGHT THREE LINES (HAMBURGER ICON) */}
+        {/* MOBILE VIEW: HAMBURGER ICON */}
         <div className="md:hidden flex items-center gap-2">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -283,14 +333,33 @@ export default function Navbar({ onQuickBook }) {
                   className="flex items-center gap-3 p-3 bg-white/5 border border-[#7928CA]/50 rounded-2xl text-white font-bold"
                 >
                   <img src={loggedInUser.profilePic} alt="" className="w-8 h-8 rounded-full border border-[#FF0055] object-cover" />
-                  <span>{loggedInUser.name} (Member Portal)</span>
+                  <span>{loggedInUser.name} (Member Dashboard)</span>
                 </a>
 
                 <button
-                  onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
+                  onClick={() => { setMobileMenuOpen(false); handleLogoutUser(); }}
                   className="w-full py-3 bg-[#FF0055] text-xs font-extrabold text-white uppercase text-center block rounded-2xl shadow-lg"
                 >
-                  Log Out
+                  Log Out Member
+                </button>
+              </div>
+            ) : isAdminLoggedIn ? (
+              <div className="space-y-2">
+                <a
+                  href="admin.html"
+                  target="_self"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 p-3 bg-white/5 border border-[#00DFD8]/50 rounded-2xl text-white font-bold"
+                >
+                  <ShieldCheck className="w-6 h-6 text-[#00DFD8]" />
+                  <span>Studio Management (Admin)</span>
+                </a>
+
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleLogoutAdmin(); }}
+                  className="w-full py-3 bg-[#FF0055] text-xs font-extrabold text-white uppercase text-center block rounded-2xl shadow-lg"
+                >
+                  Log Out Admin
                 </button>
               </div>
             ) : (
@@ -301,7 +370,7 @@ export default function Navbar({ onQuickBook }) {
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full py-3.5 btn-glow-primary text-xs font-extrabold text-white uppercase text-center block rounded-2xl shadow-lg"
                 >
-                  Member Portal Login
+                  Student & Member Login
                 </a>
 
                 <a
@@ -310,7 +379,7 @@ export default function Navbar({ onQuickBook }) {
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full py-3.5 btn-glass text-xs font-bold text-white uppercase text-center block rounded-2xl"
                 >
-                  Admin Portal Login
+                  Studio Management (Admin)
                 </a>
               </div>
             )}

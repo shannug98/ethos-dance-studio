@@ -1,8 +1,13 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using DanceStudio.API.Data;
 using DanceStudio.API.Models;
 
@@ -13,6 +18,7 @@ namespace DanceStudio.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly DanceStudioDbContext _context;
+        public static readonly string JwtSecretKey = "EthosDanceStudioSecretKey_2026_SuperSecureJWT_9981";
 
         public AuthController(DanceStudioDbContext context)
         {
@@ -20,6 +26,7 @@ namespace DanceStudio.API.Controllers
         }
 
         // POST: api/auth/send-otp
+        [AllowAnonymous]
         [HttpPost("send-otp")]
         public async Task<IActionResult> SendOtp([FromBody] OtpRequest request)
         {
@@ -63,7 +70,8 @@ namespace DanceStudio.API.Controllers
             });
         }
 
-        // POST: api/auth/verify-otp
+        // POST: api/auth/verify-otp (Returns JWT Token with 'Student' Role)
+        [AllowAnonymous]
         [HttpPost("verify-otp")]
         public async Task<IActionResult> VerifyOtp([FromBody] OtpVerifyRequest request)
         {
@@ -74,7 +82,6 @@ namespace DanceStudio.API.Controllers
 
             var cleanPhone = request.Phone.Replace(" ", "").Replace("-", "").Replace("+91", "");
 
-            // Verify OTP (allow '123456' as universal demo fallback for smooth testing)
             var validOtp = await _context.OtpVerifications
                 .Where(o => o.Phone == cleanPhone && o.OtpCode == request.OtpCode && !o.IsUsed && o.ExpiryTime > DateTime.UtcNow)
                 .OrderByDescending(o => o.Id)
@@ -91,45 +98,35 @@ namespace DanceStudio.API.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // Find or create customer
+            // Find or create customer user
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Phone.Contains(cleanPhone));
             if (user == null)
             {
                 var newId = new Random().Next(1026, 9999);
                 user = new User
                 {
-                    Id = newId,
                     CustomerCode = $"ETH{newId}",
-                    Name = "Ethos Member",
+                    Name = cleanPhone.Contains("83417") ? "Shanmuka Gaddam" : "Ethos Member",
                     Phone = cleanPhone,
-                    Email = $"dancer.{cleanPhone}@ethosdance.com",
+                    Email = $"student{newId}@ethosdancestudio.com",
+                    Role = "Student",
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow
                 };
+
                 _context.Users.Add(user);
-
-                // Add default active package
-                _context.CustomerPackages.Add(new CustomerPackage
-                {
-                    UserId = user.Id,
-                    PackageId = 3,
-                    PackageName = "Monthly Adults Pass",
-                    StartDate = DateTime.UtcNow,
-                    ExpiryDate = DateTime.UtcNow.AddDays(30),
-                    Status = "Active"
-                });
-
                 await _context.SaveChangesAsync();
             }
 
-            var package = await _context.CustomerPackages
-                .Where(cp => cp.UserId == user.Id)
-                .OrderByDescending(cp => cp.Id)
-                .FirstOrDefaultAsync();
+            // Issue JWT Token with 'Student' Role
+            var token = GenerateJwtToken(user.Id, user.Name, user.Role, user.Phone);
 
             return Ok(new
             {
                 success = true,
+                message = "Authentication successful",
+                token = token,
+                role = user.Role,
                 user = new
                 {
                     id = user.Id,
@@ -137,26 +134,81 @@ namespace DanceStudio.API.Controllers
                     name = user.Name,
                     phone = user.Phone,
                     email = user.Email,
-                    packageTitle = package?.PackageName ?? "Monthly Pass",
-                    totalClasses = 20,
-                    classesAttended = 12,
-                    classesLeft = 8,
-                    daysRemaining = package != null ? Math.Max(0, (package.ExpiryDate - DateTime.UtcNow).Days) : 30,
-                    passExpiryDate = package?.ExpiryDate.ToString("MMMM dd, yyyy") ?? "Active",
-                    profilePic = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
+                    role = user.Role
                 }
             });
         }
-    }
 
-    public class OtpRequest
-    {
-        public string Phone { get; set; } = string.Empty;
-    }
+        // POST: api/auth/admin-login (Returns JWT Token with 'Admin' Role)
+        [AllowAnonymous]
+        [HttpPost("admin-login")]
+        public IActionResult AdminLogin([FromBody] AdminLoginRequest request)
+        {
+            if (request.Password == "admin123" || request.Password == "admin")
+            {
+                var token = GenerateJwtToken(1, "Ethos Studio Director", "Admin", "+91 83417 01113");
+                return Ok(new
+                {
+                    success = true,
+                    message = "Admin authorization granted",
+                    token = token,
+                    role = "Admin",
+                    user = new
+                    {
+                        id = 1,
+                        name = "Ethos Studio Director",
+                        role = "Admin",
+                        permissions = new string[] { "ALL_ACCESS", "CREATE_EVENT", "MANAGE_ROSTER", "VIEW_FINANCIALS" }
+                    }
+                });
+            }
 
-    public class OtpVerifyRequest
-    {
-        public string Phone { get; set; } = string.Empty;
-        public string OtpCode { get; set; } = string.Empty;
+            return Unauthorized(new { message = "Invalid master admin password" });
+        }
+
+        // GET: api/auth/me (Protected Route - Returns Current Authenticated User & Claims)
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult GetCurrentUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userPhone = User.FindFirst(ClaimTypes.MobilePhone)?.Value;
+
+            return Ok(new
+            {
+                authenticated = true,
+                userId = userId,
+                name = userName,
+                role = userRole,
+                phone = userPhone
+            });
+        }
+
+        // JWT Token Generator Helper Method
+        private string GenerateJwtToken(int userId, string name, string role, string phone)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(JwtSecretKey);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                    new Claim(ClaimTypes.Name, name),
+                    new Claim(ClaimTypes.Role, role),
+                    new Claim(ClaimTypes.MobilePhone, phone ?? string.Empty)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7), // Token valid for 7 days
+                Issuer = "EthosDanceStudioAPI",
+                Audience = "EthosDanceStudioClient",
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
     }
 }

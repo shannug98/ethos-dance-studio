@@ -1,15 +1,19 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using DanceStudio.API.Controllers;
 using DanceStudio.API.Data;
 using DanceStudio.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Services to Container
+// 1. Add Controllers & OpenAPI/Swagger to Container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure Azure SQL Database or Local SQLite Database
+// 2. Configure Database Connection
 var azureConnectionString = builder.Configuration.GetConnectionString("AzureSqlConnection") 
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -28,11 +32,37 @@ builder.Services.AddDbContext<DanceStudioDbContext>(options =>
     }
 });
 
-// Register Application Services
+// 3. Register JWT Bearer Authentication & Role-Based Access Control (RBAC)
+var key = Encoding.UTF8.GetBytes(AuthController.JwtSecretKey);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidIssuer = "EthosDanceStudioAPI",
+        ValidateAudience = true,
+        ValidAudience = "EthosDanceStudioClient",
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+builder.Services.AddAuthorization();
+
+// 4. Register Application Services
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 
-// Enable CORS for React Frontend
+// 5. Enable CORS for React Frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -45,14 +75,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Ensure Database is Created & Seeded automatically (Ensure Created)
+// 6. Ensure Database Created Automatically
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DanceStudioDbContext>();
     db.Database.EnsureCreated();
 }
 
-// HTTP Pipeline
+// 7. HTTP Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -60,7 +90,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAll");
-app.UseAuthorization();
+
+app.UseAuthentication(); // 🔐 Enable JWT Authentication
+app.UseAuthorization();  // 🛡️ Enable Role-Based Authorization (RBAC)
+
 app.MapControllers();
 
 app.Run();
