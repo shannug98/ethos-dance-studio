@@ -24,9 +24,9 @@ export default defineConfig({
         refund: resolve(__dirname, 'refund.html'),
       },
       output: {
-        entryFileNames: 'assets/ethos-app-v20260820-cb8888-[hash].js',
-        chunkFileNames: 'assets/ethos-chunk-v20260820-cb8888-[hash].js',
-        assetFileNames: 'assets/ethos-style-v20260820-cb8888-[hash].[ext]'
+        entryFileNames: 'assets/ethos-app-v20260820-noog-[hash].js',
+        chunkFileNames: 'assets/ethos-chunk-v20260820-noog-[hash].js',
+        assetFileNames: 'assets/ethos-style-v20260820-noog-[hash].[ext]'
       }
     },
   },
