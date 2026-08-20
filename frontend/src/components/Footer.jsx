@@ -1,52 +1,47 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ethosPureLogo from '../assets/ethos_pure_logo.png';
 import shanmukaPhoto from '../assets/shanmuka_photo.jpg';
-import { Sparkles, Flame, Zap, ArrowUpRight, Radio } from 'lucide-react';
+import { Sparkles, Flame, Zap, ArrowUpRight } from 'lucide-react';
 
 export default function Footer({ onQuickBook }) {
-  const [oScale, setOScale] = useState(35); // Initial huge scale covering entire footer picture
+  const [oScale, setOScale] = useState(35);
   const footerRef = useRef(null);
 
   const ethosLetters = ['E', 'T', 'H', 'O', 'S'];
 
-  // 🌟 ANIMATION STARTS FROM TAB JUST ABOVE FOOTER AND COVERS ENTIRE FOOTER UNTIL BOTTOM 🌟
   useEffect(() => {
     const handleScroll = () => {
       if (!footerRef.current) return;
       const rect = footerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Animation starts when scrolling section/tab JUST ABOVE footer
-      // (approx 450px before footer top enters bottom of screen)
       const startOffset = windowHeight + 450;
       const totalDistance = rect.height + 450;
       const currentScroll = startOffset - rect.top;
 
       const progress = Math.min(Math.max(currentScroll / totalDistance, 0), 1);
-
-      // Interpolate O scale from 35 down to 1 as progress goes from 0 to 1
-      const calculatedScale = 35 - progress * 34; // Starts at 35 (covers entire footer picture), ends at 1
+      const calculatedScale = 35 - progress * 34;
       setOScale(calculatedScale);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
+    handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <footer ref={footerRef} className="bg-[#030407] text-white pt-10 border-t border-slate-900 relative overflow-hidden font-sans select-none">
+    <footer ref={footerRef} className="bg-[#0A0A0B] text-white pt-10 border-t border-slate-900 relative overflow-hidden font-sans select-none">
       
-      {/* 🌟 FULL SCREEN OVERLAY MASK THAT COVERS ENTIRE FOOTER PICTURE AT START 🌟 */}
+      {/* FULL SCREEN OVERLAY MASK */}
       <div
-        className="absolute inset-0 z-35 bg-[#030407] pointer-events-none transition-opacity duration-200"
+        className="absolute inset-0 z-35 bg-[#0A0A0B] pointer-events-none transition-opacity duration-200"
         style={{
           opacity: oScale > 8 ? Math.min(1, (oScale - 8) / 12) : 0
         }}
       />
 
-      {/* 🌟 GIANT FULL FOOTER "O" LENS MASK (FULL PICTURE COVERAGE) 🌟 */}
+      {/* GIANT O LENS MASK */}
       <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center overflow-hidden">
         <div
           className="bg-gradient-to-r from-[#FF0055]/40 via-[#7928CA]/40 to-[#00DFD8]/40 rounded-full blur-[120px] transition-all duration-150"
@@ -58,7 +53,7 @@ export default function Footer({ onQuickBook }) {
         />
       </div>
 
-      {/* 🌟 1. INFINITE KINETIC MARQUEE BANNER 🌟 */}
+      {/* 🌟 1. KINETIC MARQUEE BANNER 🌟 */}
       <div className="py-2 bg-gradient-to-r from-[#FF0055]/20 via-[#7928CA]/30 to-[#00DFD8]/20 border-y border-white/10 overflow-hidden whitespace-nowrap backdrop-blur-md relative z-20">
         <div className="inline-flex items-center gap-8 text-[10px] font-black uppercase font-syne tracking-widest animate-marquee text-white/90">
           <span className="flex items-center gap-2 text-[#00DFD8]"><Sparkles className="w-3 h-3" /> DANCE • CREATE • INSPIRE • PERFORM</span>
@@ -68,65 +63,87 @@ export default function Footer({ onQuickBook }) {
         </div>
       </div>
 
-      {/* 🌟 2. TOP FOOTER INFORMATION GRID 🌟 */}
+      {/* 🌟 2. FOOTER COLUMNS (MATCHING USER SCREENSHOT IMG 1) 🌟 */}
       <div
         style={{
           opacity: oScale > 10 ? Math.max(0, 1 - (oScale - 10) / 15) : 1,
           transition: 'opacity 0.2s ease-out'
         }}
-        className="max-w-7xl mx-auto px-6 sm:px-10 py-8 grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-slate-900/80 relative z-20"
+        className="max-w-7xl mx-auto px-6 sm:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 border-b border-slate-800/80 relative z-20 text-left"
       >
         
-        {/* Logo & Bio */}
-        <div className="space-y-2.5">
-          <div className="h-10 w-auto flex items-center">
-            <img
-              src={ethosPureLogo}
-              alt="Ethos Dance Studio Logo"
-              className="h-full w-auto object-contain filter drop-shadow-[0_0_15px_rgba(255,0,85,0.4)]"
-            />
-          </div>
-          <p className="text-[11px] text-slate-400 leading-relaxed max-w-sm">
-            Hyderabad's Premier Dance Studio & Masterclass Hub. Professional Hip-Hop, Contemporary, Bollywood Fusion, and Royal Sangeet Choreography.
-          </p>
+        {/* COLUMN 1: Explore */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-black text-white font-syne tracking-tight">Explore</h3>
+          <ul className="space-y-3 text-sm font-medium text-slate-300">
+            <li><a href="index.html#communities" className="hover:text-white transition-colors">Communities</a></li>
+            <li><a href="events.html" className="hover:text-white transition-colors">Events</a></li>
+            <li><a href="https://wa.me/918341701113?text=Hi%20Ethos!%20I%20want%20to%20collaborate%20with%20your%20dance%20studio." target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Collab with us</a></li>
+            <li><a href="https://wa.me/918341701113?text=Hi%20Ethos!%20I%20am%20interested%20in%20Careers%20/%20Instructor%20roles." target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Careers</a></li>
+          </ul>
         </div>
 
-        {/* Contact Links */}
-        <div className="space-y-2.5 text-[11px] font-medium text-slate-300">
-          <div>
-            <span className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider">Email Studio</span>
-            <a href="mailto:ethosdancestudio@gmail.com" className="font-bold text-xs text-white hover:text-[#00DFD8] transition-colors flex items-center gap-1">
-              <span>ethosdancestudio@gmail.com</span>
-              <ArrowUpRight className="w-3 h-3 text-slate-500" />
-            </a>
-          </div>
-
-          <div>
-            <span className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider">Call / WhatsApp Hotline</span>
-            <a href="https://wa.me/918341701113" target="_blank" rel="noreferrer" className="font-extrabold text-xs text-[#25D366] hover:underline flex items-center gap-1.5 mt-0.5">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 3C7.03 3 3 7.03 3 12c0 1.85.56 3.57 1.52 5L3 21l4.15-1.42A8.94 8.94 0 0 0 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z" stroke="#25D366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M9.5 8.5c-.3 0-.6.1-.8.3-.3.3-.8 1.1-.8 2.2 0 1.1.8 2.2 1.6 3.2.8.9 2 2.1 3.2 2.6 1.1.5 1.9.4 2.4.1.4-.2.9-.8 1.1-1.2.2-.4.1-.7-.1-.9l-1.3-.9c-.2-.1-.5-.1-.7.1l-.6.7c-.2.2-.4.2-.7 0-.5-.3-1.4-.9-2.1-1.6-.6-.6-1.1-1.3-1.3-1.7-.1-.3 0-.5.2-.7l.5-.6c.2-.2.2-.5.1-.7l-.8-1.5c-.2-.3-.5-.4-.7-.4z" fill="#25D366" />
-              </svg>
-              <span>+91 83417 01113</span>
-              <ArrowUpRight className="w-3 h-3 text-[#25D366]" />
-            </a>
-          </div>
+        {/* COLUMN 2: Socials (Matching exact layout in img 1) */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-black text-white font-syne tracking-tight">Socials</h3>
+          <ul className="space-y-3 text-sm font-medium text-slate-300">
+            <li>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
+                <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span>ethos.dance</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
+                <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                <span>ethosdancestudio</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://x.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
+                <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                <span>ethosdancehyd</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://reddit.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
+                <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2.033 16.012c-.564.564-1.332.884-2.133.884s-1.569-.32-2.133-.884c-.564-.564-.884-1.332-.884-2.133 0-.801.32-1.569.884-2.133.564-.564 1.332-.884 2.133-.884s1.569.32 2.133.884c.564.564.884 1.332.884 2.133 0 .801-.32 1.569-.884 2.133zm6.333 0c-.564.564-1.332.884-2.133.884s-1.569-.32-2.133-.884c-.564-.564-.884-1.332-.884-2.133 0-.801.32-1.569.884-2.133.564-.564 1.332-.884 2.133-.884s1.569.32 2.133.884c.564.564.884 1.332.884 2.133 0 .801-.32 1.569-.884 2.133z"/>
+                </svg>
+                <span>ethosdancehyd</span>
+              </a>
+            </li>
+          </ul>
         </div>
 
-        {/* Location & Timings */}
-        <div className="space-y-2.5 text-[11px] text-slate-300 font-medium">
-          <div>
-            <span className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider">Studio Headquarters</span>
-            <p className="font-bold text-[11px] text-white mt-0.5 leading-relaxed">
-              Second floor, 1/2/49/1, Nizampet Rd, Kukatpally, Hyderabad, Telangana 500085
-            </p>
-          </div>
+        {/* COLUMN 3: Legal Links & Contact (Matching img 1) */}
+        <div className="space-y-6">
+          <ul className="space-y-3 text-sm font-medium text-slate-300">
+            <li><a href="privacy.html" className="hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" className="hover:text-white transition-colors">Terms and Conditions</a></li>
+            <li><a href="refund.html" className="hover:text-white transition-colors">Refund Policy</a></li>
+          </ul>
 
-          <div className="pt-0.5">
-            <a href="schedule.html" className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-full text-[#0088FF] font-extrabold text-[10.5px] hover:border-[#0088FF] transition-all">
-              <Radio className="w-3 h-3 text-[#0088FF] animate-pulse" />
-              <span>Live Class Timetable & Schedule</span>
+          {/* Contact Action Button with Blue Circle Arrow (Matching img 1) */}
+          <div className="pt-2">
+            <a
+              href="https://wa.me/918341701113"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-3 group"
+            >
+              <span className="text-3xl font-black font-syne text-white tracking-tight group-hover:text-[#0088FF] transition-colors">
+                Contact
+              </span>
+              <div className="w-10 h-10 rounded-full bg-[#0088FF] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
+              </div>
             </a>
           </div>
         </div>
@@ -134,12 +151,10 @@ export default function Footer({ onQuickBook }) {
       </div>
 
       {/* 🌟 3. COMPACT & ELEGANT "ETHOS." REVEAL SECTION 🌟 */}
-      <div className="bg-[#020305] py-6 sm:py-8 px-4 text-center relative overflow-hidden group">
+      <div className="bg-[#050507] py-6 sm:py-8 px-4 text-center relative overflow-hidden group">
         
-        {/* 🌟 LOGO TO THE LEFT OF COMPACT WHITE ETHOS. TYPOGRAPHY 🌟 */}
         <div className="relative z-20 flex items-center justify-center gap-2 sm:gap-3">
           
-          {/* Studio Brand Logo to Left of ETHOS */}
           <div
             style={{
               opacity: oScale > 10 ? Math.max(0, 1 - (oScale - 10) / 15) : 1,
@@ -154,7 +169,6 @@ export default function Footer({ onQuickBook }) {
             />
           </div>
 
-          {/* Compact Pure WHITE Characters for E T H O S . */}
           <div className="inline-flex items-center gap-1 sm:gap-1.5">
             {ethosLetters.map((char, idx) => {
               const isO = char === 'O';
@@ -180,7 +194,6 @@ export default function Footer({ onQuickBook }) {
               );
             })}
 
-            {/* Pure White Period Dot */}
             <span
               style={{
                 opacity: oScale > 10 ? Math.max(0, 1 - (oScale - 10) / 15) : 1,
@@ -200,18 +213,15 @@ export default function Footer({ onQuickBook }) {
       <div className="bg-[#000000] border-t border-slate-900 px-6 py-4 relative z-30">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-semibold text-slate-400">
           
-          {/* Copyright Left */}
           <div className="tracking-wide text-slate-400 text-[11px]">
             Copyright © 2026 Ethos Dance Studio. All rights reserved.
           </div>
 
-          {/* Crafted with ❤️ by Shanmuka Right */}
           <div className="flex items-center gap-2 text-slate-200 text-[11px]">
             <span>Crafted with</span>
             <span className="text-[#FF0055] animate-pulse text-sm">❤️</span>
             <span>by</span>
             
-            {/* Shanmuka Avatar Badge */}
             <div className="flex items-center gap-2 pl-1.5 pr-3 py-1 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-full shadow-xl hover:border-[#00DFD8] transition-all hover:scale-105 group/shanmuka">
               <div className="relative">
                 <img

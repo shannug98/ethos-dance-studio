@@ -19,6 +19,9 @@ export default defineConfig({
         location: resolve(__dirname, 'location.html'),
         student: resolve(__dirname, 'student.html'),
         admin: resolve(__dirname, 'admin.html'),
+        privacy: resolve(__dirname, 'privacy.html'),
+        terms: resolve(__dirname, 'terms.html'),
+        refund: resolve(__dirname, 'refund.html'),
       },
       output: {
         entryFileNames: 'assets/ethos-app-v20260820-cb8888-[hash].js',
