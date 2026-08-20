@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
-import { Sparkles, ChevronRight, Camera, Filter, X } from 'lucide-react';
+import { Sparkles, ChevronRight, Camera, X } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000';
 
@@ -12,10 +12,10 @@ export default function EthosGalleryPage() {
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
 
-  // Lightbox Enlarged Image State (Matching img 4 - Full view popup)
+  // Lightbox Enlarged Image State (PURE PHOTO ONLY - NO PAYMENT POPUP)
   const [activeLightboxImage, setActiveLightboxImage] = useState(null);
 
-  // Active Selected Category - Defaults to 'studio' (NO "All Stories")
+  // Active Selected Category - Defaults to 'studio'
   const [photoFilter, setPhotoFilter] = useState('studio');
 
   const photoCollageRef = useRef(null);
@@ -31,11 +31,11 @@ export default function EthosGalleryPage() {
 
   // Photos for Column 2 (Scrolls UP ⬆️)
   const col2Photos = [
-    'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
   ];
 
   // Photos for Column 3 (Scrolls DOWN ⬇️)
@@ -44,10 +44,10 @@ export default function EthosGalleryPage() {
     'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80',
   ];
 
-  // 🌟 4 MAIN CATEGORIES (DANCE IN STUDIO, WORKSHOPS, EVENTS, CORPORATE EVENTS) - IMG 2 MATCHING
+  // 🌟 4 MAIN CATEGORIES (DANCE IN STUDIO, WORKSHOPS, EVENTS, CORPORATE EVENTS)
   const categoryCards = [
     {
       id: 'studio',
@@ -71,39 +71,47 @@ export default function EthosGalleryPage() {
     }
   ];
 
-  // 🌟 CATEGORY SPECIFIC PHOTO COLLAGE DATA (ARRANGED DENSELY LIKE IMG 3)
+  // 🌟 PERFECT ZERO-GAP GRID PHOTO DATA (HIGH RES WORKING UNSPLASH PHOTOS)
   const densePhotoCollage = [
-    // 💃 DANCE IN STUDIO PHOTOS (8 PHOTOS)
-    { id: 101, category: 'studio', title: 'Studio Rehearsal Vibes', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
-    { id: 102, category: 'studio', title: 'Commercial Heels Practice', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80' },
-    { id: 103, category: 'studio', title: 'Hip-Hop Groove Practice', size: 'col-span-1 sm:col-span-2 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80' },
-    { id: 104, category: 'studio', title: 'Bollywood Commercial Batch', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
-    { id: 105, category: 'studio', title: 'Contemporary Storytelling', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
-    { id: 106, category: 'studio', title: 'Mirror Synchronization Training', size: 'col-span-1 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
-    { id: 107, category: 'studio', title: 'High Energy Cypher Batch', size: 'col-span-1 sm:col-span-2 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80' },
-    { id: 108, category: 'studio', title: 'Kids Dance Studio Batch', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80' },
+    // 💃 DANCE IN STUDIO PHOTOS (8 HIGH-RES WORKING PHOTOS)
+    { id: 101, category: 'studio', title: 'Studio Rehearsal Vibes', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
+    { id: 102, category: 'studio', title: 'Commercial Choreography Batch', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
+    { id: 103, category: 'studio', title: 'Hip-Hop Groove Practice', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
+    { id: 104, category: 'studio', title: 'Bollywood Fusion Practice', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
+    { id: 105, category: 'studio', title: 'Contemporary Storytelling', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
+    { id: 106, category: 'studio', title: 'Mirror Synchronization Training', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
+    { id: 107, category: 'studio', title: 'High Energy Cypher Batch', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
+    { id: 108, category: 'studio', title: 'Kids Dance Studio Batch', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
 
-    // 🎟️ WORKSHOPS PHOTOS (6 PHOTOS)
-    { id: 201, category: 'workshops', title: 'Celebrity Guest Masterclass', size: 'col-span-1 sm:col-span-2 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1200&q=80' },
-    { id: 202, category: 'workshops', title: 'Afro-Beats Speed Workshop', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
-    { id: 203, category: 'workshops', title: 'Kids Dance Bootcamp', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80' },
-    { id: 204, category: 'workshops', title: 'International Choreographer Session', size: 'col-span-1 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
-    { id: 205, category: 'workshops', title: 'Weekend Choreography Intensive', size: 'col-span-1 sm:col-span-2 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1200&q=80' },
-    { id: 206, category: 'workshops', title: 'Heels Styling Masterclass', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80' },
+    // 🎟️ WORKSHOPS PHOTOS (8 HIGH-RES WORKING PHOTOS)
+    { id: 201, category: 'workshops', title: 'Celebrity Guest Masterclass', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
+    { id: 202, category: 'workshops', title: 'Afro-Beats Speed Workshop', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
+    { id: 203, category: 'workshops', title: 'Kids Dance Bootcamp', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
+    { id: 204, category: 'workshops', title: 'International Choreographer Session', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+    { id: 205, category: 'workshops', title: 'Weekend Choreography Intensive', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
+    { id: 206, category: 'workshops', title: 'Heels Styling Masterclass', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
+    { id: 207, category: 'workshops', title: 'Urban Commercial Bootcamp', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
+    { id: 208, category: 'workshops', title: 'Monsoon Beats & Drills', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
 
-    // 🎉 EVENTS PHOTOS (5 PHOTOS)
-    { id: 301, category: 'events', title: 'Stage Showcase Light Show', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
-    { id: 302, category: 'events', title: 'Royal Sangeet Entrance', size: 'col-span-1 sm:col-span-2 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80' },
-    { id: 303, category: 'events', title: 'Freestyle Cypher Jam', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
-    { id: 304, category: 'events', title: 'Annual Ethos Arena Gala', size: 'col-span-1 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
-    { id: 305, category: 'events', title: 'Live Stage Performance', size: 'col-span-1 sm:col-span-2 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=1200&q=80' },
+    // 🎉 EVENTS PHOTOS (8 HIGH-RES WORKING PHOTOS)
+    { id: 301, category: 'events', title: 'Stage Showcase Light Show', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
+    { id: 302, category: 'events', title: 'Royal Sangeet Entrance', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+    { id: 303, category: 'events', title: 'Freestyle Cypher Jam', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
+    { id: 304, category: 'events', title: 'Annual Ethos Arena Gala', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
+    { id: 305, category: 'events', title: 'Live Stage Performance', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
+    { id: 306, category: 'events', title: 'Student Showcase Gala', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
+    { id: 307, category: 'events', title: 'Street Dance Battle 2026', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
+    { id: 308, category: 'events', title: 'Festive Season Grand Showcase', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
 
-    // 👔 CORPORATE EVENTS PHOTOS (5 PHOTOS)
-    { id: 401, category: 'corporate', title: 'Corporate Team Choreography', size: 'col-span-1 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
-    { id: 402, category: 'corporate', title: 'Annual Corporate Gala Night', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
-    { id: 403, category: 'corporate', title: 'Wedding Flashmob Rehearsal', size: 'col-span-1 sm:col-span-2 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80' },
-    { id: 404, category: 'corporate', title: 'Royal Wedding Entry Performance', size: 'col-span-1 sm:col-span-2 row-span-2 h-96', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80' },
-    { id: 405, category: 'corporate', title: 'Team Building Movement Session', size: 'col-span-1 row-span-1 h-64', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' }
+    // 👔 CORPORATE EVENTS PHOTOS (8 HIGH-RES WORKING PHOTOS)
+    { id: 401, category: 'corporate', title: 'Corporate Team Choreography', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
+    { id: 402, category: 'corporate', title: 'Annual Corporate Gala Night', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
+    { id: 403, category: 'corporate', title: 'Wedding Flashmob Rehearsal', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
+    { id: 404, category: 'corporate', title: 'Royal Wedding Entry Performance', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+    { id: 405, category: 'corporate', title: 'Team Building Movement Session', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
+    { id: 406, category: 'corporate', title: 'Corporate Flashmob Surprise', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
+    { id: 407, category: 'corporate', title: 'Executive Dance Workshop', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
+    { id: 408, category: 'corporate', title: 'Grand Sangeet Production', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' }
   ];
 
   const handleCardClick = (catId) => {
@@ -212,7 +220,7 @@ export default function EthosGalleryPage() {
 
         </section>
 
-        {/* 🌟 1. 4 CATEGORY SHOWCASE GRID ("Looking for something more?" - IMG 2) 🌟 */}
+        {/* 🌟 1. 4 CATEGORY SHOWCASE GRID ("Looking for something more?") 🌟 */}
         <section id="explore-categories" className="py-16 px-4 sm:px-8 max-w-7xl mx-auto border-t border-slate-200">
           
           <div className="mb-10 text-left">
@@ -221,7 +229,7 @@ export default function EthosGalleryPage() {
             </h2>
           </div>
 
-          {/* 4 ROUNDED CARDS GRID WITH WHITE PILL BADGES (MATCHING IMG 2) */}
+          {/* 4 ROUNDED CARDS GRID WITH WHITE PILL BADGES */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categoryCards.map((card) => {
               const isActive = photoFilter === card.id;
@@ -264,49 +272,31 @@ export default function EthosGalleryPage() {
         </section>
 
 
-        {/* 🌟 2. DENSE PHOTO MOSAIC WALL (FAIRY LIGHTS + "WHERE PASSION MEETS THE STAGE!") 🌟 */}
-        <section ref={photoCollageRef} id="photo-collage" className="bg-[#000000] text-white py-16 px-2 sm:px-6 mt-16 relative overflow-hidden">
+        {/* 🌟 2. PHOTO GRID WALL (BACKGROUND SAME AS WEBPAGE: bg-[#FAF8F5]) 🌟 */}
+        <section ref={photoCollageRef} id="photo-collage" className="bg-[#FAF8F5] text-slate-900 py-16 px-4 sm:px-8 mt-8 relative overflow-hidden border-t border-slate-200">
           
-          {/* Fairy String Lights SVG Header Banner */}
-          <div className="w-full max-w-7xl mx-auto overflow-hidden opacity-90 mb-4 select-none pointer-events-none">
-            <svg className="w-full h-8 sm:h-12" viewBox="0 0 1200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0,5 Q150,32 300,5 Q450,35 600,5 Q750,32 900,5 Q1050,35 1200,5" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" fill="none"/>
-              <circle cx="50" cy="18" r="3" fill="#FFD700" className="animate-pulse"/>
-              <circle cx="150" cy="24" r="3.5" fill="#FFFFFF"/>
-              <circle cx="250" cy="14" r="3" fill="#FF5722"/>
-              <circle cx="350" cy="24" r="3" fill="#FFD700" className="animate-pulse"/>
-              <circle cx="450" cy="25" r="3.5" fill="#00DFD8"/>
-              <circle cx="550" cy="18" r="3" fill="#FF0055" className="animate-pulse"/>
-              <circle cx="650" cy="24" r="3" fill="#FFD700"/>
-              <circle cx="750" cy="22" r="3.5" fill="#FFFFFF"/>
-              <circle cx="850" cy="15" r="3" fill="#FF9800"/>
-              <circle cx="950" cy="24" r="3" fill="#FFD700" className="animate-pulse"/>
-              <circle cx="1050" cy="25" r="3.5" fill="#00DFD8"/>
-              <circle cx="1150" cy="14" r="3" fill="#FF0055"/>
-            </svg>
-          </div>
-
-          {/* ATTRACTIVE CATCHY HEADLINE: WHERE PASSION MEETS THE STAGE! */}
+          {/* Section Studio Pill Badge (Replacing Lights) */}
           <div className="text-center max-w-4xl mx-auto mb-10 space-y-3">
-            <span className="text-xs font-mono font-black uppercase tracking-widest text-[#FF0055] block">
-              ETHOS DANCE STUDIO VISUAL LOOKBOOK
-            </span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#0088FF]/10 border border-[#0088FF]/30 text-[#0088FF] text-xs font-black uppercase tracking-widest rounded-full mb-1">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>ETHOS VISUAL GALLERY LOOKBOOK</span>
+            </div>
 
-            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-syne text-white tracking-tight leading-tight uppercase">
+            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-syne text-slate-900 tracking-tight leading-tight uppercase">
               WHERE PASSION <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0055] via-amber-300 to-[#00DFD8]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF]">
                 MEETS THE STAGE!
               </span>
             </h2>
 
-            {/* Filter Tabs (NO "All Stories" - ONLY Specific Categories) */}
+            {/* Filter Tabs (Matching Webpage Style) */}
             <div className="flex flex-wrap justify-center gap-2 pt-4">
               {categoryCards.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setPhotoFilter(cat.id)}
                   className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all ${
-                    photoFilter === cat.id ? 'bg-[#0088FF] text-white shadow-xl ring-2 ring-white/30' : 'bg-white/10 text-white hover:bg-white/20'
+                    photoFilter === cat.id ? 'bg-slate-900 text-white shadow-lg' : 'bg-slate-200/80 text-slate-700 hover:bg-slate-300 hover:text-slate-900'
                   }`}
                 >
                   {cat.title}
@@ -315,18 +305,18 @@ export default function EthosGalleryPage() {
             </div>
           </div>
 
-          {/* SEAMLESS ZERO-GAP MOSAIC PHOTO WALL (PURE CLEAN IMAGES) */}
-          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+          {/* PERFECT 4-COLUMN PHOTO GRID (ZERO GAPS - 8 WORKING HIGH RES PHOTOS PER CATEGORY) */}
+          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredPhotos.map((item) => (
               <div
                 key={item.id}
                 onClick={() => setActiveLightboxImage(item)}
-                className={`relative overflow-hidden shadow-2xl bg-slate-900 group cursor-pointer border border-white/10 ${item.size}`}
+                className="h-72 rounded-2xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-900 group cursor-pointer relative"
               >
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
             ))}
@@ -338,58 +328,31 @@ export default function EthosGalleryPage() {
 
       <Footer onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
-      {/* 🌟 LIGHTBOX MODAL FULL IMAGE POPUP (MATCHING IMG 4) 🌟 */}
+      {/* 🌟 PURE PHOTO LIGHTBOX MODAL (NO PAYMENT BUTTONS OR POPUPS - PURE PHOTO ONLY) 🌟 */}
       {activeLightboxImage && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 animate-fade-in"
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 animate-fade-in select-none"
           onClick={() => setActiveLightboxImage(null)}
         >
           {/* Close Button Top Right */}
           <button
             onClick={() => setActiveLightboxImage(null)}
-            className="absolute top-6 right-6 text-white/80 hover:text-white p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all shadow-xl z-10"
+            className="absolute top-6 right-6 text-white/80 hover:text-white p-3.5 bg-white/10 hover:bg-white/20 rounded-full transition-all shadow-2xl z-20 cursor-pointer"
+            title="Close Lightbox"
           >
-            <X className="w-6 h-6" />
+            <X className="w-7 h-7 stroke-[2.5]" />
           </button>
 
-          {/* Enlarged Photo Container (Matching img 4) */}
+          {/* Pure Enlarged Photo Container */}
           <div
-            className="relative max-w-5xl w-full max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 flex flex-col justify-between"
+            className="relative max-w-6xl w-full max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl bg-black flex items-center justify-center border border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative flex-1 max-h-[75vh] overflow-hidden bg-black flex items-center justify-center">
-              <img
-                src={activeLightboxImage.image}
-                alt={activeLightboxImage.title}
-                className="w-full h-full max-h-[75vh] object-contain"
-              />
-            </div>
-
-            <div className="p-4 sm:p-6 bg-slate-900 text-white flex items-center justify-between border-t border-white/10">
-              <div>
-                <span className="text-[10px] font-mono uppercase text-[#00DFD8] bg-white/10 px-2.5 py-0.5 rounded">
-                  {activeLightboxImage.category}
-                </span>
-                <h3 className="text-lg font-black font-syne uppercase mt-1">
-                  {activeLightboxImage.title}
-                </h3>
-              </div>
-              <button
-                onClick={() => {
-                  const imgItem = activeLightboxImage;
-                  setActiveLightboxImage(null);
-                  setSelectedItemForBooking({
-                    id: imgItem.id,
-                    title: `${imgItem.title} Pass`,
-                    price: 449,
-                    imageUrl: imgItem.image
-                  });
-                }}
-                className="py-2.5 px-5 bg-[#FF0055] hover:bg-[#D00044] text-white text-xs font-black uppercase rounded-xl shadow-lg transition-all"
-              >
-                Book Pass • ₹449
-              </button>
-            </div>
+            <img
+              src={activeLightboxImage.image}
+              alt={activeLightboxImage.title}
+              className="w-full h-full max-h-[88vh] object-contain"
+            />
           </div>
         </div>
       )}
