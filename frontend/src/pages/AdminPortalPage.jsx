@@ -87,7 +87,7 @@ export default function AdminPortalPage() {
 
           </div>
         ) : (
-          <div className="bg-[#111111] border border-[#262626] rounded-3xl p-6 sm:p-8 shadow-2xl">
+          <div className="w-full my-6">
             <AdminDashboard
               API_URL={API_URL}
               onClose={() => {}}

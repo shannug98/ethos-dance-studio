@@ -3,11 +3,39 @@ import { X, Search, DollarSign, ShoppingBag, Send, RefreshCw, Lock, Bell, Settin
 import ethosPureLogo from '../assets/ethos_pure_logo.png';
 
 export default function AdminDashboard({ API_URL, onClose, onLogout }) {
-  const [activeTab, setActiveTab] = useState('OVERVIEW'); // 'OVERVIEW', 'PACKAGES', 'EVENTS', 'CREATE_EVENT', or 'SETTINGS'
+  const [activeTab, setActiveTab] = useState('OVERVIEW'); // 'OVERVIEW', 'PACKAGES', 'EVENTS', 'BOOKINGS', 'CREATE_EVENT', or 'SETTINGS'
   const [eventFilter, setEventFilter] = useState('ALL'); // 'ALL', 'LIVE', 'UPCOMING', 'PAST'
+  const [selectedYear, setSelectedYear] = useState('2026'); // '2026', '2025', '2024', 'ALL'
+  const [selectedMonth, setSelectedMonth] = useState('ALL'); // 'ALL', 'Jan', 'Feb', 'Mar', ...
+  const [phoneOverrides, setPhoneOverrides] = useState({}); // { [ticketId]: 'custom_phone_number' }
+  const [editingEventModal, setEditingEventModal] = useState(null); // Selected event for editing details
+  const [editingStudentModal, setEditingStudentModal] = useState(null); // Selected student for editing details
   const [selectedEventModal, setSelectedEventModal] = useState(null); // Selected Event for Attendee Detail Modal
   const [selectedBatchModal, setSelectedBatchModal] = useState(null); // Selected Batch Card for Batch Roster Modal
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Live Website Content & Site Control State
+  const [siteContent, setSiteContent] = useState(() => {
+    const saved = localStorage.getItem('ethos_site_content_settings');
+    if (saved) {
+      try { return JSON.parse(saved); } catch {}
+    }
+    return {
+      heroAnnouncement: '🔥 Special 20% Off August Passes & Choreography Challenge • Limited Seats!',
+      studioPhone: '+91 83417 01113',
+      studioEmail: 'contact@ethosdancestudio.com',
+      studioAddress: 'Ethos Studio, Nizampet Rd, Kukatpally, Hyderabad 500072',
+      instagramHandle: 'ethos.dance',
+      youtubeChannel: 'Ethos Dance Studio',
+      noticeEnabled: true
+    };
+  });
+  const [siteContentSavedNotice, setSiteContentSavedNotice] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('ethos_site_content_settings', JSON.stringify(siteContent));
+    window.dispatchEvent(new Event('storage'));
+  }, [siteContent]);
 
   // Gateway Settings Security Lock State
   const [isGatewayUnlocked, setIsGatewayUnlocked] = useState(false);
@@ -255,64 +283,74 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
   }, [masterEventsList]);
 
   // Initial Events & Masterclass Tickets State
-  const [eventTickets, setEventTickets] = useState([
-    {
-      ticketId: 'EVT-84921',
-      eventId: 301,
-      eventTitle: 'Hip-Hop & Choreography Masterclass',
-      eventDate: 'Aug 19, 2026',
-      personName: 'Rahul Kumar',
-      personPhone: '+91 83417 01113',
-      personEmail: 'rahul.k@example.com',
-      tierName: 'Tier 1 • Early Bird',
-      pricePaid: 549,
-      paymentMethod: 'Razorpay UPI',
-      bookedAt: '2026-08-18 14:30',
-      status: 'CONFIRMED'
-    },
-    {
-      ticketId: 'EVT-84922',
-      eventId: 301,
-      eventTitle: 'Hip-Hop & Choreography Masterclass',
-      eventDate: 'Aug 19, 2026',
-      personName: 'Sneha Rao',
-      personPhone: '+91 98765 00001',
-      personEmail: 'sneha.r@example.com',
-      tierName: 'Tier 1 • Early Bird',
-      pricePaid: 549,
-      paymentMethod: 'Razorpay Card',
-      bookedAt: '2026-08-18 15:10',
-      status: 'CONFIRMED'
-    },
-    {
-      ticketId: 'EVT-84923',
-      eventId: 301,
-      eventTitle: 'Hip-Hop & Choreography Masterclass',
-      eventDate: 'Aug 19, 2026',
-      personName: 'Priya Sundaram',
-      personPhone: '+91 99887 76655',
-      personEmail: 'priya.s@example.com',
-      tierName: 'Tier 1 • Early Bird',
-      pricePaid: 549,
-      paymentMethod: 'Razorpay UPI',
-      bookedAt: '2026-08-18 16:45',
-      status: 'CONFIRMED'
-    },
-    {
-      ticketId: 'EVT-90112',
-      eventId: 302,
-      eventTitle: 'Contemporary & Floorwork Workshop',
-      eventDate: 'Sep 25, 2026',
-      personName: 'Arjun Das',
-      personPhone: '+91 91122 33445',
-      personEmail: 'arjun@example.com',
-      tierName: 'Tier 1 • Early Bird',
-      pricePaid: 549,
-      paymentMethod: 'Razorpay NetBanking',
-      bookedAt: '2026-08-18 17:00',
-      status: 'CONFIRMED'
+  const [eventTickets, setEventTickets] = useState(() => {
+    const saved = localStorage.getItem('ethos_master_event_tickets');
+    if (saved) {
+      try { return JSON.parse(saved); } catch {}
     }
-  ]);
+    return [
+      {
+        ticketId: 'EVT-84921',
+        eventId: 301,
+        eventTitle: 'Hip-Hop & Choreography Masterclass',
+        eventDate: 'Aug 19, 2026',
+        personName: 'Rahul Kumar',
+        personPhone: '8341701113',
+        personEmail: 'rahul.k@example.com',
+        tierName: 'Tier 1 • Early Bird',
+        pricePaid: 549,
+        paymentMethod: 'Razorpay UPI',
+        bookedAt: '2026-08-18 14:30',
+        status: 'CONFIRMED'
+      },
+      {
+        ticketId: 'EVT-84922',
+        eventId: 301,
+        eventTitle: 'Hip-Hop & Choreography Masterclass',
+        eventDate: 'Aug 19, 2026',
+        personName: 'Sneha Rao',
+        personPhone: '9876500001',
+        personEmail: 'sneha.r@example.com',
+        tierName: 'Tier 1 • Early Bird',
+        pricePaid: 549,
+        paymentMethod: 'Razorpay Card',
+        bookedAt: '2026-08-18 15:10',
+        status: 'CONFIRMED'
+      },
+      {
+        ticketId: 'EVT-84923',
+        eventId: 301,
+        eventTitle: 'Hip-Hop & Choreography Masterclass',
+        eventDate: 'Aug 19, 2026',
+        personName: 'Priya Sundaram',
+        personPhone: '9988776655',
+        personEmail: 'priya.s@example.com',
+        tierName: 'Tier 1 • Early Bird',
+        pricePaid: 549,
+        paymentMethod: 'Razorpay UPI',
+        bookedAt: '2026-08-18 16:45',
+        status: 'CONFIRMED'
+      },
+      {
+        ticketId: 'EVT-90112',
+        eventId: 302,
+        eventTitle: 'Contemporary & Floorwork Workshop',
+        eventDate: 'Sep 25, 2026',
+        personName: 'Arjun Das',
+        personPhone: '9112233445',
+        personEmail: 'arjun@example.com',
+        tierName: 'Tier 1 • Early Bird',
+        pricePaid: 549,
+        paymentMethod: 'Razorpay NetBanking',
+        bookedAt: '2026-08-18 17:00',
+        status: 'CONFIRMED'
+      }
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('ethos_master_event_tickets', JSON.stringify(eventTickets));
+  }, [eventTickets]);
 
   const [newEventForm, setNewEventForm] = useState({
     title: '',
@@ -470,10 +508,8 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
   const grandTotalRevenue = monthlyPackagesRevenue + allEventsRevenue;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/85 backdrop-blur-xl animate-fadeIn">
-      
-      {/* 🌟 WARM LIGHT CREAM BACKGROUND CONTAINER (`bg-[#FAF8F5]`) MATCHING EVENTS & GALLERY PAGES 🌟 */}
-      <div className="relative w-full max-w-7xl h-[94vh] bg-[#FAF8F5] border border-slate-300 rounded-3xl shadow-2xl overflow-hidden text-slate-900 flex flex-col font-sans">
+    <>
+      <div className="w-full bg-[#FAF8F5] border border-slate-300 rounded-3xl shadow-2xl overflow-hidden text-slate-900 flex flex-col font-sans min-h-[85vh]">
         
         {/* TOP NAVIGATION HEADER BAR */}
         <div className="relative z-10 bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between gap-4 shrink-0 text-white">
@@ -592,6 +628,21 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                 <span>+ Host New Event</span>
               </div>
               <Sparkles className="w-4 h-4 text-emerald-300" />
+            </button>
+
+            <button
+              onClick={() => setActiveTab('SITE_CONTROLS')}
+              className={`w-full px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all ${
+                activeTab === 'SITE_CONTROLS'
+                  ? 'bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] text-white shadow-lg font-black'
+                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Sparkles className="w-4 h-4 text-pink-400" />
+                <span>Website Content Controls</span>
+              </div>
+              <span className="text-[10px] text-emerald-400 font-bold">LIVE</span>
             </button>
 
             <button
@@ -781,31 +832,71 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
             {activeTab === 'EVENTS' && (
               <div className="space-y-6">
                 
-                <div className="p-4 bg-white border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
-                  <div>
-                    <h3 className="text-lg font-black uppercase font-syne text-slate-900">
-                      WORKSHOP EVENTS & PASSES HISTORY
-                    </h3>
-                    <p className="text-xs text-slate-500 font-medium">
-                      Pass sales history across Past, Live, and Future masterclasses. Total Event Revenue: <strong className="text-[#FF0055]">₹{allEventsRevenue.toLocaleString()}</strong>
-                    </p>
-                  </div>
+                <div className="p-5 bg-white border border-slate-200 rounded-3xl space-y-4 shadow-sm">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                      <h3 className="text-xl font-black uppercase font-syne text-slate-900 flex items-center gap-2">
+                        WORKSHOP EVENTS & PASSES MANAGEMENT
+                        <span className="px-2.5 py-0.5 bg-[#FF0055]/10 text-[#FF0055] text-[10px] font-bold rounded-full border border-[#FF0055]/30">
+                          {masterEventsList.length} Events Listed
+                        </span>
+                      </h3>
+                      <p className="text-xs text-slate-500 font-medium">
+                        Manage live workshops, edit pricing, filter by year/month, and dispatch ticket receipts to attendees.
+                      </p>
+                    </div>
 
-                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => setActiveTab('CREATE_EVENT')}
-                      className="px-3 py-2 bg-emerald-600 text-white text-[11px] font-black uppercase rounded-xl flex items-center gap-1 shadow-sm"
+                      className="px-5 py-3 bg-[#FF0055] hover:bg-[#e00044] text-white text-xs font-black uppercase rounded-2xl flex items-center gap-2 shadow-lg shadow-[#FF0055]/20 transition-all shrink-0"
                     >
-                      <PlusCircle className="w-3.5 h-3.5" />
-                      <span>+ Create Event</span>
+                      <PlusCircle className="w-4 h-4" />
+                      <span>+ Publish New Event</span>
                     </button>
+                  </div>
 
-                    <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-300">
+                  {/* YEAR, MONTH & STATUS FILTER CONTROLS (MATCHING EVENTS.HTML) */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                    
+                    {/* Year Selector Dropdown */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black uppercase text-slate-500 font-syne">YEAR:</span>
+                      <select
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                        className="bg-slate-100 border border-slate-300 rounded-xl text-xs font-extrabold uppercase px-3 py-2 text-slate-900 shadow-xs focus:outline-none focus:border-[#FF0055] font-syne"
+                      >
+                        <option value="2026">📅 2026 EVENTS</option>
+                        <option value="2025">📅 2025 ARCHIVE</option>
+                        <option value="2024">📅 2024 ARCHIVE</option>
+                        <option value="ALL">📅 ALL YEARS</option>
+                      </select>
+                    </div>
+
+                    {/* Month Filter Tabs */}
+                    <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 max-w-full">
+                      {['ALL', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m) => (
+                        <button
+                          key={m}
+                          onClick={() => setSelectedMonth(m)}
+                          className={`px-3 py-1.5 text-[10px] font-black uppercase rounded-xl transition-all ${
+                            selectedMonth === m
+                              ? 'bg-slate-900 text-white shadow-sm'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          }`}
+                        >
+                          {m}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Status Filter Pills */}
+                    <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-300">
                       {['ALL', 'LIVE', 'UPCOMING', 'PAST'].map((fKey) => (
                         <button
                           key={fKey}
                           onClick={() => setEventFilter(fKey)}
-                          className={`px-3 py-1 text-[10px] font-black uppercase rounded-xl transition-all ${
+                          className={`px-3 py-1 text-[10px] font-black uppercase rounded-lg transition-all ${
                             eventFilter === fKey
                               ? 'bg-[#FF0055] text-white shadow-sm'
                               : 'text-slate-600 hover:text-slate-900'
@@ -815,49 +906,132 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                         </button>
                       ))}
                     </div>
+
                   </div>
                 </div>
 
-                {/* EVENTS CARDS GRID */}
+                {/* RICH EVENTS CARDS GRID (MATCHING MAIN WEBSITE CARD LAYOUT) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {masterEventsList
-                    .filter(e => eventFilter === 'ALL' || e.status === eventFilter)
+                    .filter((evt) => {
+                      if (eventFilter !== 'ALL' && evt.status !== eventFilter) return false;
+                      if (selectedYear !== 'ALL') {
+                        const evtYear = evt.date.match(/20\d\d/)?.[0] || '2026';
+                        if (evtYear !== selectedYear) return false;
+                      }
+                      if (selectedMonth !== 'ALL') {
+                        const dateLower = evt.date.toLowerCase();
+                        const monthLower = selectedMonth.toLowerCase();
+                        if (!dateLower.includes(monthLower)) return false;
+                      }
+                      if (searchTerm) {
+                        const term = searchTerm.toLowerCase();
+                        const matchTitle = evt.title?.toLowerCase().includes(term);
+                        const matchChoreo = evt.choreographer?.toLowerCase().includes(term);
+                        if (!matchTitle && !matchChoreo) return false;
+                      }
+                      return true;
+                    })
                     .map((evt) => {
                       return (
-                        <div key={evt.id} className="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col justify-between space-y-4 shadow-xl relative overflow-hidden">
-                          
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-full border ${
-                                evt.status === 'LIVE' 
-                                  ? 'bg-[#FF0055]/10 text-[#FF0055] border-[#FF0055]/30' 
-                                  : evt.status === 'UPCOMING' 
-                                  ? 'bg-[#0088FF]/10 text-[#0088FF] border-[#0088FF]/30'
-                                  : 'bg-slate-100 text-slate-600 border-slate-300'
+                        <div
+                          key={evt.id}
+                          className="bg-white border border-slate-200 rounded-[1.5rem] p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl group"
+                        >
+                          <div>
+                            {/* 1. TOP POSTER IMAGE CONTAINER (MATCHING EVENTS.HTML) */}
+                            <div className="relative h-[220px] -mx-5 -mt-5 mb-4 overflow-hidden rounded-t-[1.3rem] bg-slate-900 border-b border-slate-100">
+                              <img
+                                src={evt.image || 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80'}
+                                alt={evt.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+
+                              {/* STATUS BADGE OVERLAY */}
+                              <span className={`absolute top-3 left-3 px-2.5 py-1 text-[9px] font-black uppercase rounded-full shadow-md backdrop-blur-md text-white ${
+                                evt.status === 'LIVE' ? 'bg-[#FF0055]' : evt.status === 'UPCOMING' ? 'bg-[#0088FF]' : 'bg-slate-800'
                               }`}>
                                 {evt.statusBadge}
                               </span>
 
-                              <span className="text-xs font-mono font-black text-slate-900">₹{evt.revenue.toLocaleString()}</span>
+                              {/* PASS SALES SUMMARY OVERLAY */}
+                              <span className="absolute top-3 right-3 px-2.5 py-1 bg-black/80 text-white text-[9px] font-black uppercase rounded-full shadow-md backdrop-blur-md">
+                                🎟️ {evt.passesSold} / {evt.totalPasses} Sold
+                              </span>
                             </div>
 
-                            <h4 className="text-xl font-black font-syne text-slate-900 uppercase">{evt.title}</h4>
-                            
-                            <div className="text-xs text-slate-600 font-semibold space-y-1">
-                              <div>📅 Date: <strong className="text-slate-900">{evt.date}</strong></div>
-                              <div>🕒 Time: <strong className="text-slate-900">{evt.time || '5:00 PM - 8:00 PM'}</strong></div>
-                              <div>💃 Master Choreographer: <strong className="text-slate-900">{evt.choreographer}</strong></div>
-                              <div>🎟️ Passes Sold: <strong className="text-[#FF0055]">{evt.passesSold} / {evt.totalPasses} Passes</strong></div>
+                            {/* 2. EVENT TITLE */}
+                            <h3 className="text-xl font-bold font-sans text-slate-900 leading-snug mb-3 min-h-[56px] flex items-center">
+                              {evt.title}
+                            </h3>
+
+                            {/* 3. DATE & CHOREOGRAPHER PILL BOX */}
+                            <div className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-3 flex items-start gap-3 mb-2.5 shadow-2xs">
+                              <Calendar className="w-4 h-4 text-[#FF0055] shrink-0 mt-0.5" />
+                              <div className="text-xs">
+                                <span className="font-extrabold text-slate-900 block">{evt.date} • {evt.time || '5:00 PM - 8:00 PM'}</span>
+                                <span className="text-[11px] text-slate-500 font-medium block">Master Choreography: <strong>{evt.choreographer}</strong></span>
+                              </div>
+                            </div>
+
+                            {/* 4. LOCATION PILL BOX */}
+                            <div className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-3 flex items-start gap-3 mb-4 shadow-2xs">
+                              <MapPin className="w-4 h-4 text-[#0088FF] shrink-0 mt-0.5" />
+                              <div className="text-xs">
+                                <span className="font-extrabold text-slate-900 block">{evt.location}</span>
+                                <span className="text-[11px] text-slate-500 font-medium block">Revenue Generated: <strong className="text-emerald-600 font-mono">₹{evt.revenue.toLocaleString()}</strong></span>
+                              </div>
                             </div>
                           </div>
 
-                          <button
-                            onClick={() => setSelectedEventModal(evt)}
-                            className="w-full py-3 bg-[#FF0055] hover:bg-[#e00044] text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2"
-                          >
-                            <Ticket className="w-4 h-4" />
-                            <span>View All {evt.passesSold} Attendee Passes →</span>
-                          </button>
+                          {/* 5. ADMIN ACTION BUTTONS */}
+                          <div className="space-y-2 pt-2 border-t border-slate-100">
+                            <button
+                              onClick={() => setSelectedEventModal(evt)}
+                              className="w-full py-3 bg-[#FF0055] hover:bg-[#e00044] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                              <Ticket className="w-4 h-4" />
+                              <span>View All {evt.passesSold} Attendee Passes & Send Ticket →</span>
+                            </button>
+
+                            <div className="grid grid-cols-3 gap-2">
+                              <button
+                                onClick={() => setEditingEventModal(evt)}
+                                className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black uppercase rounded-xl border border-slate-300 flex items-center justify-center gap-1 transition-all"
+                              >
+                                <Settings className="w-3.5 h-3.5" />
+                                <span>Edit</span>
+                              </button>
+
+                              <button
+                                onClick={() => {
+                                  const nextStatus = evt.status === 'LIVE' ? 'PAST' : 'LIVE';
+                                  const nextBadge = nextStatus === 'LIVE' ? '🔴 LIVE NOW' : '⚪ PAST ARCHIVE';
+                                  setMasterEventsList(prev => prev.map(item => item.id === evt.id ? { ...item, status: nextStatus, statusBadge: nextBadge } : item));
+                                }}
+                                className={`py-2.5 text-xs font-black uppercase rounded-xl border flex items-center justify-center gap-1 transition-all ${
+                                  evt.status === 'LIVE'
+                                    ? 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
+                                    : 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+                                }`}
+                              >
+                                <RefreshCw className="w-3.5 h-3.5" />
+                                <span>{evt.status === 'LIVE' ? 'Mark Past' : 'Mark Live'}</span>
+                              </button>
+
+                              <button
+                                onClick={() => {
+                                  if (window.confirm(`Are you sure you want to delete event "${evt.title}"?`)) {
+                                    setMasterEventsList(prev => prev.filter(item => item.id !== evt.id));
+                                  }
+                                }}
+                                className="py-2.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-black uppercase rounded-xl border border-red-200 flex items-center justify-center gap-1 transition-all"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                          </div>
 
                         </div>
                       );
@@ -1076,7 +1250,113 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
               </div>
             )}
 
-            {/* 4️⃣ GATEWAY & ADMIN SETTINGS TAB */}
+            {/* 5️⃣ WEBSITE CONTENT & SITE CONTROLS TAB */}
+            {activeTab === 'SITE_CONTROLS' && (
+              <div className="max-w-3xl mx-auto space-y-6">
+                <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 space-y-6 shadow-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-[#FF0055]/10 border border-[#FF0055]/30 flex items-center justify-center text-[#FF0055]">
+                      <Sparkles className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black uppercase font-syne text-slate-900">WEBSITE CONTENT & SITE CONTROLS</h3>
+                      <p className="text-xs text-slate-500">Update website announcement banners, studio contact details, and social handles.</p>
+                    </div>
+                  </div>
+
+                  {siteContentSavedNotice && (
+                    <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold rounded-2xl flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                      <span>Website content & studio details updated successfully!</span>
+                    </div>
+                  )}
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      localStorage.setItem('ethos_site_content_settings', JSON.stringify(siteContent));
+                      window.dispatchEvent(new Event('storage'));
+                      setSiteContentSavedNotice(true);
+                      setTimeout(() => setSiteContentSavedNotice(false), 4000);
+                    }}
+                    className="space-y-4 text-xs font-bold text-slate-700"
+                  >
+                    <div>
+                      <label className="block text-slate-700 uppercase mb-1">Top Announcement Banner Text</label>
+                      <input
+                        type="text" required
+                        value={siteContent.heroAnnouncement}
+                        onChange={(e) => setSiteContent({ ...siteContent, heroAnnouncement: e.target.value })}
+                        className="w-full p-3.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#FF0055]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-slate-700 uppercase mb-1">Studio Primary Phone / WhatsApp</label>
+                        <input
+                          type="text" required
+                          value={siteContent.studioPhone}
+                          onChange={(e) => setSiteContent({ ...siteContent, studioPhone: e.target.value })}
+                          className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#FF0055]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-700 uppercase mb-1">Studio Support Email</label>
+                        <input
+                          type="email" required
+                          value={siteContent.studioEmail}
+                          onChange={(e) => setSiteContent({ ...siteContent, studioEmail: e.target.value })}
+                          className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#FF0055]"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-700 uppercase mb-1">Studio Location Address</label>
+                      <input
+                        type="text" required
+                        value={siteContent.studioAddress}
+                        onChange={(e) => setSiteContent({ ...siteContent, studioAddress: e.target.value })}
+                        className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#FF0055]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-slate-700 uppercase mb-1">Instagram Handle</label>
+                        <input
+                          type="text" required
+                          value={siteContent.instagramHandle}
+                          onChange={(e) => setSiteContent({ ...siteContent, instagramHandle: e.target.value })}
+                          className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#FF0055]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-700 uppercase mb-1">YouTube Channel Name</label>
+                        <input
+                          type="text" required
+                          value={siteContent.youtubeChannel}
+                          onChange={(e) => setSiteContent({ ...siteContent, youtubeChannel: e.target.value })}
+                          className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#FF0055]"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all"
+                    >
+                      Save & Update Website Content
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* 6️⃣ GATEWAY & ADMIN SETTINGS TAB */}
             {activeTab === 'SETTINGS' && (
               <div className="max-w-2xl mx-auto space-y-6">
                 
@@ -1293,16 +1573,30 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                         </div>
 
                         <div className="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end justify-between gap-3 shrink-0">
-                          <div className="flex items-center gap-2">
-                            <div className="flex -space-x-2">
-                              {(student.privatePhotos || []).map((photo, pIdx) => (
-                                <img key={pIdx} src={photo} alt="" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
-                              ))}
-                            </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <button
+                              onClick={() => setEditingStudentModal(student)}
+                              className="px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 border border-slate-300 text-[10px] font-extrabold uppercase rounded-xl flex items-center gap-1 transition-colors"
+                            >
+                              <Settings className="w-3 h-3 text-[#0088FF]" />
+                              <span>Edit</span>
+                            </button>
 
-                            <label className="cursor-pointer px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 border border-slate-300 text-[10px] font-extrabold uppercase rounded-xl flex items-center gap-1.5 transition-colors">
-                              <ImageIcon className="w-3.5 h-3.5 text-[#0088FF]" />
-                              <span>Upload Photo</span>
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete student subscriber "${student.name}"?`)) {
+                                  setStudents(prev => prev.filter(s => s.id !== student.id));
+                                }
+                              }}
+                              className="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-[10px] font-extrabold uppercase rounded-xl flex items-center gap-1 transition-colors"
+                            >
+                              <X className="w-3 h-3" />
+                              <span>Delete</span>
+                            </button>
+
+                            <label className="cursor-pointer px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 border border-slate-300 text-[10px] font-extrabold uppercase rounded-xl flex items-center gap-1 transition-colors">
+                              <ImageIcon className="w-3 h-3 text-[#0088FF]" />
+                              <span>Photo</span>
                               <input
                                 type="file"
                                 accept="image/*"
@@ -1335,7 +1629,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       {/* 🎟️ EVENT ATTENDEES ROSTER MODAL */}
       {selectedEventModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white border border-slate-200 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl text-slate-900 flex flex-col max-h-[85vh]">
+          <div className="bg-white border border-slate-200 w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl text-slate-900 flex flex-col max-h-[88vh]">
             
             <div className="bg-slate-900 p-6 border-b border-slate-800 flex items-center justify-between text-white">
               <div>
@@ -1358,8 +1652,8 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                     <tr className="bg-slate-100 border-b border-slate-300 text-[10px] font-black uppercase tracking-wider text-slate-600">
                       <th className="p-3">Ticket ID</th>
                       <th className="p-3">Person Name</th>
-                      <th className="p-3">Phone & Email</th>
                       <th className="p-3">Tier & Price</th>
+                      <th className="p-3">Phone Number (Editable Override)</th>
                       <th className="p-3">Status</th>
                       <th className="p-3 text-right">Action</th>
                     </tr>
@@ -1367,36 +1661,48 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                   <tbody className="divide-y divide-slate-200 text-xs font-medium">
                     {eventTickets
                       .filter(t => t.eventId === selectedEventModal.id)
-                      .map((t) => (
-                        <tr key={t.ticketId} className="hover:bg-slate-50">
-                          <td className="p-3 font-mono font-bold text-[#0088FF]">{t.ticketId}</td>
-                          <td className="p-3 font-bold text-slate-900">{t.personName}</td>
-                          <td className="p-3 text-slate-600">
-                            <div>{t.personPhone}</div>
-                            <div className="text-[10px] text-slate-400">{t.personEmail}</div>
-                          </td>
-                          <td className="p-3">
-                            <span className="text-slate-600 block">{t.tierName}</span>
-                            <span className="font-bold text-slate-900">₹{t.pricePaid}</span>
-                          </td>
-                          <td className="p-3">
-                            <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 text-[9px] font-bold rounded-full">
-                              ✓ {t.status}
-                            </span>
-                          </td>
-                          <td className="p-3 text-right">
-                            <a
-                              href={getEventTicketWhatsappUrl(t)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-[10px] font-black uppercase rounded-xl inline-flex items-center gap-1 shadow-sm"
-                            >
-                              <MessageCircle className="w-3.5 h-3.5 fill-white" />
-                              <span>WhatsApp Ticket</span>
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                      .map((t) => {
+                        const currentPhone = phoneOverrides[t.ticketId] !== undefined ? phoneOverrides[t.ticketId] : (t.personPhone || '');
+
+                        return (
+                          <tr key={t.ticketId} className="hover:bg-slate-50">
+                            <td className="p-3 font-mono font-bold text-[#0088FF]">{t.ticketId}</td>
+                            <td className="p-3 font-bold text-slate-900">
+                              <div>{t.personName}</div>
+                              <div className="text-[10px] text-slate-400">{t.personEmail}</div>
+                            </td>
+                            <td className="p-3">
+                              <span className="text-slate-600 block">{t.tierName}</span>
+                              <span className="font-bold text-slate-900">₹{t.pricePaid}</span>
+                            </td>
+                            <td className="p-3">
+                              <input
+                                type="tel"
+                                value={currentPhone}
+                                onChange={(e) => setPhoneOverrides({ ...phoneOverrides, [t.ticketId]: e.target.value })}
+                                className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-[#25D366] w-40"
+                                placeholder="Enter phone number..."
+                              />
+                            </td>
+                            <td className="p-3">
+                              <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 text-[9px] font-bold rounded-full">
+                                ✓ {t.status}
+                              </span>
+                            </td>
+                            <td className="p-3 text-right">
+                              <a
+                                href={getEventTicketWhatsappUrl(t, currentPhone)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-[10px] font-black uppercase rounded-xl inline-flex items-center gap-1 shadow-sm"
+                              >
+                                <MessageCircle className="w-3.5 h-3.5 fill-white" />
+                                <span>WhatsApp Ticket</span>
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>
@@ -1406,6 +1712,221 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
         </div>
       )}
 
-    </div>
+      {/* ✏️ EDIT EVENT DETAILS MODAL */}
+      {editingEventModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white border border-slate-200 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl text-slate-900 flex flex-col p-6 sm:p-8 space-y-6">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-3">
+                <Settings className="w-6 h-6 text-[#FF0055]" />
+                <div>
+                  <h3 className="text-xl font-black uppercase font-syne text-slate-900">EDIT WORKSHOP EVENT DETAILS</h3>
+                  <p className="text-xs text-slate-500">Update event title, dates, pricing, or status</p>
+                </div>
+              </div>
+
+              <button onClick={() => setEditingEventModal(null)} className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setMasterEventsList(prev => prev.map(evt => evt.id === editingEventModal.id ? editingEventModal : evt));
+                setEditingEventModal(null);
+              }}
+              className="space-y-4 text-xs font-bold text-slate-700"
+            >
+              <div>
+                <label className="block text-slate-700 uppercase mb-1">Event Title</label>
+                <input
+                  type="text" required
+                  value={editingEventModal.title}
+                  onChange={(e) => setEditingEventModal({ ...editingEventModal, title: e.target.value })}
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Event Date</label>
+                  <input
+                    type="text" required
+                    value={editingEventModal.date}
+                    onChange={(e) => setEditingEventModal({ ...editingEventModal, date: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Master Choreographer</label>
+                  <input
+                    type="text" required
+                    value={editingEventModal.choreographer}
+                    onChange={(e) => setEditingEventModal({ ...editingEventModal, choreographer: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Location</label>
+                  <input
+                    type="text" required
+                    value={editingEventModal.location}
+                    onChange={(e) => setEditingEventModal({ ...editingEventModal, location: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Status</label>
+                  <select
+                    value={editingEventModal.status}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const badge = val === 'LIVE' ? '🔴 LIVE NOW' : val === 'UPCOMING' ? '🟡 OPENS SOON' : '⚪ PAST ARCHIVE';
+                      setEditingEventModal({ ...editingEventModal, status: val, statusBadge: badge });
+                    }}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold"
+                  >
+                    <option value="LIVE">🔴 LIVE NOW</option>
+                    <option value="UPCOMING">🟡 UPCOMING</option>
+                    <option value="PAST">⚪ PAST ARCHIVE</option>
+                  </select>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 bg-[#FF0055] hover:bg-[#e00044] text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all"
+              >
+                Save & Update Event
+              </button>
+            </form>
+
+          </div>
+        </div>
+      )}
+
+      {/* ✏️ EDIT STUDENT DETAILS MODAL */}
+      {editingStudentModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white border border-slate-200 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl text-slate-900 flex flex-col p-6 sm:p-8 space-y-6">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-3">
+                <User className="w-6 h-6 text-[#0088FF]" />
+                <div>
+                  <h3 className="text-xl font-black uppercase font-syne text-slate-900">EDIT STUDENT MEMBER DETAILS</h3>
+                  <p className="text-xs text-slate-500">Update student profile, classes left, or pass expiry date</p>
+                </div>
+              </div>
+
+              <button onClick={() => setEditingStudentModal(null)} className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setStudents(prev => prev.map(s => s.id === editingStudentModal.id ? editingStudentModal : s));
+                setEditingStudentModal(null);
+              }}
+              className="space-y-4 text-xs font-bold text-slate-700"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Student Full Name</label>
+                  <input
+                    type="text" required
+                    value={editingStudentModal.name}
+                    onChange={(e) => setEditingStudentModal({ ...editingStudentModal, name: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Student Code ID</label>
+                  <input
+                    type="text" required
+                    value={editingStudentModal.studentCode}
+                    onChange={(e) => setEditingStudentModal({ ...editingStudentModal, studentCode: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Parent Name</label>
+                  <input
+                    type="text" required
+                    value={editingStudentModal.parentName}
+                    onChange={(e) => setEditingStudentModal({ ...editingStudentModal, parentName: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Contact Phone</label>
+                  <input
+                    type="text" required
+                    value={editingStudentModal.phone}
+                    onChange={(e) => setEditingStudentModal({ ...editingStudentModal, phone: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Classes Left</label>
+                  <input
+                    type="number" required
+                    value={editingStudentModal.classesLeft}
+                    onChange={(e) => setEditingStudentModal({ ...editingStudentModal, classesLeft: Number(e.target.value) })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Days Remaining</label>
+                  <input
+                    type="number" required
+                    value={editingStudentModal.daysRemaining}
+                    onChange={(e) => setEditingStudentModal({ ...editingStudentModal, daysRemaining: Number(e.target.value) })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1">Pass Expiry Date</label>
+                  <input
+                    type="text" required
+                    value={editingStudentModal.passExpiryDate}
+                    onChange={(e) => setEditingStudentModal({ ...editingStudentModal, passExpiryDate: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 bg-[#0088FF] hover:bg-[#0077EE] text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all"
+              >
+                Save Student Details
+              </button>
+            </form>
+
+          </div>
+        </div>
+      )}
+
+    </>
   );
 }

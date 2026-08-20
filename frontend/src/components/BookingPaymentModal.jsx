@@ -67,6 +67,28 @@ export default function BookingPaymentModal({ item, API_URL, onClose, onSuccessP
       profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
     }));
 
+    // Save ticket booking to ethos_master_event_tickets for Admin Console
+    try {
+      const newBookingTicket = {
+        ticketId: mockTxId,
+        eventId: item?.id || Date.now(),
+        eventTitle: itemTitle,
+        eventDate: item?.date || 'Aug 2026',
+        personName: formData.fullName,
+        personPhone: formData.phone,
+        personEmail: formData.email,
+        tierName: 'Standard Pass',
+        pricePaid: itemPrice,
+        paymentMethod: 'UPI / Razorpay',
+        bookedAt: new Date().toISOString().slice(0, 16).replace('T', ' '),
+        status: 'CONFIRMED'
+      };
+
+      const existingTickets = JSON.parse(localStorage.getItem('ethos_master_event_tickets') || '[]');
+      localStorage.setItem('ethos_master_event_tickets', JSON.stringify([newBookingTicket, ...existingTickets]));
+      window.dispatchEvent(new Event('storage'));
+    } catch (e) {}
+
     setStep('DONE');
 
     setTimeout(() => {
