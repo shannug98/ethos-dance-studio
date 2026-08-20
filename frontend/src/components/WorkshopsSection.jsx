@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Clock, MapPin, Sparkles, UserCheck, Flame } from 'lucide-react';
+import { Calendar, Clock, MapPin, Sparkles, UserCheck, Flame, Share2 } from 'lucide-react';
 
 export default function WorkshopsSection({ events = [], onSelectEvent }) {
   // Default fallback workshops if no admin events fall within 28 days
@@ -102,74 +102,88 @@ export default function WorkshopsSection({ events = [], onSelectEvent }) {
           </div>
         </div>
 
-        {/* Workshop Cards Grid (Renders ALL events occurring within 28 days) */}
+        {/* Workshop Cards Grid (Renders ALL events occurring within 28 days - Matching Screenshot Design) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayEvents.map((item) => (
             <div
               key={item.id}
-              onClick={() => onSelectEvent && onSelectEvent({ id: item.id, title: item.title, price: item.price || 1499, type: 'Workshop Ticket' })}
-              className="bg-[#111111] border border-[#333333] flex flex-col justify-between group hover:border-[#FF0044] cursor-pointer transition-all p-6 space-y-4 rounded-2xl shadow-2xl relative"
+              className="bg-white text-slate-900 border border-slate-200/90 rounded-[1.5rem] p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl group"
             >
               <div>
-                <div className="relative h-60 overflow-hidden bg-[#000000] -mx-6 -mt-6 mb-4 rounded-t-2xl">
+                {/* 1. TOP POSTER IMAGE */}
+                <div className="relative h-[220px] -mx-5 -mt-5 mb-4 overflow-hidden rounded-t-[1.3rem] bg-slate-900 border-b border-slate-100">
                   <img
                     src={item.image || item.imageUrl || 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80'}
                     alt={item.title}
-                    className="w-full h-full object-cover grayscale contrast-125 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
 
-                  {/* ACTIVE REGISTRATION BADGE */}
-                  <span className="absolute top-3 left-3 px-3 py-1 bg-[#22C55E] text-white text-[10px] font-black uppercase rounded-full shadow-lg border border-emerald-400/30 flex items-center gap-1">
-                    <span>⚡ REGISTRATION OPEN</span>
+                  {/* ★ OG BADGE */}
+                  <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-black text-slate-900 shadow-md">
+                    ★ OG
                   </span>
 
-                  <span className="absolute top-3 right-3 px-3 py-1 bg-[#FF0044] text-white text-[10px] font-black uppercase rounded-full shadow-lg">
-                    🔥 Only {item.seatsLeft || 5} Seats Left!
-                  </span>
-
-                  <span className="absolute bottom-3 left-3 px-3 py-1 bg-black/80 text-[#D0FBF9] text-[10px] font-black uppercase rounded-full backdrop-blur-md">
-                    {item.danceStyle || item.style || 'Masterclass'}
+                  {/* STATUS BADGE */}
+                  <span className="absolute top-3 right-3 px-2.5 py-1 bg-[#FF0055] text-white text-[9px] font-black uppercase rounded-full shadow-md">
+                    🔥 {item.seatsLeft || 5} Seats Left
                   </span>
                 </div>
 
-                <div className="space-y-3">
-                  <h3 className="text-xl font-extrabold text-white uppercase font-display leading-snug">{item.title}</h3>
-                  <p className="text-xs text-slate-300 leading-relaxed font-normal line-clamp-2">{item.desc || item.description}</p>
+                {/* 2. EVENT TITLE */}
+                <h3 className="text-xl font-bold font-sans text-slate-900 leading-snug mb-3 min-h-[56px] flex items-center">
+                  {item.title}
+                </h3>
 
-                  {/* Detailed Event Meta */}
-                  <div className="space-y-2 pt-3 text-xs font-semibold text-slate-300 border-t border-[#222222]">
-                    <div className="flex items-center gap-2 text-[#D0FBF9]">
-                      <UserCheck className="w-3.5 h-3.5 text-[#FF0044]" />
-                      <span>Guest Choreographer: <strong>{item.choreographer || item.guestChoreographer || 'Ethos Team'}</strong></span>
-                    </div>
+                {/* 3. DATE & SLOTS PILL BOX (ROUNDED WHITE INPUT BOX STYLE - MATCHING SCREENSHOT) */}
+                <div className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-3 flex items-start gap-3 mb-2.5 shadow-2xs">
+                  <Calendar className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 block leading-tight">
+                      {item.date || 'Aug 29, 2026'}
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-500 block leading-tight">
+                      {item.time || '2 Slots Available'}
+                    </span>
+                  </div>
+                </div>
 
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-[#0088FF]" />
-                      <span>Date: <strong>{item.date}</strong></span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-[#D900FF]" />
-                      <span>Time: <strong>{item.time || '5:00 PM - 8:00 PM'}</strong></span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-[#FF0044]" />
-                      <span>Venue: <strong>{item.location || 'Ethos Studio Kukatpally'}</strong></span>
-                    </div>
+                {/* 4. LOCATION PILL BOX (ROUNDED WHITE INPUT BOX STYLE - MATCHING SCREENSHOT) */}
+                <div className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-3 flex items-start gap-3 mb-4 shadow-2xs">
+                  <MapPin className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                  <div className="overflow-hidden">
+                    <span className="text-xs font-bold text-slate-900 block leading-tight truncate">
+                      {item.location || 'Ethos Studio Kukatpally'}
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-500 block leading-tight truncate">
+                      Exact location shared after registration
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#222222] flex items-center justify-between">
+              {/* 5. PRICE & ACTION FOOTER (MATCHING SCREENSHOT) */}
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
                 <div>
-                  <span className="text-[9px] uppercase text-slate-400 block font-bold">Pass Fee</span>
-                  <span className="text-white font-extrabold text-xl font-display">₹{item.price || 1499}</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase block">Starting from</span>
+                  <span className="text-xl font-bold font-sans text-slate-900">₹{item.price || 1499}</span>
                 </div>
 
-                <button className="btn-cyan text-xs py-2 px-4 font-extrabold uppercase tracking-wider rounded-xl">
-                  Reserve Pass
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => onSelectEvent && onSelectEvent({ id: item.id, title: item.title, price: item.price || 1499, type: 'Workshop Ticket' })}
+                    className="py-2.5 px-5 bg-black hover:bg-slate-800 text-white text-xs font-bold font-sans rounded-xl shadow-md transition-all active:scale-95"
+                  >
+                    Book Now
+                  </button>
+
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigator.share ? navigator.share({ title: item.title, url: window.location.href }) : alert(`Link for ${item.title} copied!`); }}
+                    className="p-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs"
+                    title="Share Event"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
             </div>
