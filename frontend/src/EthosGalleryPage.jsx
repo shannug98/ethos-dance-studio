@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
 import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
 import { Sparkles, MessageCircle, Users } from 'lucide-react';
@@ -267,6 +268,9 @@ export default function EthosGalleryPage() {
           onClose={() => setConfirmedRegistration(null)}
         />
       )}
+
+      {/* Floating AI Bot & Social Dock */}
+      <FloatingWhatsApp />
     </div>
   );
 }

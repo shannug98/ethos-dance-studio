@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import SangeethSection from '../components/SangeethSection';
 import Footer from '../components/Footer';
+import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
 
@@ -46,6 +47,9 @@ export default function SangeetPage() {
           onClose={() => setConfirmedRegistration(null)}
         />
       )}
+
+      {/* Floating AI Bot & Social Dock */}
+      <FloatingWhatsApp />
     </div>
   );
 }

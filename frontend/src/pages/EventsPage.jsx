@@ -1,46 +1,52 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
 import { Camera, Sparkles, Palette, Smartphone, Lightbulb, Dices, Lock, Bell, ArrowRight, ShieldCheck, Ticket, Flame } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000';
 
-export function getEventPricingTier(ticketsSold = 6) {
+export function getEventPricingTier(ticketsSold = 6, customTiers = null) {
+  const t1 = Number(customTiers?.tier1Price || customTiers?.price || 549);
+  const t2 = Number(customTiers?.tier2Price || (t1 + 100));
+  const t3 = Number(customTiers?.tier3Price || (t2 + 100));
+  const t4 = Number(customTiers?.tier4Price || (t3 + 50));
+
   if (ticketsSold < 10) {
     return {
-      currentPrice: 549,
+      currentPrice: t1,
       tierName: 'Tier 1 • Early Bird (First 10)',
       ticketsSoldInTier: ticketsSold,
       tierLimit: 10,
-      nextPrice: 649,
+      nextPrice: t2,
       badgeColor: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/30',
       activeTierIndex: 1
     };
   } else if (ticketsSold < 20) {
     return {
-      currentPrice: 649,
+      currentPrice: t2,
       tierName: 'Tier 2 • Phase 2 (Next 10)',
       ticketsSoldInTier: ticketsSold - 10,
       tierLimit: 10,
-      nextPrice: 749,
+      nextPrice: t3,
       badgeColor: 'bg-blue-500/10 text-blue-700 border-blue-500/30',
       activeTierIndex: 2
     };
   } else if (ticketsSold < 30) {
     return {
-      currentPrice: 749,
+      currentPrice: t3,
       tierName: 'Tier 3 • Phase 3 (Next 10)',
       ticketsSoldInTier: ticketsSold - 20,
       tierLimit: 10,
-      nextPrice: 799,
+      nextPrice: t4,
       badgeColor: 'bg-purple-500/10 text-purple-700 border-purple-500/30',
       activeTierIndex: 3
     };
   } else {
     return {
-      currentPrice: 799,
+      currentPrice: t4,
       tierName: 'Tier 4 • On-Door Standard',
       ticketsSoldInTier: ticketsSold - 30,
       tierLimit: 50,
@@ -359,6 +365,9 @@ export default function EventsPage() {
           onClose={() => setConfirmedRegistration(null)}
         />
       )}
+
+      {/* Floating AI Bot & Social Dock */}
+      <FloatingWhatsApp />
 
     </div>
   );

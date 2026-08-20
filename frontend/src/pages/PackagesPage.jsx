@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import PackagesSection from '../components/PackagesSection';
 import Footer from '../components/Footer';
+import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
 
@@ -56,6 +57,9 @@ export default function PackagesPage() {
           onClose={() => setConfirmedRegistration(null)}
         />
       )}
+
+      {/* Floating AI Bot & Social Dock */}
+      <FloatingWhatsApp />
     </div>
   );
 }

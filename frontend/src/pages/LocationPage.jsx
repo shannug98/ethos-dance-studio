@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import InstructorsSection from '../components/InstructorsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
+import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import BookingPaymentModal from '../components/BookingPaymentModal';
 import ConfirmationReceiptModal from '../components/ConfirmationReceiptModal';
 
@@ -48,6 +49,9 @@ export default function LocationPage() {
           onClose={() => setConfirmedRegistration(null)}
         />
       )}
+
+      {/* Floating AI Bot & Social Dock */}
+      <FloatingWhatsApp />
     </div>
   );
 }

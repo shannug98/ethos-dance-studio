@@ -16,20 +16,6 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
 
   // + Create New Event Form State
   const [eventCreatedNotice, setEventCreatedNotice] = useState(false);
-  const [newEventForm, setNewEventForm] = useState({
-    title: '',
-    date: '',
-    time: '',
-    location: 'Ethos Studio, Nizampet Rd, Kukatpally, Hyderabad',
-    choreographer: '',
-    price: 549,
-    totalPasses: 40,
-    desc: '',
-    posterUrl: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
-    showOnEventsPage: true,
-    showOnGalleryPage: true,
-    showOnPassesPage: true
-  });
 
   // Initial Monthly Package Student Subscribers State
   const [students, setStudents] = useState([
@@ -328,6 +314,25 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
     }
   ]);
 
+  const [newEventForm, setNewEventForm] = useState({
+    title: '',
+    date: '',
+    time: '',
+    location: 'Ethos Studio, Nizampet Rd, Kukatpally, Hyderabad',
+    choreographer: '',
+    price: 549,
+    tier1Price: 549,
+    tier2Price: 649,
+    tier3Price: 749,
+    tier4Price: 799,
+    totalPasses: 40,
+    desc: '',
+    posterUrl: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
+    showOnEventsPage: true,
+    showOnGalleryPage: true,
+    showOnPassesPage: true
+  });
+
   // Settings State
   const [settings, setSettings] = useState({
     RazorpayKeyId: 'rzp_test_EthosDance2026',
@@ -352,6 +357,11 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       totalPasses: Number(newEventForm.totalPasses) || 40,
       passesSold: 0,
       revenue: 0,
+      price: Number(newEventForm.tier1Price) || 549,
+      tier1Price: Number(newEventForm.tier1Price) || 549,
+      tier2Price: Number(newEventForm.tier2Price) || 649,
+      tier3Price: Number(newEventForm.tier3Price) || 749,
+      tier4Price: Number(newEventForm.tier4Price) || 799,
       choreographer: newEventForm.choreographer || 'Ethos Master Instructor',
       image: newEventForm.posterUrl || 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
       desc: newEventForm.desc
@@ -368,6 +378,10 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
       location: 'Ethos Studio, Nizampet Rd, Kukatpally, Hyderabad',
       choreographer: '',
       price: 549,
+      tier1Price: 549,
+      tier2Price: 649,
+      tier3Price: 749,
+      tier4Price: 799,
       totalPasses: 40,
       desc: '',
       posterUrl: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
@@ -925,15 +939,59 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                         />
                       </div>
 
-                      <div>
-                        <label className="block text-slate-700 uppercase mb-1">Ticket Price (₹) *</label>
-                        <input
-                          type="number" required
-                          placeholder="549"
-                          value={newEventForm.price}
-                          onChange={(e) => setNewEventForm({ ...newEventForm, price: e.target.value })}
-                          className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-emerald-600"
-                        />
+                    </div>
+
+                    {/* EARLY BIRD DYNAMIC TIERED PRICING SCHEMES (ADMIN CUSTOM PRICES) */}
+                    <div className="bg-slate-100 border border-slate-300 rounded-2xl p-4 space-y-3">
+                      <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center justify-between">
+                        <span>🏷️ EARLY BIRD TIERED PRICING SCHEMES</span>
+                        <span className="text-[10px] text-emerald-700 font-extrabold uppercase">Custom Admin Tier Prices</span>
+                      </h4>
+
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-bold text-slate-700">
+                        <div>
+                          <label className="block text-[10px] text-emerald-700 uppercase mb-1">Tier 1 (Passes 1–10) *</label>
+                          <input
+                            type="number" required
+                            placeholder="549"
+                            value={newEventForm.tier1Price}
+                            onChange={(e) => setNewEventForm({ ...newEventForm, tier1Price: e.target.value })}
+                            className="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-emerald-600 font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] text-blue-700 uppercase mb-1">Tier 2 (Passes 11–20) *</label>
+                          <input
+                            type="number" required
+                            placeholder="649"
+                            value={newEventForm.tier2Price}
+                            onChange={(e) => setNewEventForm({ ...newEventForm, tier2Price: e.target.value })}
+                            className="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-blue-600 font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] text-purple-700 uppercase mb-1">Tier 3 (Passes 21–30) *</label>
+                          <input
+                            type="number" required
+                            placeholder="749"
+                            value={newEventForm.tier3Price}
+                            onChange={(e) => setNewEventForm({ ...newEventForm, tier3Price: e.target.value })}
+                            className="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-purple-600 font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] text-amber-700 uppercase mb-1">Tier 4 (Passes 31+) *</label>
+                          <input
+                            type="number" required
+                            placeholder="799"
+                            value={newEventForm.tier4Price}
+                            onChange={(e) => setNewEventForm({ ...newEventForm, tier4Price: e.target.value })}
+                            className="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-amber-600 font-mono"
+                          />
+                        </div>
                       </div>
                     </div>
 
