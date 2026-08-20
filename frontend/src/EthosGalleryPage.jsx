@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import BookingPaymentModal from './components/BookingPaymentModal';
 import ConfirmationReceiptModal from './components/ConfirmationReceiptModal';
-import { Sparkles, ChevronRight, Camera, X } from 'lucide-react';
+import { Sparkles, ChevronRight, X } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000';
 
@@ -47,7 +47,7 @@ export default function EthosGalleryPage() {
     'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80',
   ];
 
-  // 🌟 4 MAIN CATEGORIES (DANCE IN STUDIO, WORKSHOPS, EVENTS, CORPORATE EVENTS)
+  // 🌟 4 MAIN CATEGORIES
   const categoryCards = [
     {
       id: 'studio',
@@ -71,47 +71,47 @@ export default function EthosGalleryPage() {
     }
   ];
 
-  // 🌟 PERFECT ZERO-GAP GRID PHOTO DATA (HIGH RES WORKING UNSPLASH PHOTOS)
+  // 🌟 DENSE ZIG-ZAG MASONRY PHOTO COLLAGE DATA (MATCHING SCREENSHOT IMG 2)
   const densePhotoCollage = [
-    // 💃 DANCE IN STUDIO PHOTOS (8 HIGH-RES WORKING PHOTOS)
-    { id: 101, category: 'studio', title: 'Studio Rehearsal Vibes', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
-    { id: 102, category: 'studio', title: 'Commercial Choreography Batch', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
-    { id: 103, category: 'studio', title: 'Hip-Hop Groove Practice', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
-    { id: 104, category: 'studio', title: 'Bollywood Fusion Practice', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
-    { id: 105, category: 'studio', title: 'Contemporary Storytelling', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
-    { id: 106, category: 'studio', title: 'Mirror Synchronization Training', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
-    { id: 107, category: 'studio', title: 'High Energy Cypher Batch', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
-    { id: 108, category: 'studio', title: 'Kids Dance Studio Batch', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
+    // 💃 DANCE IN STUDIO PHOTOS (8 ZIG-ZAG TILES MATCHING IMG 2)
+    { id: 101, category: 'studio', title: 'Studio Rehearsal Vibes', spanClass: 'col-span-2 md:col-span-3 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1200&q=80' },
+    { id: 102, category: 'studio', title: 'Commercial Choreography Batch', spanClass: 'col-span-1 md:col-span-1 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
+    { id: 103, category: 'studio', title: 'Hip-Hop Groove Practice', spanClass: 'col-span-1 md:col-span-2 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
+    { id: 104, category: 'studio', title: 'Bollywood Fusion Practice', spanClass: 'col-span-1 md:col-span-1 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
+    { id: 105, category: 'studio', title: 'Contemporary Storytelling', spanClass: 'col-span-1 md:col-span-2 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
+    { id: 106, category: 'studio', title: 'Mirror Synchronization Training', spanClass: 'col-span-1 md:col-span-2 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
+    { id: 107, category: 'studio', title: 'High Energy Cypher Batch', spanClass: 'col-span-2 md:col-span-4 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80' },
+    { id: 108, category: 'studio', title: 'Kids Dance Studio Batch', spanClass: 'col-span-2 md:col-span-6 row-span-1 h-[150px] sm:h-[200px]', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1400&q=80' },
 
-    // 🎟️ WORKSHOPS PHOTOS (8 HIGH-RES WORKING PHOTOS)
-    { id: 201, category: 'workshops', title: 'Celebrity Guest Masterclass', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
-    { id: 202, category: 'workshops', title: 'Afro-Beats Speed Workshop', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
-    { id: 203, category: 'workshops', title: 'Kids Dance Bootcamp', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
-    { id: 204, category: 'workshops', title: 'International Choreographer Session', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
-    { id: 205, category: 'workshops', title: 'Weekend Choreography Intensive', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
-    { id: 206, category: 'workshops', title: 'Heels Styling Masterclass', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
-    { id: 207, category: 'workshops', title: 'Urban Commercial Bootcamp', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
-    { id: 208, category: 'workshops', title: 'Monsoon Beats & Drills', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
+    // 🎟️ WORKSHOPS PHOTOS (8 ZIG-ZAG TILES MATCHING IMG 2)
+    { id: 201, category: 'workshops', title: 'Celebrity Guest Masterclass', spanClass: 'col-span-2 md:col-span-4 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1200&q=80' },
+    { id: 202, category: 'workshops', title: 'Afro-Beats Speed Workshop', spanClass: 'col-span-1 md:col-span-2 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
+    { id: 203, category: 'workshops', title: 'Kids Dance Bootcamp', spanClass: 'col-span-1 md:col-span-2 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
+    { id: 204, category: 'workshops', title: 'International Choreographer Session', spanClass: 'col-span-1 md:col-span-2 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+    { id: 205, category: 'workshops', title: 'Weekend Choreography Intensive', spanClass: 'col-span-2 md:col-span-4 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1200&q=80' },
+    { id: 206, category: 'workshops', title: 'Heels Styling Masterclass', spanClass: 'col-span-1 md:col-span-3 row-span-1 h-[140px] sm:h-[185px]', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
+    { id: 207, category: 'workshops', title: 'Urban Commercial Bootcamp', spanClass: 'col-span-1 md:col-span-3 row-span-1 h-[140px] sm:h-[185px]', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
+    { id: 208, category: 'workshops', title: 'Monsoon Beats & Drills', spanClass: 'col-span-2 md:col-span-6 row-span-1 h-[150px] sm:h-[200px]', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1400&q=80' },
 
-    // 🎉 EVENTS PHOTOS (8 HIGH-RES WORKING PHOTOS)
-    { id: 301, category: 'events', title: 'Stage Showcase Light Show', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
-    { id: 302, category: 'events', title: 'Royal Sangeet Entrance', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
-    { id: 303, category: 'events', title: 'Freestyle Cypher Jam', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
-    { id: 304, category: 'events', title: 'Annual Ethos Arena Gala', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
-    { id: 305, category: 'events', title: 'Live Stage Performance', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
-    { id: 306, category: 'events', title: 'Student Showcase Gala', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
-    { id: 307, category: 'events', title: 'Street Dance Battle 2026', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
-    { id: 308, category: 'events', title: 'Festive Season Grand Showcase', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
+    // 🎉 EVENTS PHOTOS (8 ZIG-ZAG TILES MATCHING IMG 2)
+    { id: 301, category: 'events', title: 'Stage Showcase Light Show', spanClass: 'col-span-2 md:col-span-3 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80' },
+    { id: 302, category: 'events', title: 'Royal Sangeet Entrance', spanClass: 'col-span-1 md:col-span-3 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+    { id: 303, category: 'events', title: 'Freestyle Cypher Jam', spanClass: 'col-span-1 md:col-span-3 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80' },
+    { id: 304, category: 'events', title: 'Annual Ethos Arena Gala', spanClass: 'col-span-1 md:col-span-2 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
+    { id: 305, category: 'events', title: 'Live Stage Performance', spanClass: 'col-span-2 md:col-span-4 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=1200&q=80' },
+    { id: 306, category: 'events', title: 'Student Showcase Gala', spanClass: 'col-span-1 md:col-span-3 row-span-1 h-[140px] sm:h-[185px]', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
+    { id: 307, category: 'events', title: 'Street Dance Battle 2026', spanClass: 'col-span-1 md:col-span-3 row-span-1 h-[140px] sm:h-[185px]', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' },
+    { id: 308, category: 'events', title: 'Festive Season Grand Showcase', spanClass: 'col-span-2 md:col-span-6 row-span-1 h-[150px] sm:h-[200px]', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1400&q=80' },
 
-    // 👔 CORPORATE EVENTS PHOTOS (8 HIGH-RES WORKING PHOTOS)
-    { id: 401, category: 'corporate', title: 'Corporate Team Choreography', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80' },
-    { id: 402, category: 'corporate', title: 'Annual Corporate Gala Night', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
-    { id: 403, category: 'corporate', title: 'Wedding Flashmob Rehearsal', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
-    { id: 404, category: 'corporate', title: 'Royal Wedding Entry Performance', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
-    { id: 405, category: 'corporate', title: 'Team Building Movement Session', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
-    { id: 406, category: 'corporate', title: 'Corporate Flashmob Surprise', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
-    { id: 407, category: 'corporate', title: 'Executive Dance Workshop', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80' },
-    { id: 408, category: 'corporate', title: 'Grand Sangeet Production', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80' }
+    // 👔 CORPORATE EVENTS PHOTOS (8 ZIG-ZAG TILES MATCHING IMG 2)
+    { id: 401, category: 'corporate', title: 'Corporate Team Choreography', spanClass: 'col-span-2 md:col-span-4 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=1200&q=80' },
+    { id: 402, category: 'corporate', title: 'Annual Corporate Gala Night', spanClass: 'col-span-1 md:col-span-2 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80' },
+    { id: 403, category: 'corporate', title: 'Wedding Flashmob Rehearsal', spanClass: 'col-span-1 md:col-span-2 row-span-1 h-[126px] sm:h-[176px]', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
+    { id: 404, category: 'corporate', title: 'Royal Wedding Entry Performance', spanClass: 'col-span-1 md:col-span-3 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+    { id: 405, category: 'corporate', title: 'Team Building Movement Session', spanClass: 'col-span-1 md:col-span-3 row-span-2 h-[260px] sm:h-[360px]', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80' },
+    { id: 406, category: 'corporate', title: 'Corporate Flashmob Surprise', spanClass: 'col-span-1 md:col-span-2 row-span-1 h-[140px] sm:h-[185px]', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80' },
+    { id: 407, category: 'corporate', title: 'Executive Dance Workshop', spanClass: 'col-span-1 md:col-span-4 row-span-1 h-[140px] sm:h-[185px]', image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1200&q=80' },
+    { id: 408, category: 'corporate', title: 'Grand Sangeet Production', spanClass: 'col-span-2 md:col-span-6 row-span-1 h-[150px] sm:h-[200px]', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1400&q=80' }
   ];
 
   const handleCardClick = (catId) => {
@@ -272,10 +272,10 @@ export default function EthosGalleryPage() {
         </section>
 
 
-        {/* 🌟 2. PHOTO GRID WALL (BACKGROUND SAME AS WEBPAGE: bg-[#FAF8F5]) 🌟 */}
-        <section ref={photoCollageRef} id="photo-collage" className="bg-[#FAF8F5] text-slate-900 py-16 px-4 sm:px-8 mt-8 relative overflow-hidden border-t border-slate-200">
+        {/* 🌟 2. DENSE ZIG-ZAG MASONRY PHOTO COLLAGE (MATCHING SCREENSHOT IMG 2 EXACTLY - MINIMUM SPACING gap-1.5) 🌟 */}
+        <section ref={photoCollageRef} id="photo-collage" className="bg-[#FAF8F5] text-slate-900 py-16 px-1 sm:px-4 mt-8 relative overflow-hidden border-t border-slate-200">
           
-          {/* Section Studio Pill Badge (Replacing Lights) */}
+          {/* Section Studio Pill Badge */}
           <div className="text-center max-w-4xl mx-auto mb-10 space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#0088FF]/10 border border-[#0088FF]/30 text-[#0088FF] text-xs font-black uppercase tracking-widest rounded-full mb-1">
               <Sparkles className="w-3.5 h-3.5" />
@@ -289,7 +289,7 @@ export default function EthosGalleryPage() {
               </span>
             </h2>
 
-            {/* Filter Tabs (Matching Webpage Style) */}
+            {/* Filter Tabs */}
             <div className="flex flex-wrap justify-center gap-2 pt-4">
               {categoryCards.map((cat) => (
                 <button
@@ -305,13 +305,13 @@ export default function EthosGalleryPage() {
             </div>
           </div>
 
-          {/* PERFECT 4-COLUMN PHOTO GRID (ZERO GAPS - 8 WORKING HIGH RES PHOTOS PER CATEGORY) */}
-          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* DENSE ZIG-ZAG MASONRY COLLAGE WITH ULTRA-TIGHT GAP (gap-1.5) MATCHING USER IMG 2 */}
+          <div className="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-6 gap-1.5 bg-black/5 p-1 rounded-sm border border-slate-200">
             {filteredPhotos.map((item) => (
               <div
                 key={item.id}
                 onClick={() => setActiveLightboxImage(item)}
-                className="h-72 rounded-2xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-900 group cursor-pointer relative"
+                className={`overflow-hidden bg-slate-900 group cursor-pointer relative rounded-2xs border border-slate-900/10 ${item.spanClass}`}
               >
                 <img
                   src={item.image}
