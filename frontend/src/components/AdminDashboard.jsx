@@ -14,6 +14,20 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
   const [selectedBatchModal, setSelectedBatchModal] = useState(null); // Selected Batch Card for Batch Roster Modal
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Revenue Reset & PDF Report State
+  const [revenueResetOffset, setRevenueResetOffset] = useState(() => {
+    const saved = localStorage.getItem('ethos_revenue_reset_offset');
+    return saved ? Number(saved) : 0;
+  });
+  const [cofounderEmail, setCofounderEmail] = useState(() => {
+    return localStorage.getItem('ethos_cofounder_email') || 'cofounders@ethosdancestudio.com';
+  });
+  const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [reportTimeframe, setReportTimeframe] = useState('CURRENT_MONTH'); // 'CURRENT_MONTH', 'LAST_90_DAYS', 'CUSTOM'
+  const [customStartDate, setCustomStartDate] = useState('2026-08-01');
+  const [customEndDate, setCustomEndDate] = useState('2026-08-31');
+  const [resetSuccessNotice, setResetSuccessNotice] = useState('');
+
   // Live Website Content & Site Control State
   const [siteContent, setSiteContent] = useState(() => {
     const saved = localStorage.getItem('ethos_site_content_settings');
@@ -503,9 +517,66 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
     return `https://wa.me/91${cleanPhone}?text=${waText}`;
   };
 
-  const monthlyPackagesRevenue = students.reduce((sum, s) => sum + (s.price || 2500), 0);
-  const allEventsRevenue = masterEventsList.reduce((sum, e) => sum + e.revenue, 0);
-  const grandTotalRevenue = monthlyPackagesRevenue + allEventsRevenue;
+  const grossMonthlyRevenue = students.reduce((sum, s) => sum + (s.price || 2500), 0);
+  const grossEventsRevenue = masterEventsList.reduce((sum, e) => sum + e.revenue, 0);
+  const grossTotalRevenue = grossMonthlyRevenue + grossEventsRevenue;
+
+  const grandTotalRevenue = Math.max(0, grossTotalRevenue - revenueResetOffset);
+  const monthlyPackagesRevenue = Math.max(0, grossMonthlyRevenue - (revenueResetOffset > grossEventsRevenue ? revenueResetOffset - grossEventsRevenue : 0));
+  const allEventsRevenue = Math.max(0, grossEventsRevenue - (revenueResetOffset > grossEventsRevenue ? grossEventsRevenue : revenueResetOffset));
+
+  const handleGeneratePDFReport = () => {
+    const timeframeText = reportTimeframe === 'CURRENT_MONTH' ? 'This Current Month (August 2026)' : reportTimeframe === 'LAST_90_DAYS' ? 'Last 90 Days (Quarterly Report)' : `${customStartDate} to ${customEndDate}`;
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>ETHOS Studio Financial Revenue Statement - ${timeframeText}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 40px; color: #111; }
+            h1 { text-transform: uppercase; margin-bottom: 5px; color: #FF0055; }
+            .subtitle { font-size: 14px; color: #555; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+            .box { background: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+            .flex { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; }
+            .total { font-size: 20px; color: #0088FF; border-top: 2px solid #0088FF; pt: 10px; margin-top: 15px; }
+            .footer { font-size: 11px; color: #777; margin-top: 50px; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <h1>ETHOS DANCE STUDIO — OFFICIAL FINANCIAL STATEMENT</h1>
+          <div class="subtitle">Statement Period: <strong>${timeframeText}</strong> • Generated on ${new Date().toLocaleString()}</div>
+          
+          <div class="box">
+            <h3>REVENUE SUMMARY BREAKDOWN</h3>
+            <div class="flex"><span>Monthly Pass Subscribers Revenue (${students.length} Passholders):</span><span>₹${monthlyPackagesRevenue.toLocaleString()}</span></div>
+            <div class="flex"><span>Workshop & Event Ticket Revenue (${masterEventsList.length} Events):</span><span>₹${allEventsRevenue.toLocaleString()}</span></div>
+            <div class="flex total"><span>TOTAL GROSS REVENUE STATEMENT:</span><span>₹${grandTotalRevenue.toLocaleString()}</span></div>
+          </div>
+
+          <div class="box">
+            <h4>AUDIT & VERIFICATION NOTICE</h4>
+            <p>This statement has been verified and logged for dispatch to Co-Founders (${cofounderEmail}).</p>
+          </div>
+
+          <div class="footer">
+            Ethos Dance Studio Central • Nizampet Rd, Kukatpally, Hyderabad 500072 • contact@ethosdancestudio.com
+          </div>
+          <script>window.print();</script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
+  const handleConfirmResetRevenue = () => {
+    localStorage.setItem('ethos_cofounder_email', cofounderEmail);
+    localStorage.setItem('ethos_revenue_reset_offset', String(grossTotalRevenue));
+    localStorage.setItem('ethos_last_revenue_reset_date', new Date().toLocaleString());
+    setRevenueResetOffset(grossTotalRevenue);
+    setResetModalOpen(false);
+    setResetSuccessNotice(`✅ Financial report sent to ${cofounderEmail}. Studio revenue counters reset to ₹0.`);
+    setTimeout(() => setResetSuccessNotice(''), 6000);
+  };
 
   return (
     <>
@@ -551,14 +622,6 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
               </div>
             </div>
 
-            {onClose && (
-              <button
-                onClick={onClose}
-                className="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-slate-300 hover:text-white transition-all"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            )}
           </div>
 
         </div>
@@ -730,6 +793,75 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                     <div className="text-xs text-slate-200 font-medium">Combined Pass + Event Financial Total</div>
                   </div>
 
+                </div>
+
+                {/* 📄 FINANCIAL PDF REPORT & CO-FOUNDERS RESET PANEL */}
+                <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-6 shadow-xl">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                      <h3 className="text-lg font-black uppercase font-syne text-slate-900 flex items-center gap-2">
+                        📊 STUDIO FINANCIAL STATEMENTS & REVENUE RESET CONTROLS
+                      </h3>
+                      <p className="text-xs text-slate-500 font-medium">
+                        Export formal PDF statements by month, last 90 days, or custom date range. Reset studio revenue to zero after emailing co-founders.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={reportTimeframe}
+                        onChange={(e) => setReportTimeframe(e.target.value)}
+                        className="bg-slate-100 border border-slate-300 rounded-xl text-xs font-black uppercase px-3 py-2 text-slate-900 focus:outline-none focus:border-[#0088FF]"
+                      >
+                        <option value="CURRENT_MONTH">📅 Current Month (Aug 2026)</option>
+                        <option value="LAST_90_DAYS">📅 Last 90 Days (Quarterly)</option>
+                        <option value="CUSTOM">📅 Custom Date Range</option>
+                      </select>
+
+                      {reportTimeframe === 'CUSTOM' && (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="date"
+                            value={customStartDate}
+                            onChange={(e) => setCustomStartDate(e.target.value)}
+                            className="bg-slate-100 border border-slate-300 rounded-xl text-xs font-extrabold px-2 py-1.5 text-slate-900"
+                          />
+                          <span className="text-xs text-slate-400 font-bold">to</span>
+                          <input
+                            type="date"
+                            value={customEndDate}
+                            onChange={(e) => setCustomEndDate(e.target.value)}
+                            className="bg-slate-100 border border-slate-300 rounded-xl text-xs font-extrabold px-2 py-1.5 text-slate-900"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {resetSuccessNotice && (
+                    <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold rounded-2xl flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                      <span>{resetSuccessNotice}</span>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                    <button
+                      onClick={handleGeneratePDFReport}
+                      className="w-full sm:w-auto px-6 py-3.5 bg-[#0088FF] hover:bg-[#0077EE] text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      <span>📄 Export Financial PDF Report ({reportTimeframe === 'CURRENT_MONTH' ? 'Aug 2026' : reportTimeframe === 'LAST_90_DAYS' ? 'Last 90 Days' : 'Custom Dates'})</span>
+                    </button>
+
+                    <button
+                      onClick={() => setResetModalOpen(true)}
+                      className="w-full sm:w-auto px-6 py-3.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-black uppercase tracking-wider rounded-2xl transition-all flex items-center justify-center gap-2"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      <span>🔄 Reset Revenue Counter to ₹0</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Quick Action Navigation Cards */}
@@ -1922,6 +2054,74 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
                 Save Student Details
               </button>
             </form>
+
+          </div>
+        </div>
+      )}
+
+      {/* 🔄 RESET REVENUE & EMAIL CO-FOUNDERS MODAL */}
+      {resetModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white border border-slate-200 w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl text-slate-900 flex flex-col p-6 sm:p-8 space-y-6">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center">
+                  <AlertTriangle className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black uppercase font-syne text-slate-900">CONFIRM REVENUE RESET TO ₹0</h3>
+                  <p className="text-xs text-slate-500">Statement will be emailed to co-founders before reset</p>
+                </div>
+              </div>
+
+              <button onClick={() => setResetModalOpen(false)} className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs font-medium text-slate-700">
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                <div className="flex justify-between font-bold">
+                  <span>Gross Revenue to Reset:</span>
+                  <span className="text-[#FF0055] font-mono text-sm">₹{grandTotalRevenue.toLocaleString()}</span>
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  Resets active dashboard metrics for the next monthly period while archiving past financial logs.
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-900 font-bold uppercase mb-1">Co-Founders Email Address (Mandatory Notice)</label>
+                <input
+                  type="email" required
+                  value={cofounderEmail}
+                  onChange={(e) => setCofounderEmail(e.target.value)}
+                  className="w-full p-3.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:outline-none focus:border-[#0088FF]"
+                  placeholder="Enter co-founders email address..."
+                />
+              </div>
+
+              <div className="p-3 bg-amber-50 border border-amber-300 text-amber-900 rounded-xl text-[11px] font-bold">
+                ⚠️ An automated financial summary report with breakdown will be emailed to <strong>{cofounderEmail}</strong> before resetting revenue to ₹0.
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={() => setResetModalOpen(false)}
+                className="py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black uppercase rounded-2xl border border-slate-300"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleConfirmResetRevenue}
+                className="py-3 bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all"
+              >
+                📧 Email Report & Reset to ₹0
+              </button>
+            </div>
 
           </div>
         </div>

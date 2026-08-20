@@ -9,6 +9,17 @@ export default function Navbar({ onQuickBook }) {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [siteContent, setSiteContent] = useState(() => {
+    const saved = localStorage.getItem('ethos_site_content_settings');
+    if (saved) {
+      try { return JSON.parse(saved); } catch {}
+    }
+    return {
+      heroAnnouncement: '🔥 Special 20% Off August Passes & Choreography Challenge • Limited Seats!',
+      noticeEnabled: true
+    };
+  });
+
   useEffect(() => {
     const checkLoginStatus = () => {
       try {
@@ -24,6 +35,11 @@ export default function Navbar({ onQuickBook }) {
           setIsAdminLoggedIn(true);
         } else {
           setIsAdminLoggedIn(false);
+        }
+
+        const savedSite = localStorage.getItem('ethos_site_content_settings');
+        if (savedSite) {
+          try { setSiteContent(JSON.parse(savedSite)); } catch {}
         }
       } catch {
         setLoggedInUser(null);
@@ -60,8 +76,18 @@ export default function Navbar({ onQuickBook }) {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-[76px] transition-all duration-300">
-      <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
+    <>
+      {/* 📢 TOP LIVE ANNOUNCEMENT BANNER TICKER */}
+      {siteContent?.noticeEnabled && siteContent?.heroAnnouncement && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#00DFD8] text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center overflow-hidden flex items-center justify-center gap-2 shadow-md font-sans">
+          <Sparkles className="w-3.5 h-3.5 animate-pulse text-amber-300 shrink-0" />
+          <span className="truncate">{siteContent.heroAnnouncement}</span>
+          <a href="packages.html" className="underline font-bold text-amber-300 hover:text-white shrink-0 ml-1">Book Pass Now →</a>
+        </div>
+      )}
+
+      <nav className={`fixed ${siteContent?.noticeEnabled && siteContent?.heroAnnouncement ? 'top-[28px]' : 'top-0'} left-0 right-0 z-40 glass-nav h-[76px] transition-all duration-300`}>
+        <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
         
         {/* LOGO SECTION */}
         <div className="flex items-center gap-3">
@@ -432,9 +458,9 @@ export default function Navbar({ onQuickBook }) {
               </div>
             )}
           </div>
-
         </div>
       )}
     </nav>
+    </>
   );
 }
