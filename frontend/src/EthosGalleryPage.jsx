@@ -12,31 +12,31 @@ export default function EthosGalleryPage() {
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
 
-  // Photos for Column 1 (Scrolls UP)
+  // Photos for Column 1 (Scrolls DOWN ⬇️)
   const col1Photos = [
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80',
   ];
 
-  // Photos for Column 2 (Scrolls DOWN)
+  // Photos for Column 2 (Scrolls UP ⬆️)
   const col2Photos = [
     'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1504609813442-a8924e83f76e?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
   ];
 
-  // Photos for Column 3 (Scrolls UP)
+  // Photos for Column 3 (Scrolls DOWN ⬇️)
   const col3Photos = [
     'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1504609813442-a8924e83f76e?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1535525153412-5a42439e210d?auto=format&fit=crop&w=800&q=80',
   ];
 
   // Ethos Clubs & Communities
@@ -162,29 +162,29 @@ export default function EthosGalleryPage() {
             <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white via-white/80 to-transparent z-10 pointer-events-none rounded-t-3xl" />
             <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white via-white/80 to-transparent z-10 pointer-events-none rounded-b-3xl" />
 
-            {/* COLUMN 1: SLIDES UP */}
-            <div className="flex flex-col gap-3 animate-infinite-scroll-up">
+            {/* COLUMN 1: SLIDES DOWN ⬇️ */}
+            <div className="flex flex-col gap-3 animate-vertical-down">
               {[...col1Photos, ...col1Photos].map((imgUrl, i) => (
                 <div key={i} className="h-44 sm:h-52 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-md">
-                  <img src={imgUrl} alt="" className="w-full h-full object-cover" />
+                  <img src={imgUrl} alt="Ethos Dance Moment" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
 
-            {/* COLUMN 2: SLIDES DOWN */}
-            <div className="flex flex-col gap-3 animate-infinite-scroll-down">
+            {/* COLUMN 2: SLIDES UP ⬆️ */}
+            <div className="flex flex-col gap-3 animate-vertical-up">
               {[...col2Photos, ...col2Photos].map((imgUrl, i) => (
                 <div key={i} className="h-44 sm:h-52 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-md">
-                  <img src={imgUrl} alt="" className="w-full h-full object-cover" />
+                  <img src={imgUrl} alt="Ethos Dance Moment" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
 
-            {/* COLUMN 3: SLIDES UP */}
-            <div className="hidden sm:flex flex-col gap-3 animate-infinite-scroll-up">
+            {/* COLUMN 3: SLIDES DOWN ⬇️ */}
+            <div className="hidden sm:flex flex-col gap-3 animate-vertical-down">
               {[...col3Photos, ...col3Photos].map((imgUrl, i) => (
                 <div key={i} className="h-44 sm:h-52 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-md">
-                  <img src={imgUrl} alt="" className="w-full h-full object-cover" />
+                  <img src={imgUrl} alt="Ethos Dance Moment" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>

@@ -84,16 +84,19 @@ p, span, li, a, label, input, select, button, textarea, .font-body, .font-sans {
   100% { transform: translateY(0%); }
 }
 
-.animate-vertical-up {
-  animation: verticalScrollUp 25s linear infinite;
+.animate-vertical-up, .animate-infinite-scroll-up {
+  animation: verticalScrollUp 20s linear infinite;
+  will-change: transform;
 }
 
-.animate-vertical-down {
-  animation: verticalScrollDown 28s linear infinite;
+.animate-vertical-down, .animate-infinite-scroll-down {
+  animation: verticalScrollDown 22s linear infinite;
+  will-change: transform;
 }
 
 .animate-vertical-up-slow {
-  animation: verticalScrollUp 32s linear infinite;
+  animation: verticalScrollUp 30s linear infinite;
+  will-change: transform;
 }
 
 /* Creative Modern Display Typography */
