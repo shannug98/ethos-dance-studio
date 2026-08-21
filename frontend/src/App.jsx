@@ -55,7 +55,11 @@ export default function App() {
 
     loadEvents();
     window.addEventListener('storage', loadEvents);
-    return () => window.removeEventListener('storage', loadEvents);
+    window.addEventListener('ethos_events_updated', loadEvents);
+    return () => {
+      window.removeEventListener('storage', loadEvents);
+      window.removeEventListener('ethos_events_updated', loadEvents);
+    };
   }, []);
 
   const handleSelectItemForBooking = (item) => {
@@ -82,11 +86,6 @@ export default function App() {
         onQuickBook={handleSelectItemForBooking}
       />
 
-      {/* 2. Sliding Upcoming Event Notification Banner */}
-      <div className="pt-[104px]">
-        <EventTickerBanner onSelectEvent={handleSelectItemForBooking} />
-      </div>
-
       {/* 3. CLEAN MAIN HOME PAGE FLOW */}
       <main>
         {/* HERO SECTION */}
@@ -94,16 +93,16 @@ export default function App() {
           onBookWorkshop={handleSelectItemForBooking}
         />
 
-        {/* ABOUT ETHOS */}
-        <AboutSection />
-
         {/* SPECIAL UPCOMING EVENTS & WORKSHOPS (FILTERED WITHIN 28 DAYS) */}
         <WorkshopsSection
           events={events}
           onSelectEvent={handleSelectItemForBooking}
         />
 
-        {/* MASTER CHOREOGRAPHERS & INSTRUCTORS */}
+        {/* ABOUT ETHOS & VISION (MOVED ABOVE FOUNDERS SECTION) */}
+        <AboutSection />
+
+        {/* MASTER CHOREOGRAPHERS & INSTRUCTORS / FOUNDERS */}
         <InstructorsSection />
 
         {/* STUDENT TESTIMONIALS & REVIEWS */}

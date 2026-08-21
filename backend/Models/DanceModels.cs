@@ -97,7 +97,7 @@ namespace DanceStudio.API.Models
         public string PasswordHash { get; set; } = string.Empty;
         public string Role { get; set; } = "Student"; // "Admin", "Instructor", "Student"
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
     }
 
     public class CustomerPackage

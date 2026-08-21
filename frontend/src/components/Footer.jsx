@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ethosPureLogo from '../assets/ethos_pure_logo.png';
+import ethosNavbarLogo from '../assets/ethos_navbar_logo_official.png';
 import shanmukaPhoto from '../assets/shanmuka_photo.jpg';
 import { Sparkles, Flame, Zap, ArrowUpRight } from 'lucide-react';
 
 export default function Footer({ onQuickBook }) {
-  const [oScale, setOScale] = useState(35);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const footerRef = useRef(null);
-
-  const ethosLetters = ['E', 'T', 'H', 'O', 'S'];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,13 +13,11 @@ export default function Footer({ onQuickBook }) {
       const rect = footerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      const startOffset = windowHeight + 450;
-      const totalDistance = rect.height + 450;
-      const currentScroll = startOffset - rect.top;
-
+      const totalDistance = rect.height;
+      const currentScroll = windowHeight - rect.top;
       const progress = Math.min(Math.max(currentScroll / totalDistance, 0), 1);
-      const calculatedScale = 35 - progress * 34;
-      setOScale(calculatedScale);
+      
+      setScrollProgress(progress);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -33,62 +29,36 @@ export default function Footer({ onQuickBook }) {
   return (
     <footer ref={footerRef} className="bg-[#0A0A0B] text-white pt-10 border-t border-slate-900 relative overflow-hidden font-sans select-none">
       
-      {/* FULL SCREEN OVERLAY MASK */}
-      <div
-        className="absolute inset-0 z-35 bg-[#0A0A0B] pointer-events-none transition-opacity duration-200"
-        style={{
-          opacity: oScale > 8 ? Math.min(1, (oScale - 8) / 12) : 0
-        }}
-      />
-
-      {/* GIANT O LENS MASK */}
-      <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center overflow-hidden">
-        <div
-          className="bg-gradient-to-r from-[#FF0055]/40 via-[#7928CA]/40 to-[#00DFD8]/40 rounded-full blur-[120px] transition-all duration-150"
-          style={{
-            width: `${oScale * 250}px`,
-            height: `${oScale * 250}px`,
-            opacity: oScale > 2 ? 0.95 : 0.3
-          }}
-        />
-      </div>
-
       {/* 🌟 1. KINETIC MARQUEE BANNER 🌟 */}
-      <div className="py-2 bg-gradient-to-r from-[#FF0055]/20 via-[#7928CA]/30 to-[#00DFD8]/20 border-y border-white/10 overflow-hidden whitespace-nowrap backdrop-blur-md relative z-20">
-        <div className="inline-flex items-center gap-8 text-[10px] font-black uppercase font-syne tracking-widest animate-marquee text-white/90">
-          <span className="flex items-center gap-2 text-[#00DFD8]"><Sparkles className="w-3 h-3" /> DANCE • CREATE • INSPIRE • PERFORM</span>
-          <span className="flex items-center gap-2 text-pink-400"><Flame className="w-3 h-3 text-[#FF0055]" /> ETHOS DANCE STUDIO HYDERABAD</span>
-          <span className="flex items-center gap-2 text-amber-300"><Zap className="w-3 h-3" /> KUKATPALLY MAIN HALL</span>
-          <span className="flex items-center gap-2 text-[#00DFD8]"><Sparkles className="w-3 h-3" /> DANCE • CREATE • INSPIRE • PERFORM</span>
+      <div className="py-2.5 bg-white/5 border-y border-white/10 overflow-hidden whitespace-nowrap backdrop-blur-md relative z-20">
+        <div className="inline-flex items-center gap-8 text-[10px] font-black uppercase font-syne tracking-widest animate-marquee text-white/80">
+          <span className="flex items-center gap-2 text-white/90"><Sparkles className="w-3 h-3 text-white" /> DANCE • CREATE • INSPIRE • PERFORM</span>
+          <span className="flex items-center gap-2 text-white/90"><Flame className="w-3 h-3 text-white" /> ETHOS DANCE STUDIO HYDERABAD</span>
+          <span className="flex items-center gap-2 text-white/90"><Zap className="w-3 h-3 text-white" /> KUKATPALLY MAIN HALL</span>
+          <span className="flex items-center gap-2 text-white/90"><Sparkles className="w-3 h-3 text-white" /> DANCE • CREATE • INSPIRE • PERFORM</span>
         </div>
       </div>
 
-      {/* 🌟 2. FOOTER COLUMNS (MATCHING USER SCREENSHOT IMG 1) 🌟 */}
-      <div
-        style={{
-          opacity: oScale > 10 ? Math.max(0, 1 - (oScale - 10) / 15) : 1,
-          transition: 'opacity 0.2s ease-out'
-        }}
-        className="max-w-7xl mx-auto px-6 sm:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 border-b border-slate-800/80 relative z-20 text-left"
-      >
+      {/* 🌟 2. FOOTER COLUMNS 🌟 */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 border-b border-slate-800/80 relative z-20 text-left">
         
-        {/* COLUMN 1: Explore (Actual Website Pages) */}
+        {/* COLUMN 1: Explore */}
         <div className="space-y-4">
           <h3 className="text-xl font-black text-white font-syne tracking-tight">Explore</h3>
-          <ul className="space-y-3 text-sm font-medium text-slate-300">
-            <li><a href="events.html" className="hover:text-white transition-colors">Events & Workshops</a></li>
+          <ul className="space-y-3 text-sm font-medium text-slate-400">
+            <li><a href="events.html" className="hover:text-white transition-colors">Events &amp; Workshops</a></li>
             <li><a href="schedule.html" className="hover:text-white transition-colors">Class Schedule</a></li>
-            <li><a href="gallery.html" className="hover:text-white transition-colors">Gallery & Lookbook</a></li>
-            <li><a href="packages.html" className="hover:text-white transition-colors">Passes & Packages</a></li>
+            <li><a href="gallery.html" className="hover:text-white transition-colors">Gallery &amp; Lookbook</a></li>
+            <li><a href="packages.html" className="hover:text-white transition-colors">Passes &amp; Packages</a></li>
             <li><a href="location.html" className="hover:text-white transition-colors">Studio Location</a></li>
-            <li><a href="sangeet.html" className="hover:text-white transition-colors">Sangeet & Wedding</a></li>
+            <li><a href="sangeet.html" className="hover:text-white transition-colors">Sangeet &amp; Wedding</a></li>
           </ul>
         </div>
 
-        {/* COLUMN 2: Socials (Instagram & YouTube Only) */}
+        {/* COLUMN 2: Socials */}
         <div className="space-y-4">
           <h3 className="text-xl font-black text-white font-syne tracking-tight">Socials</h3>
-          <ul className="space-y-3 text-sm font-medium text-slate-300">
+          <ul className="space-y-3 text-sm font-medium text-slate-400">
             <li>
               <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 hover:text-white transition-colors">
                 <svg className="w-5 h-5 fill-current text-slate-400" viewBox="0 0 24 24">
@@ -108,15 +78,14 @@ export default function Footer({ onQuickBook }) {
           </ul>
         </div>
 
-        {/* COLUMN 3: Legal Links & Contact (Matching img 1) */}
+        {/* COLUMN 3: Legal Links & Contact */}
         <div className="space-y-6">
-          <ul className="space-y-3 text-sm font-medium text-slate-300">
+          <ul className="space-y-3 text-sm font-medium text-slate-400">
             <li><a href="privacy.html" className="hover:text-white transition-colors">Privacy Policy</a></li>
             <li><a href="terms.html" className="hover:text-white transition-colors">Terms and Conditions</a></li>
             <li><a href="refund.html" className="hover:text-white transition-colors">Refund Policy</a></li>
           </ul>
 
-          {/* Contact Action Button with Blue Circle Arrow (Matching img 1) */}
           <div className="pt-2">
             <a
               href="https://wa.me/918341701113"
@@ -124,10 +93,10 @@ export default function Footer({ onQuickBook }) {
               rel="noreferrer"
               className="inline-flex items-center gap-3 group"
             >
-              <span className="text-3xl font-black font-syne text-white tracking-tight group-hover:text-[#0088FF] transition-colors">
+              <span className="text-3xl font-black font-syne text-white tracking-tight group-hover:text-slate-300 transition-colors">
                 Contact
               </span>
-              <div className="w-10 h-10 rounded-full bg-[#0088FF] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-full bg-white text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
               </div>
             </a>
@@ -136,86 +105,43 @@ export default function Footer({ onQuickBook }) {
 
       </div>
 
-      {/* 🌟 3. COMPACT & ELEGANT "ETHOS." REVEAL SECTION 🌟 */}
-      <div className="bg-[#050507] py-6 sm:py-8 px-4 text-center relative overflow-hidden group">
+      {/* 🌟 3. ETHOS EMBLEM LOGO & ALL-WHITE ETHOS TEXT MATCHING EXACT SIZE 🌟 */}
+      <div className="bg-[#050507] py-12 px-4 text-center relative overflow-hidden group border-b border-slate-900 flex items-center justify-center">
         
-        <div className="relative z-20 flex items-center justify-center gap-2 sm:gap-3">
-          
-          <div
-            style={{
-              opacity: oScale > 10 ? Math.max(0, 1 - (oScale - 10) / 15) : 1,
-              transition: 'opacity 0.2s ease-out'
-            }}
-            className="flex items-center shrink-0"
-          >
-            <img
-              src={ethosPureLogo}
-              alt="Ethos Pure Logo"
-              className="h-[7.5vw] sm:h-[5.5vw] min-h-[36px] sm:min-h-[60px] w-auto object-contain mr-2 sm:mr-3.5 filter drop-shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:scale-105 transition-transform"
-            />
+        <div className="relative z-20 flex items-center justify-center gap-4 sm:gap-6 max-w-7xl mx-auto">
+          {/* EMBLEM LOGO & ETHOS TEXT MATCHING EXACT SAME SIZE IN ALL WHITE */}
+          <img
+            src={ethosNavbarLogo}
+            alt="ETHOS Official Transparent Emblem"
+            className="h-16 sm:h-20 md:h-24 w-auto object-contain shrink-0 filter drop-shadow-[0_0_25px_rgba(255,255,255,0.25)]"
+          />
+
+          {/* ALL WHITE ETHOS TEXT MATCHING EMBLEM HEIGHT EXACTLY */}
+          <div className="text-4xl sm:text-6xl md:text-7xl font-black font-syne text-white tracking-tight uppercase leading-none">
+            ETHOS
           </div>
-
-          <div className="inline-flex items-center gap-1 sm:gap-1.5">
-            {ethosLetters.map((char, idx) => {
-              const isO = char === 'O';
-              return (
-                <span
-                  key={idx}
-                  style={
-                    isO
-                      ? {
-                          transform: `scale(${oScale})`,
-                          transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
-                          zIndex: oScale > 2 ? 40 : 20
-                        }
-                      : {
-                          opacity: oScale > 10 ? Math.max(0, 1 - (oScale - 10) / 15) : 1,
-                          transition: 'opacity 0.2s ease-out'
-                        }
-                  }
-                  className="text-[7.5vw] sm:text-[5.5vw] font-black font-syne tracking-tight leading-none uppercase text-white inline-block transition-transform duration-300 hover:scale-110 drop-shadow-[0_8px_25px_rgba(0,0,0,0.9)]"
-                >
-                  {char}
-                </span>
-              );
-            })}
-
-            <span
-              style={{
-                opacity: oScale > 10 ? Math.max(0, 1 - (oScale - 10) / 15) : 1,
-                transition: 'opacity 0.2s ease-out'
-              }}
-              className="text-[7.5vw] sm:text-[5.5vw] font-black font-syne leading-none text-[#FF0055] drop-shadow-[0_0_20px_rgba(255,0,85,1)]"
-            >
-              .
-            </span>
-          </div>
-
         </div>
 
       </div>
 
-      {/* 🌟 4. SIGNATURE BOTTOM BAR WITH SHANMUKA'S PHOTO 🌟 */}
-      <div className="bg-[#000000] border-t border-slate-900 px-6 py-4 relative z-30">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-semibold text-slate-400">
+      {/* 🌟 4. SIGNATURE BOTTOM BAR WITH SMALLER 1.5-2 PT REDUCED CENTERED TEXT 🌟 */}
+      <div className="bg-[#000000] border-t border-slate-900 px-6 py-5 relative z-30">
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center gap-2.5 text-center">
           
-          <div className="tracking-wide text-slate-400 text-[11px]">
-            Copyright © 2026 Ethos Dance Studio. All rights reserved.
-          </div>
-
-          <div className="flex items-center gap-2 text-slate-200 text-[11px]">
+          {/* REDUCED FONT SIZE CRAFTED WITH LOVE TEXT (SLIGHTLY SMALLER - REDUCED BY 1.5-2) */}
+          <div className="flex flex-wrap items-center justify-center gap-1.5 text-slate-300 text-[11px] sm:text-xs font-semibold tracking-wide">
             <span>Crafted with</span>
-            <span className="text-[#FF0055] animate-pulse text-sm">❤️</span>
-            <span>by</span>
+            <span className="text-[#FF0055] animate-pulse text-xs">❤️</span>
+            <span>for Ethos Dance Studio by</span>
             
-            <div className="flex items-center gap-2 pl-1.5 pr-3 py-1 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-full shadow-xl hover:border-[#00DFD8] transition-all hover:scale-105 group/shanmuka">
+            <div className="flex items-center gap-1.5 pl-1.5 pr-2.5 py-0.5 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-full shadow-md hover:border-[#00DFD8] transition-all hover:scale-105 group/shanmuka cursor-pointer">
               <div className="relative">
                 <img
                   src={shanmukaPhoto}
                   alt="Shanmuka"
-                  className="w-6 h-6 rounded-full object-cover border border-[#00DFD8] shadow-md group-hover/shanmuka:rotate-12 transition-transform"
+                  className="w-5 h-5 rounded-full object-cover border border-[#00DFD8] shadow-sm group-hover/shanmuka:rotate-12 transition-transform"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full border-2 border-slate-950" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-400 rounded-full border border-slate-950" />
               </div>
               
               <div className="text-left leading-none">
@@ -224,7 +150,10 @@ export default function Footer({ onQuickBook }) {
                 </span>
               </div>
             </div>
+          </div>
 
+          <div className="tracking-wide text-slate-500 text-[10px]">
+            Copyright © 2026 Ethos Dance Studio. All rights reserved.
           </div>
 
         </div>

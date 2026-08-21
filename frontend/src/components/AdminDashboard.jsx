@@ -638,7 +638,7 @@ export default function AdminDashboard({ API_URL, onClose, onLogout }) {
               onClick={() => setActiveTab('OVERVIEW')}
               className={`w-full px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all ${
                 activeTab === 'OVERVIEW'
-                  ? 'bg-gradient-to-r from-[#FF0055] to-[#7928CA] text-white shadow-lg font-black'
+                  ? 'bg-[#0088FF] text-white shadow-lg font-black'
                   : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
             >

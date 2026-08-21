@@ -25,12 +25,12 @@ export default function PackagesPage() {
       
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
-      <main className="pt-[104px]">
-        {/* Page Banner */}
-        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
-          <h1 className="text-4xl sm:text-6xl font-black font-syne">STUDIO MEMBERSHIPS & PASSES</h1>
-          <p className="text-xs sm:text-sm font-extrabold font-outfit tracking-widest mt-2 opacity-90">
-            Transparent Monthly Passes & All-Access Masterclass Subscriptions
+      <main className="pt-[80px]">
+        {/* CLEAN LUXURY DARK MONOCHROME BANNER (NO RAINBOW GRADIENT) */}
+        <div className="bg-[#090A0F] py-14 px-6 text-center text-white uppercase tracking-widest border-b border-slate-800">
+          <h1 className="text-4xl sm:text-6xl font-black font-syne text-white">STUDIO MEMBERSHIPS &amp; PASSES</h1>
+          <p className="text-xs sm:text-sm font-semibold tracking-widest mt-2 text-slate-300">
+            Transparent Monthly Passes &amp; All-Access Masterclass Subscriptions
           </p>
         </div>
 
@@ -58,7 +58,6 @@ export default function PackagesPage() {
         />
       )}
 
-      {/* Floating AI Bot & Social Dock */}
       <FloatingWhatsApp />
     </div>
   );

@@ -12,7 +12,6 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         events: resolve(__dirname, 'events.html'),
-        schedule: resolve(__dirname, 'schedule.html'),
         gallery: resolve(__dirname, 'gallery.html'),
         sangeet: resolve(__dirname, 'sangeet.html'),
         packages: resolve(__dirname, 'packages.html'),

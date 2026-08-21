@@ -19,10 +19,10 @@ export default function LocationPage() {
       <Navbar onQuickBook={(item) => setSelectedItemForBooking(item)} />
 
       <main className="pt-[104px]">
-        {/* Page Banner */}
-        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white font-display uppercase tracking-widest shadow-2xl">
-          <h1 className="text-4xl sm:text-6xl font-black font-syne">STUDIO LOCATION & TEAM</h1>
-          <p className="text-xs sm:text-sm font-bold tracking-widest mt-2">Kukatpally Hyderabad • Meet Our Master Choreographers</p>
+        {/* CLEAN LUXURY DARK MONOCHROME BANNER (NO RAINBOW GRADIENT) */}
+        <div className="bg-[#090A0F] py-14 px-6 text-center text-white font-display uppercase tracking-widest border-b border-slate-800">
+          <h1 className="text-4xl sm:text-6xl font-black font-syne text-white">STUDIO LOCATION &amp; TEAM</h1>
+          <p className="text-xs sm:text-sm font-semibold tracking-widest mt-2 text-slate-300">Kukatpally Hyderabad • Meet Our Master Choreographers</p>
         </div>
 
         <InstructorsSection />

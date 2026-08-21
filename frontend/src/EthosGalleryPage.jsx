@@ -132,10 +132,10 @@ export default function EthosGalleryPage() {
 
       <main className="pt-[104px]">
         
-        {/* Page Banner */}
-        <div className="bg-gradient-to-r from-[#FF0055] via-[#7928CA] to-[#0088FF] p-8 text-center text-white uppercase tracking-widest shadow-2xl">
-          <h1 className="text-4xl sm:text-6xl font-black font-syne">ETHOS COMMUNITIES & GALLERY</h1>
-          <p className="text-xs sm:text-sm font-extrabold tracking-widest mt-2 opacity-90">Hyderabad's Premier Dance Studio, Workshops & Events</p>
+        {/* CLEAN LUXURY DARK MONOCHROME BANNER (NO RAINBOW GRADIENT) */}
+        <div className="bg-[#090A0F] py-14 px-6 text-center text-white uppercase tracking-widest border-b border-slate-800">
+          <h1 className="text-4xl sm:text-6xl font-black font-syne text-white">ETHOS COMMUNITIES &amp; GALLERY</h1>
+          <p className="text-xs sm:text-sm font-semibold tracking-widest mt-2 text-slate-300">Hyderabad's Premier Dance Studio, Workshops &amp; Events</p>
         </div>
 
         {/* 🌟 3-COLUMN VERTICAL MARQUEE HERO SECTION */}

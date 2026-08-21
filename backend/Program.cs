@@ -13,23 +13,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 2. Configure Database Connection
-var azureConnectionString = builder.Configuration.GetConnectionString("AzureSqlConnection") 
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+// 2. Configure Database Connection (Supabase PostgreSQL with fallback)
+// 2. Configure Supabase PostgreSQL
+var supabaseConn = builder.Configuration.GetConnectionString("SupabaseConnection");
+
+if (string.IsNullOrWhiteSpace(supabaseConn))
+{
+    throw new InvalidOperationException(
+        "SupabaseConnection is missing from the connection string configuration.");
+}
 
 builder.Services.AddDbContext<DanceStudioDbContext>(options =>
 {
-    if (!string.IsNullOrEmpty(azureConnectionString) 
-        && azureConnectionString.Contains("database.windows.net") 
-        && !azureConnectionString.Contains("YOUR_AZURE_SERVER"))
-    {
-        options.UseSqlServer(azureConnectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
-    }
-    else
-    {
-        var localSqliteConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=dancestudio.db";
-        options.UseSqlite(localSqliteConn);
-    }
+    options.UseNpgsql(supabaseConn);
 });
 
 // 3. Register JWT Bearer Authentication & Role-Based Access Control (RBAC)
@@ -75,12 +71,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// 6. Ensure Database Created Automatically
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<DanceStudioDbContext>();
-    db.Database.EnsureCreated();
-}
+// 6. Database Initialization handled via EF Core Migrations (Add-Migration & Update-Database)
 
 // 7. HTTP Pipeline
 if (app.Environment.IsDevelopment())

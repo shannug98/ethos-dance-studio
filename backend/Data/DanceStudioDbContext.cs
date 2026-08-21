@@ -64,8 +64,8 @@ namespace DanceStudio.API.Data
                     UserId = 1025,
                     PackageId = 3,
                     PackageName = "Royal Celebration / Monthly Pass",
-                    StartDate = DateTime.UtcNow,
-                    ExpiryDate = DateTime.UtcNow.AddDays(7), // Expiring in 7 days for testing
+                    StartDate = new DateTime(2026, 8, 21, 0, 0, 0, DateTimeKind.Utc),
+                    ExpiryDate = new DateTime(2026, 8, 28, 0, 0, 0, DateTimeKind.Utc), // Expiring in 7 days for testing
                     Status = "Active"
                 }
             );
