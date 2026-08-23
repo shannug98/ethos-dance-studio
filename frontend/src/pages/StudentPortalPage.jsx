@@ -100,11 +100,12 @@ export default function StudentPortalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans flex flex-col justify-between select-none">
+    <div className="w-full min-h-screen bg-[#090A0F] text-white font-sans flex flex-col justify-between select-none p-0 m-0 overflow-x-hidden">
       
+      {/* NAVBAR */}
       <Navbar />
 
-      <main className="pt-[104px] max-w-7xl mx-auto px-4 sm:px-8 py-12 w-full flex-1">
+      <main className="pt-[80px] w-full flex-1 flex flex-col justify-center items-center p-4 sm:p-8">
         
         {/* CLEAN LUXURY DARK MONOCHROME PAGE BANNER (NO RAINBOW GRADIENT) */}
         <div className="bg-[#090A0F] p-8 rounded-3xl mb-8 text-center text-white shadow-2xl uppercase border border-slate-800">
