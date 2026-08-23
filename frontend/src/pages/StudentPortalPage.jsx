@@ -100,18 +100,21 @@ export default function StudentPortalPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#090A0F] text-white font-sans flex flex-col justify-between select-none p-0 m-0 overflow-x-hidden">
+    <div className="w-full min-h-screen bg-[#FAF9F6] text-slate-900 font-sans flex flex-col justify-between select-none p-0 m-0 overflow-x-hidden">
       
       {/* NAVBAR */}
       <Navbar />
 
-      <main className="pt-[80px] w-full flex-1 flex flex-col justify-center items-center p-4 sm:p-8">
+      <main className="pt-[110px] sm:pt-[120px] pb-12 w-full flex-1 flex flex-col justify-center items-center px-4 sm:px-8">
         
-        {/* CLEAN LUXURY DARK MONOCHROME PAGE BANNER (NO RAINBOW GRADIENT) */}
-        <div className="bg-[#090A0F] p-8 rounded-3xl mb-8 text-center text-white shadow-2xl uppercase border border-slate-800">
-          <h1 className="text-3xl sm:text-5xl font-black font-syne text-white">STUDENT &amp; MEMBER PORTAL</h1>
-          <p className="text-xs sm:text-sm font-semibold tracking-widest mt-2 text-slate-300">
-            Official Portal for Member Passes, Purchased Tickets &amp; Gate QR Codes
+        {/* CLEAN LUXURY PAGE BANNER */}
+        <div className="bg-white border border-slate-200 p-8 rounded-3xl mb-8 text-center text-slate-900 shadow-sm uppercase w-full max-w-4xl">
+          <div className="w-14 h-14 bg-[#0088FF]/10 border-2 border-[#0088FF] rounded-full flex items-center justify-center mx-auto text-[#0088FF] mb-3 shadow-sm">
+            <User className="w-7 h-7" />
+          </div>
+          <h1 className="text-3xl font-black font-syne text-slate-900 tracking-tight">ETHOS MEMBER PORTAL</h1>
+          <p className="text-xs text-slate-500 font-medium normal-case pt-1">
+            Access active monthly passes, gate QR codes, and choreography workshop history.
           </p>
         </div>
 
