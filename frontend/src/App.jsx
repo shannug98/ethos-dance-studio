@@ -16,10 +16,21 @@ import AdminLoginModal from './components/AdminLoginModal';
 import AdminDashboard from './components/AdminDashboard';
 import StudentPortalModal from './components/StudentPortalModal';
 
-const API_URL = 'http://localhost:5000';
+// Dedicated Page Windows
+import TrainerLandingPage from './pages/trainer/TrainerLandingPage';
+import TrainerApplicationPage from './pages/trainer/TrainerApplicationPage';
+import ApplicationStatusPage from './pages/trainer/ApplicationStatusPage';
+import TrainerDashboardPage from './pages/trainer/TrainerDashboardPage';
+import TrainerLoginPage from './pages/trainer/TrainerLoginPage';
+import ChoreographerDetailPage from './pages/ChoreographerDetailPage';
+
+import { Trophy, LogOut } from 'lucide-react';
+
+const API_URL = 'http://localhost:5152';
 
 export default function App() {
   const [events, setEvents] = useState([]);
+  const [currentView, setCurrentView] = useState('HOME'); // HOME, TRAINER_LANDING, TRAINER_LOGIN, TRAINER_REGISTER, TRAINER_STATUS, TRAINER_DASHBOARD, CHOREOGRAPHER_DETAIL
 
   // Modals & State
   const [selectedItemForBooking, setSelectedItemForBooking] = useState(null);
@@ -28,21 +39,32 @@ export default function App() {
   const [adminDashboardOpen, setAdminDashboardOpen] = useState(false);
   const [studentPortalOpen, setStudentPortalOpen] = useState(false);
 
+  // Choreographer Detail View State
+  const [selectedChoreographer, setSelectedChoreographer] = useState(null);
+
+  // Trainer Persistent Login State
+  const [loggedInTrainer, setLoggedInTrainer] = useState(() => {
+    const saved = localStorage.getItem('ethos_logged_in_trainer');
+    if (saved) {
+      try { return JSON.parse(saved); } catch {}
+    }
+    return null;
+  });
+
+  const [activeTrainerId, setActiveTrainerId] = useState(1);
+
   useEffect(() => {
     const loadEvents = () => {
-      // 1. Check LocalStorage Admin Catalog first
       const savedAdminEvents = localStorage.getItem('ethos_master_events_catalog');
       let adminCatalog = [];
       if (savedAdminEvents) {
         try { adminCatalog = JSON.parse(savedAdminEvents); } catch {}
       }
 
-      // 2. Fetch API events
       fetch(`${API_URL}/api/events`)
         .then(res => res.json())
         .then(data => {
           const combined = [...data, ...adminCatalog];
-          // Remove duplicates by ID
           const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
           setEvents(unique);
         })
@@ -76,41 +98,154 @@ export default function App() {
     setAdminDashboardOpen(true);
   };
 
+  const handleTrainerLoginSuccess = (trainerId, profile) => {
+    const trainerObj = profile || { id: trainerId, fullName: 'Shanmuka Gaddam', currentTier: 'Gold', trainerCode: 'ETH-TR-100001' };
+    setActiveTrainerId(trainerId || 1);
+    setLoggedInTrainer(trainerObj);
+    localStorage.setItem('ethos_logged_in_trainer', JSON.stringify(trainerObj));
+    setCurrentView('TRAINER_DASHBOARD');
+  };
+
+  const handleTrainerLogout = () => {
+    setLoggedInTrainer(null);
+    localStorage.removeItem('ethos_logged_in_trainer');
+    setCurrentView('HOME');
+  };
+
+  const handleSelectChoreographer = (teacher) => {
+    setSelectedChoreographer(teacher);
+    setCurrentView('CHOREOGRAPHER_DETAIL');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white font-sans relative">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans relative overflow-x-hidden">
       
+      {/* PERSISTENT LOGGED-IN TRAINER BANNER */}
+      {loggedInTrainer && (
+        <div className="bg-slate-900 text-white px-4 py-2 text-xs font-bold flex flex-wrap items-center justify-between gap-2 shadow-md sticky top-0 z-[250] font-sans">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-slate-300">Logged in as Trainer:</span>
+            <span className="font-extrabold text-white uppercase">{loggedInTrainer.fullName}</span>
+            <span className="px-2 py-0.5 bg-[#0088FF] text-white rounded-full text-[10px] uppercase font-black">
+              {loggedInTrainer.currentTier || 'Gold'} Tier
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setCurrentView('TRAINER_DASHBOARD')}
+              className="px-3 py-1 bg-[#0088FF] hover:bg-[#0077EE] text-white rounded-lg text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+            >
+              <Trophy className="w-3.5 h-3.5" /> Open Trainer Dashboard
+            </button>
+            <button
+              onClick={handleTrainerLogout}
+              className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-slate-300 rounded-lg text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" /> Logout
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 1. Global Navigation Header */}
       <Navbar
         onOpenAdmin={() => setAdminLoginOpen(true)}
         onOpenStudentPortal={() => setStudentPortalOpen(true)}
         onQuickBook={handleSelectItemForBooking}
+        onOpenTrainers={() => setCurrentView(currentView === 'TRAINER_LANDING' ? 'HOME' : 'TRAINER_LANDING')}
       />
 
-      {/* 3. CLEAN MAIN HOME PAGE FLOW */}
-      <main>
-        {/* HERO SECTION */}
-        <HeroSection
-          onBookWorkshop={handleSelectItemForBooking}
+      {/* 2. DEDICATED PAGE WINDOW VIEWS */}
+      {currentView === 'TRAINER_LANDING' && (
+        <TrainerLandingPage
+          onApply={() => setCurrentView('TRAINER_REGISTER')}
+          onCheckStatus={() => setCurrentView('TRAINER_STATUS')}
+          onOpenLogin={() => setCurrentView('TRAINER_LOGIN')}
+          onOpenDashboard={(id) => {
+            setActiveTrainerId(id || 1);
+            setCurrentView('TRAINER_DASHBOARD');
+          }}
         />
+      )}
 
-        {/* SPECIAL UPCOMING EVENTS & WORKSHOPS (FILTERED WITHIN 28 DAYS) */}
-        <WorkshopsSection
-          events={events}
-          onSelectEvent={handleSelectItemForBooking}
+      {currentView === 'TRAINER_LOGIN' && (
+        <TrainerLoginPage
+          API_URL={API_URL}
+          onBack={() => setCurrentView('TRAINER_LANDING')}
+          onSuccessLogin={handleTrainerLoginSuccess}
         />
+      )}
 
-        {/* ABOUT ETHOS & VISION (MOVED ABOVE FOUNDERS SECTION) */}
-        <AboutSection />
+      {currentView === 'TRAINER_REGISTER' && (
+        <TrainerApplicationPage
+          API_URL={API_URL}
+          onClose={() => setCurrentView('TRAINER_LANDING')}
+          onSuccess={(res) => {
+            alert(`🎉 Application Submitted Successfully!\n\nYour Trainer Application Code is: ${res.trainerCode}\n\n📱 A confirmation message with your application details has been dispatched to your WhatsApp number (${res.phone}).`);
+            setCurrentView('TRAINER_STATUS');
+          }}
+        />
+      )}
 
-        {/* MASTER CHOREOGRAPHERS & INSTRUCTORS / FOUNDERS */}
-        <InstructorsSection />
+      {currentView === 'TRAINER_STATUS' && (
+        <ApplicationStatusPage
+          onClose={() => setCurrentView('TRAINER_LANDING')}
+          onOpenDashboard={(id) => {
+            setActiveTrainerId(id || 1);
+            setCurrentView('TRAINER_DASHBOARD');
+          }}
+        />
+      )}
 
-        {/* STUDENT TESTIMONIALS & REVIEWS */}
-        <TestimonialsSection />
+      {currentView === 'TRAINER_DASHBOARD' && (
+        <TrainerDashboardPage
+          trainerId={activeTrainerId}
+          onBrowseWebsite={() => setCurrentView('HOME')}
+          onLogout={handleTrainerLogout}
+        />
+      )}
 
-        {/* LOCATION, MAP & CONTACT FORM */}
-        <ContactSection />
-      </main>
+      {/* CHOREOGRAPHER DETAILS PAGE (FULL PAGE WINDOW) */}
+      {currentView === 'CHOREOGRAPHER_DETAIL' && (
+        <ChoreographerDetailPage
+          instructor={selectedChoreographer}
+          onBack={() => setCurrentView('HOME')}
+          onBookWorkshop={(instructor) => {
+            handleSelectItemForBooking({
+              id: 'wrk_inst_' + instructor.id,
+              title: instructor.name + ' Masterclass',
+              instructor: instructor.name,
+              price: 1499
+            });
+          }}
+        />
+      )}
+
+      {/* DEFAULT HOME WEBSITE VIEW */}
+      {currentView === 'HOME' && (
+        <main>
+          <HeroSection
+            onBookWorkshop={handleSelectItemForBooking}
+          />
+
+          <WorkshopsSection
+            events={events}
+            onSelectEvent={handleSelectItemForBooking}
+          />
+
+          <AboutSection />
+          
+          <InstructorsSection
+            onSelectChoreographer={handleSelectChoreographer}
+          />
+          
+          <TestimonialsSection />
+          <ContactSection />
+        </main>
+      )}
 
       {/* FOOTER */}
       <Footer
@@ -122,7 +257,7 @@ export default function App() {
       {/* FLOATING WHATSAPP CHAT BUTTON */}
       <FloatingWhatsApp />
 
-      {/* MODALS */}
+      {/* ADMIN & BOOKING MODALS */}
       {selectedItemForBooking && (
         <BookingPaymentModal
           item={selectedItemForBooking}

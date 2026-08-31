@@ -27,7 +27,7 @@ export default function Footer({ onQuickBook }) {
   }, []);
 
   return (
-    <footer ref={footerRef} className="bg-[#0A0A0B] text-white pt-10 border-t border-slate-900 relative overflow-hidden font-sans select-none">
+    <footer ref={footerRef} className="bg-[#0A0A0B] text-white pt-10 border-t border-slate-900 relative overflow-hidden font-sans select-none print:hidden">
       
       {/* 🌟 1. KINETIC MARQUEE BANNER 🌟 */}
       <div className="py-2.5 bg-white/5 border-y border-white/10 overflow-hidden whitespace-nowrap backdrop-blur-md relative z-20">

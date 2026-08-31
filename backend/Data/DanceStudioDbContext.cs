@@ -22,6 +22,15 @@ namespace DanceStudio.API.Data
         public DbSet<NotificationRecord> Notifications { get; set; } = null!;
         public DbSet<OtpVerification> OtpVerifications { get; set; } = null!;
 
+        // 🕺 Trainer Platform DbSets
+        public DbSet<TrainerProfile> TrainerProfiles { get; set; } = null!;
+        public DbSet<TrainerVideo> TrainerVideos { get; set; } = null!;
+        public DbSet<TrainerTier> TrainerTiers { get; set; } = null!;
+        public DbSet<TrainerPass> TrainerPasses { get; set; } = null!;
+        public DbSet<TrainerWorkshop> TrainerWorkshops { get; set; } = null!;
+        public DbSet<WorkshopFeedback> WorkshopFeedbacks { get; set; } = null!;
+        public DbSet<TrainerPerformanceScore> TrainerPerformanceScores { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -198,6 +207,112 @@ namespace DanceStudio.API.Data
                     ImageUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
                     YearsExperience = 10,
                     InstagramHandle = "@ethosdancestudio"
+                }
+            );
+
+            // Seed Trainer Tiers
+            modelBuilder.Entity<TrainerTier>().HasData(
+                new TrainerTier
+                {
+                    Id = 1,
+                    Name = "Silver",
+                    Price = 1999,
+                    Duration = "Monthly",
+                    MinimumScore = 0,
+                    MaximumWorkshops = 2,
+                    HomepageFeatured = false,
+                    Description = "Basic trainer access, studio workshop listing, 1-2 workshops monthly, student feedback collection.",
+                    IsActive = true
+                },
+                new TrainerTier
+                {
+                    Id = 2,
+                    Name = "Gold",
+                    Price = 3999,
+                    Duration = "Monthly",
+                    MinimumScore = 80,
+                    MaximumWorkshops = 5,
+                    HomepageFeatured = true,
+                    Description = "Enhanced Ethos promotion, homepage feature badge, 3-5 workshops monthly, priority scheduling.",
+                    IsActive = true
+                },
+                new TrainerTier
+                {
+                    Id = 3,
+                    Name = "Diamond",
+                    Price = 6999,
+                    Duration = "Monthly",
+                    MinimumScore = 90,
+                    MaximumWorkshops = 10,
+                    HomepageFeatured = true,
+                    Description = "Highest visibility, featured master trainer badge, unlimited workshop slots, social media blast.",
+                    IsActive = true
+                }
+            );
+
+            // Seed Demo Trainer Profiles
+            modelBuilder.Entity<TrainerProfile>().HasData(
+                new TrainerProfile
+                {
+                    Id = 1,
+                    TrainerCode = "ETH-TR-100001",
+                    FullName = "Shanmuka Gaddam",
+                    Email = "shanmukagaddam98@gmail.com",
+                    Phone = "8341701113",
+                    City = "Hyderabad",
+                    PrimaryDanceStyle = "Hip-Hop / Commercial",
+                    SecondaryDanceStyles = "Urban, Sangeet Choreography",
+                    ExperienceYears = 7,
+                    Bio = "Lead Choreographer & Workshop Director at Ethos Dance Studio.",
+                    CurrentTier = "Gold",
+                    Status = "Approved",
+                    SubmittedAt = new DateTime(2026, 8, 20, 0, 0, 0, DateTimeKind.Utc),
+                    ReviewedAt = new DateTime(2026, 8, 21, 0, 0, 0, DateTimeKind.Utc)
+                },
+                new TrainerProfile
+                {
+                    Id = 2,
+                    TrainerCode = "ETH-TR-100002",
+                    FullName = "Rahul Kumar",
+                    Email = "rahul@ethos.com",
+                    Phone = "9876543210",
+                    City = "Hyderabad",
+                    PrimaryDanceStyle = "Contemporary",
+                    SecondaryDanceStyles = "Bollywood, Jazz",
+                    ExperienceYears = 5,
+                    Bio = "Senior Contemporary instructor with 5+ years teaching experience.",
+                    CurrentTier = "Silver",
+                    Status = "Approved",
+                    SubmittedAt = new DateTime(2026, 8, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ReviewedAt = new DateTime(2026, 8, 26, 0, 0, 0, DateTimeKind.Utc)
+                }
+            );
+
+            // Seed Demo Performance Scores
+            modelBuilder.Entity<TrainerPerformanceScore>().HasData(
+                new TrainerPerformanceScore
+                {
+                    Id = 1,
+                    TrainerProfileId = 1,
+                    OverallScore = 92,
+                    AverageRating = 4.9,
+                    TotalReviews = 28,
+                    AttendanceRate = 98,
+                    RepeatStudentRate = 42,
+                    WorkshopsCompleted = 12,
+                    UpdatedAt = new DateTime(2026, 8, 30, 0, 0, 0, DateTimeKind.Utc)
+                },
+                new TrainerPerformanceScore
+                {
+                    Id = 2,
+                    TrainerProfileId = 2,
+                    OverallScore = 84,
+                    AverageRating = 4.7,
+                    TotalReviews = 14,
+                    AttendanceRate = 95,
+                    RepeatStudentRate = 30,
+                    WorkshopsCompleted = 5,
+                    UpdatedAt = new DateTime(2026, 8, 30, 0, 0, 0, DateTimeKind.Utc)
                 }
             );
         }

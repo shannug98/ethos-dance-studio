@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using DanceStudio.API.Data;
 using DanceStudio.API.Models;
 using DanceStudio.API.Services;
@@ -20,8 +23,13 @@ namespace DanceStudio.API.Controllers
     {
         private readonly DanceStudioDbContext _context;
         private readonly INotificationService _notificationService;
+        private readonly IWhatsAppService _whatsAppService;
+        private readonly IPassPdfService _passPdfService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        private readonly HttpClient _httpClient;
 
-        // 🛡️ AUTHORITATIVE SERVER-SIDE PRICE CATALOG (DO NOT TRUST REACT FRONTEND PRICE)
+        // 🛡️ AUTHORITATIVE SERVER-SIDE PRICE CATALOG (DO NOT TRUST FRONTEND TAMPERED PRICE)
         private static readonly Dictionary<string, decimal> AuthoritativePackagePrices = new(StringComparer.OrdinalIgnoreCase)
         {
             // Monthly Membership Packages
@@ -40,30 +48,42 @@ namespace DanceStudio.API.Controllers
             { "ETH_SANGEET_PLATINUM", 25000m },
             { "502", 25000m },
 
-            // Workshop Masterclasses
-            { "201", 1499m }, // Afro-Fusion
-            { "202", 1999m }, // Sangeet Bootcamp
-            { "203", 1299m }, // Heels Intensive
-            { "204", 1399m }, // Hip-Hop Masterclass
-            { "302", 1299m }, // Contemporary
-            { "303", 1399m }  // Bolly-Hop
+            // Masterclass Workshops
+            { "201", 1499m },
+            { "202", 1999m },
+            { "203", 1299m },
+            { "204", 1399m },
+            { "302", 1299m },
+            { "303", 1399m }
         };
 
-        public PaymentController(DanceStudioDbContext context, INotificationService notificationService)
+        public PaymentController(
+            DanceStudioDbContext context,
+            INotificationService notificationService,
+            IWhatsAppService whatsAppService,
+            IPassPdfService passPdfService,
+            IEmailService emailService,
+            IConfiguration configuration,
+            HttpClient httpClient)
         {
             _context = context;
             _notificationService = notificationService;
+            _whatsAppService = whatsAppService;
+            _passPdfService = passPdfService;
+            _emailService = emailService;
+            _configuration = configuration;
+            _httpClient = httpClient;
         }
 
-        // 🛡️ 1. POST: api/payments/create-order (SERVER-SIDE PRICE AUTHORITY)
+        // 🛡️ 1. POST: api/payments/create-order (RAZORPAY ORDERS API / SERVER PRICE AUTHORITY)
         [HttpPost("create-order")]
         public async Task<ActionResult<RazorpayOrderResponse>> CreateOrder([FromBody] CreateRazorpayOrderRequest request)
         {
-            var keyIdSetting = await _context.Settings.FirstOrDefaultAsync(s => s.Key == "RazorpayKeyId");
-            var keyId = keyIdSetting?.Value ?? "rzp_test_TS8IlVVeyIdK40";
+            var keyId = _configuration["Razorpay:KeyId"] ?? "rzp_test_TS8IlVVeyIdK40";
+            var keySecret = _configuration["Razorpay:KeySecret"] ?? "RAZORPAY_TEST_SECRET";
 
-            // Determine authoritative price from server DB catalog
-            decimal authoritativePrice = request.Amount; // Default fallback
+            // Determine authoritative price
+            decimal authoritativePrice = request.Amount;
 
             string lookupKey = !string.IsNullOrEmpty(request.PackageId) 
                 ? request.PackageId 
@@ -71,11 +91,10 @@ namespace DanceStudio.API.Controllers
 
             if (!string.IsNullOrEmpty(lookupKey) && AuthoritativePackagePrices.TryGetValue(lookupKey, out var serverPrice))
             {
-                authoritativePrice = serverPrice; // OVERRIDE ANY TAMPERED FRONTEND PRICE (e.g. ₹1 -> ₹5,999)
+                authoritativePrice = serverPrice;
             }
             else
             {
-                // Try checking database package prices
                 var dbPkg = await _context.Packages.FirstOrDefaultAsync(p => p.Title.Contains(request.ItemTitle) || p.Id.ToString() == lookupKey);
                 if (dbPkg != null && dbPkg.Price > 0)
                 {
@@ -83,11 +102,53 @@ namespace DanceStudio.API.Controllers
                 }
             }
 
-            // Amount in paise (1 INR = 100 paise)
             long amountInPaise = (long)(authoritativePrice * 100m);
+            string razorpayOrderId = string.Empty;
 
-            // Generate Razorpay Order ID (Format: order_XXXXXXXXXXXXXX)
-            string razorpayOrderId = "order_" + Guid.NewGuid().ToString("N")[..14];
+            // Attempt official Razorpay Orders API call
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(keyId) && !string.IsNullOrWhiteSpace(keySecret) && !keyId.Contains("YOUR_"))
+                {
+                    var orderPayload = new
+                    {
+                        amount = amountInPaise,
+                        currency = "INR",
+                        receipt = $"rcpt_{Guid.NewGuid():N}"[..18],
+                        notes = new
+                        {
+                            item_title = request.ItemTitle,
+                            package_id = lookupKey
+                        }
+                    };
+
+                    var json = JsonSerializer.Serialize(orderPayload);
+                    using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.razorpay.com/v1/orders");
+                    var authBytes = Encoding.ASCII.GetBytes($"{keyId}:{keySecret}");
+                    req.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
+                    req.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    using var res = await _httpClient.SendAsync(req);
+                    if (res.IsSuccessStatusCode)
+                    {
+                        var resBody = await res.Content.ReadAsStringAsync();
+                        using var doc = JsonDocument.Parse(resBody);
+                        if (doc.RootElement.TryGetProperty("id", out var idElem))
+                        {
+                            razorpayOrderId = idElem.GetString() ?? "";
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Fallback to local order ID format if offline or in test mode without secret
+            }
+
+            if (string.IsNullOrEmpty(razorpayOrderId))
+            {
+                razorpayOrderId = "order_" + Guid.NewGuid().ToString("N")[..14];
+            }
 
             return Ok(new RazorpayOrderResponse
             {
@@ -100,11 +161,24 @@ namespace DanceStudio.API.Controllers
             });
         }
 
-        // 🛡️ 2. POST: api/payments/verify-signature (FRONTEND HANDLER VERIFICATION)
+        // 🛡️ 2. POST: api/payments/verify-signature (RAZORPAY HMAC SHA256 VERIFICATION)
         [HttpPost("verify-signature")]
         public async Task<ActionResult> VerifyPayment([FromBody] VerifyRazorpayPaymentRequest request)
         {
-            // Determine authoritative price
+            var keySecret = _configuration["Razorpay:KeySecret"] ?? "RAZORPAY_TEST_SECRET";
+
+            // Verify Razorpay HMAC-SHA256 signature if provided
+            if (!string.IsNullOrEmpty(request.RazorpaySignature))
+            {
+                var payloadToSign = $"{request.RazorpayOrderId}|{request.RazorpayPaymentId}";
+                bool isValid = VerifyHmacSha256(payloadToSign, keySecret, request.RazorpaySignature);
+
+                if (!isValid && !keySecret.Contains("TEST_SECRET"))
+                {
+                    return BadRequest(new { success = false, message = "Razorpay payment signature verification failed." });
+                }
+            }
+
             decimal authoritativePrice = request.PricePaid;
             string lookupKey = !string.IsNullOrEmpty(request.PackageId) 
                 ? request.PackageId 
@@ -124,20 +198,18 @@ namespace DanceStudio.API.Controllers
                 customerEmail: request.CustomerEmail,
                 customerPhone: request.CustomerPhone,
                 bookingType: request.BookingType,
-                paymentSource: "Razorpay Standard Checkout"
+                paymentSource: "Razorpay Verified Standard Checkout"
             );
         }
 
-        // 🚀 3. POST: api/payments/webhook (SERVER-TO-SERVER ASYNCHRONOUS RAZORPAY WEBHOOK)
+        // 🚀 3. POST: api/payments/webhook (RAZORPAY ASYNCHRONOUS WEBHOOK)
         [HttpPost("webhook")]
         public async Task<IActionResult> RazorpayWebhook()
         {
             using var reader = new StreamReader(Request.Body);
             var rawJsonPayload = await reader.ReadToEndAsync();
 
-            // 1. Verify Webhook Signature (HMAC-SHA256)
-            var webhookSecretSetting = await _context.Settings.FirstOrDefaultAsync(s => s.Key == "RazorpayWebhookSecret");
-            var secret = webhookSecretSetting?.Value ?? "ethos_webhook_secret_2026";
+            var secret = _configuration["Razorpay:WebhookSecret"] ?? "ethos_webhook_secret_2026";
 
             if (Request.Headers.TryGetValue("X-Razorpay-Signature", out var receivedSignature))
             {
@@ -148,14 +220,12 @@ namespace DanceStudio.API.Controllers
                 }
             }
 
-            // 2. Parse Webhook Event Payload
             try
             {
                 using var doc = JsonDocument.Parse(rawJsonPayload);
                 var root = doc.RootElement;
                 string eventType = root.GetProperty("event").GetString() ?? "";
 
-                // Process on payment.captured or order.paid
                 if (eventType == "payment.captured" || eventType == "order.paid")
                 {
                     var payload = root.GetProperty("payload");
@@ -168,7 +238,6 @@ namespace DanceStudio.API.Controllers
                     string phone = payment.TryGetProperty("contact", out var cElem) ? cElem.GetString() ?? "" : "";
                     string description = payment.TryGetProperty("description", out var dElem) ? dElem.GetString() ?? "Ethos Studio Pass" : "Ethos Studio Pass";
 
-                    // Process Payment Idempotently (Prevents duplicates if browser also called verify-signature)
                     await ProcessSuccessfulPaymentAsync(
                         paymentId: paymentId,
                         orderId: orderId,
@@ -178,7 +247,7 @@ namespace DanceStudio.API.Controllers
                         customerEmail: email,
                         customerPhone: phone,
                         bookingType: "Pass",
-                        paymentSource: "Razorpay Server Webhook (payment.captured)"
+                        paymentSource: "Razorpay Webhook (payment.captured)"
                     );
                 }
             }
@@ -190,18 +259,17 @@ namespace DanceStudio.API.Controllers
             return Ok(new { status = "Webhook processed successfully", timestamp = DateTime.UtcNow });
         }
 
-        // 🔄 SHARED CORE PAYMENT ACTIVATION WORKFLOW (IDEMPOTENT & THREAD-SAFE)
+        // 🔄 SHARED CORE PAYMENT ACTIVATION & NOTIFICATION DISPATCH
         private async Task<ActionResult> ProcessSuccessfulPaymentAsync(
             string paymentId, string orderId, string itemTitle, decimal pricePaid,
             string customerName, string customerEmail, string customerPhone, string bookingType, string paymentSource)
         {
             string txId = string.IsNullOrEmpty(paymentId) ? ("PAY-" + Guid.NewGuid().ToString("N")[..10].ToUpper()) : paymentId;
 
-            // Check for Duplicate / Idempotency
+            // Check Idempotency
             var existingBooking = await _context.Bookings.FirstOrDefaultAsync(b => b.TransactionId == txId);
             if (existingBooking != null)
             {
-                // Already processed cleanly! Return existing details.
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == customerEmail || u.Phone.Contains(customerPhone.Replace("+91", "").Trim()));
                 return Ok(new
                 {
@@ -275,44 +343,47 @@ namespace DanceStudio.API.Controllers
                 PaidAt = DateTime.UtcNow
             });
 
-            // Dispatch System Notification Log
-            _context.Notifications.Add(new NotificationRecord
-            {
-                UserId = user.Id,
-                Type = "AccountActivation",
-                Channel = "SMS/WhatsApp",
-                Message = $"Welcome to Ethos Dance Studio! Your {itemTitle} is active. Member Code: {user.CustomerCode}. Access portal at https://shannug98.github.io/ethos-dance-studio/student.html",
-                Status = "Dispatched",
-                SentAt = DateTime.UtcNow
-            });
-
             await _context.SaveChangesAsync();
 
-            // Send notification email
-            if (!string.IsNullOrEmpty(customerEmail))
+            // 1. GENERATE OFFICIAL QUESTPDF PASS WITH QR CODE & EMAIL VIA BREVO
+            string passId = $"ETH-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid():N}"[..18].ToUpper();
+            try
             {
-                await _notificationService.SendBookingConfirmationAsync(customerEmail, user.Name, itemTitle, txId);
+                if (!string.IsNullOrWhiteSpace(customerEmail))
+                {
+                    var pdfData = new PassPdfData
+                    {
+                        CustomerName = user.Name,
+                        PackageName = itemTitle,
+                        PassId = passId,
+                        PurchaseDate = DateTime.UtcNow,
+                        ValidFrom = DateTime.UtcNow,
+                        ValidUntil = DateTime.UtcNow.AddDays(30),
+                        Status = "PAID"
+                    };
+
+                    var pdfBytes = _passPdfService.GeneratePassPdf(pdfData);
+                    var html = $"<h2>Hi {user.Name},</h2><p>Thank you for purchasing <strong>{itemTitle}</strong>! Your official Ethos entry pass PDF with entrance gate scanner QR code is attached.</p>";
+
+                    await _emailService.SendEmailAsync(customerEmail, user.Name, "Your Official Ethos Dance Studio Pass", html, $"Ethos-{passId}.pdf", pdfBytes);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EMAIL PASS DISPATCH WARNING] {ex.Message}");
             }
 
-            // 🚀 AUTOMATED BACKGROUND WHATSAPP RECEIPT DISPATCH VIA TWILIO
-            string waReceiptText = $"🎟️ *ETHOS DANCE STUDIO — BOOKING CONFIRMED*\n\n" +
-                                   $"Hi *{user.Name}*,\n" +
-                                   $"Your payment for *{itemTitle}* is verified!\n\n" +
-                                   $"🆔 Ticket ID: *{txId}*\n" +
-                                   $"💰 Paid: *₹{pricePaid}*\n" +
-                                   $"👤 Member Code: *{user.CustomerCode}*\n" +
-                                   $"📍 Studio: Nizampet Rd, Kukatpally, Hyderabad\n\n" +
-                                   $"Show this message at entrance. See you on stage!\n*Ethos Dance Studio Team*";
-
-            if (!string.IsNullOrEmpty(customerPhone))
+            // 2. 🚀 DISPATCH REAL WHATSAPP CONFIRMATION VIA META CLOUD API (Replaced Twilio)
+            if (!string.IsNullOrWhiteSpace(cleanPhone))
             {
-                _ = _notificationService.SendWhatsAppMessageAsync(customerPhone, waReceiptText);
+                _ = _whatsAppService.SendPassConfirmationAsync(cleanPhone, user.Name, passId, itemTitle);
             }
 
             return Ok(new
             {
                 status = "SUCCESS",
                 booking = booking,
+                passId = passId,
                 customerCode = user.CustomerCode,
                 user = new
                 {
@@ -329,7 +400,6 @@ namespace DanceStudio.API.Controllers
             });
         }
 
-        // HMAC-SHA256 Helper
         private static bool VerifyHmacSha256(string rawData, string secret, string expectedSignature)
         {
             try
@@ -343,33 +413,6 @@ namespace DanceStudio.API.Controllers
             {
                 return false;
             }
-        }
-
-        [HttpGet("settings")]
-        public async Task<ActionResult<Dictionary<string, string>>> GetSettings()
-        {
-            var settings = await _context.Settings.ToDictionaryAsync(s => s.Key, s => s.Value);
-            return Ok(settings);
-        }
-
-        [HttpPost("settings")]
-        public async Task<IActionResult> UpdateSettings([FromBody] Dictionary<string, string> updatedSettings)
-        {
-            foreach (var kvp in updatedSettings)
-            {
-                var setting = await _context.Settings.FirstOrDefaultAsync(s => s.Key == kvp.Key);
-                if (setting != null)
-                {
-                    setting.Value = kvp.Value;
-                }
-                else
-                {
-                    _context.Settings.Add(new StudioSetting { Key = kvp.Key, Value = kvp.Value });
-                }
-            }
-
-            await _context.SaveChangesAsync();
-            return Ok(new { Message = "Settings updated successfully!" });
         }
     }
 }

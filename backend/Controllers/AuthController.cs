@@ -5,11 +5,15 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using DanceStudio.API.Data;
 using DanceStudio.API.Models;
+using DanceStudio.API.Services;
 
 namespace DanceStudio.API.Controllers
 {
@@ -18,11 +22,20 @@ namespace DanceStudio.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly DanceStudioDbContext _context;
-        public static readonly string JwtSecretKey = "EthosDanceStudioSecretKey_2026_SuperSecureJWT_9981";
+        private readonly IWhatsAppService _whatsAppService;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
 
-        public AuthController(DanceStudioDbContext context)
+        public AuthController(
+            DanceStudioDbContext context,
+            IWhatsAppService whatsAppService,
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             _context = context;
+            _whatsAppService = whatsAppService;
+            _configuration = configuration;
+            _environment = environment;
         }
 
         // POST: api/auth/send-otp
@@ -49,24 +62,39 @@ namespace DanceStudio.API.Controllers
             _context.OtpVerifications.Add(otpRecord);
             await _context.SaveChangesAsync();
 
+            // 🚀 DISPATCH REAL OTP VIA META WHATSAPP CLOUD API
+            var (waSuccess, waMsg) = await _whatsAppService.SendOtpAsync(cleanPhone, otpCode);
+
             // Log notification
             var notification = new NotificationRecord
             {
                 UserId = 0,
                 Type = "OtpLogin",
-                Channel = "SMS",
-                Message = $"Your Ethos Dance Studio login OTP is {otpCode}. Valid for 10 minutes.",
-                Status = "Dispatched",
+                Channel = "Meta WhatsApp Cloud API",
+                Message = $"Your Ethos Dance Studio login OTP is {otpCode}. Result: {waMsg}",
+                Status = waSuccess ? "Dispatched" : "Pending/Failed",
                 SentAt = DateTime.UtcNow
             };
             _context.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
+            // In Development mode, return demoOtp for local UI testing fallback
+            if (_environment.IsDevelopment())
+            {
+                return Ok(new
+                {
+                    success = true,
+                    message = $"OTP dispatched via Meta WhatsApp Cloud API to +91 {cleanPhone}",
+                    whatsAppStatus = waMsg,
+                    demoOtp = otpCode // Local Development Helper
+                });
+            }
+
+            // Production Response (Security Best Practice: Never return OTP in JSON response)
             return Ok(new
             {
                 success = true,
-                message = $"OTP dispatched to +91 {cleanPhone}",
-                demoOtp = otpCode // Provided for quick testing UI
+                message = $"OTP code sent successfully to your WhatsApp (+91 {cleanPhone})"
             });
         }
 
@@ -87,7 +115,10 @@ namespace DanceStudio.API.Controllers
                 .OrderByDescending(o => o.Id)
                 .FirstOrDefaultAsync();
 
-            if (validOtp == null && request.OtpCode != "123456" && request.OtpCode != "482910")
+            // Restrict dev fallback code to Development environment only
+            bool isDevFallback = _environment.IsDevelopment() && (request.OtpCode == "123456" || request.OtpCode == "482910");
+
+            if (validOtp == null && !isDevFallback)
             {
                 return BadRequest(new { message = "Invalid or expired OTP code" });
             }
@@ -144,7 +175,9 @@ namespace DanceStudio.API.Controllers
         [HttpPost("admin-login")]
         public IActionResult AdminLogin([FromBody] AdminLoginRequest request)
         {
-            if (request.Password == "admin123" || request.Password == "admin")
+            var masterAdminPass = _configuration["Admin:Password"] ?? "EthosAdmin2026Secure!";
+
+            if (request.Password == masterAdminPass || (_environment.IsDevelopment() && (request.Password == "admin123" || request.Password == "admin")))
             {
                 var token = GenerateJwtToken(1, "Ethos Studio Director", "Admin", "+91 83417 01113");
                 return Ok(new
@@ -163,7 +196,7 @@ namespace DanceStudio.API.Controllers
                 });
             }
 
-            return Unauthorized(new { message = "Invalid master admin password" });
+            return Unauthorized(new { message = "Invalid master admin credentials" });
         }
 
         // GET: api/auth/me (Protected Route - Returns Current Authenticated User & Claims)
@@ -189,8 +222,9 @@ namespace DanceStudio.API.Controllers
         // JWT Token Generator Helper Method
         private string GenerateJwtToken(int userId, string name, string role, string phone)
         {
+            var jwtSecret = _configuration["Jwt:Secret"] ?? "EthosDanceStudioSecretKey_2026_SuperSecureJWT_9981";
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(JwtSecretKey);
+            var key = Encoding.UTF8.GetBytes(jwtSecret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -201,7 +235,7 @@ namespace DanceStudio.API.Controllers
                     new Claim(ClaimTypes.Role, role),
                     new Claim(ClaimTypes.MobilePhone, phone ?? string.Empty)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7), // Token valid for 7 days
+                Expires = DateTime.UtcNow.AddDays(7),
                 Issuer = "EthosDanceStudioAPI",
                 Audience = "EthosDanceStudioClient",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

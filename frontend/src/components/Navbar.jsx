@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, UserCheck, LogOut, ChevronDown, ShieldCheck } from 'lucide-react';
+import { Menu, X, UserCheck, LogOut, ChevronDown, ShieldCheck, Sparkles } from 'lucide-react';
 import ethosNavbarLogoOfficial from '../assets/ethos_navbar_logo_official.png';
 
-export default function Navbar({ onQuickBook }) {
+export default function Navbar({ onQuickBook, onOpenAdmin, onOpenStudentPortal, onOpenTrainers }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -63,10 +63,10 @@ export default function Navbar({ onQuickBook }) {
   return (
     <>
       {/* 🌟 TRANSPARENT TO BLACK PLANETARIUM DENMARK FLOATING HEADER BAR 🌟 */}
-      <header data-header="" className="fixed top-3 md:top-5 left-0 right-0 w-full z-[200] px-4 pointer-events-none">
+      <header data-header="" className="fixed top-3 md:top-5 left-0 right-0 w-full z-[200] px-4 pointer-events-none print:hidden">
         <div className="max-w-5xl mx-auto bg-black/90 backdrop-blur-xl border border-white/15 rounded-full p-1.5 sm:p-2 flex items-center justify-between shadow-2xl text-white pointer-events-auto transition-all">
           
-          {/* LEFT: "BUY TICKETS" TRANSPARENT TO BLACK GLASS BUTTON */}
+          {/* LEFT: "BUY TICKETS" GLASS BUTTON */}
           <div className="flex items-center">
             <a
               href="events.html"
@@ -77,7 +77,7 @@ export default function Navbar({ onQuickBook }) {
             </a>
           </div>
 
-          {/* CENTER: EXACT OFFICIAL EMBLEM LOGO (WHITE CRESCENT + RED E) + "ETHOS DANCE STUDIO" TEXT */}
+          {/* CENTER: OFFICIAL EMBLEM LOGO + "ETHOS DANCE STUDIO" */}
           <a
             href="index.html"
             target="_self"
@@ -93,88 +93,12 @@ export default function Navbar({ onQuickBook }) {
             </span>
           </a>
 
-          {/* RIGHT: LOGIN BUTTON + MINIMAL "MENU ☰" BUTTON */}
+          {/* RIGHT: MINIMAL "MENU ☰" BUTTON (CLEAN & UNCLUTTERED) */}
           <div className="flex items-center gap-2 sm:gap-3 text-xs font-bold uppercase tracking-wider text-slate-200">
             
-            {/* LOGIN BUTTON DROPDOWN */}
-            <div className="relative" ref={dropdownRef}>
-              {loggedInUser ? (
-                <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 px-3.5 py-1.5 rounded-full transition-all cursor-pointer text-white"
-                >
-                  <img
-                    src={loggedInUser.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
-                    alt=""
-                    className="w-5 h-5 rounded-full object-cover"
-                  />
-                  <span className="text-[11px] font-black">{loggedInUser.name ? loggedInUser.name.split(' ')[0] : 'Member'}</span>
-                  <ChevronDown className="w-3 h-3 text-white" />
-                </button>
-              ) : isAdminLoggedIn ? (
-                <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-400/50 px-3.5 py-1.5 rounded-full text-emerald-300 text-xs font-bold cursor-pointer"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Admin</span>
-                </button>
-              ) : (
-                <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="hidden sm:flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/20 px-3.5 py-1.5 rounded-full text-white text-xs font-bold cursor-pointer"
-                >
-                  <UserCheck className="w-3.5 h-3.5" />
-                  <span>Login</span>
-                </button>
-              )}
-
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-[#090A0F]/95 border border-white/20 rounded-2xl shadow-2xl backdrop-blur-2xl p-3 z-50 space-y-2 text-left text-white">
-                  {loggedInUser ? (
-                    <>
-                      <div className="p-2 bg-white/5 rounded-xl flex items-center gap-2">
-                        <img src={loggedInUser.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'} alt="" className="w-8 h-8 rounded-full" />
-                        <div>
-                          <p className="text-xs font-bold">{loggedInUser.name}</p>
-                          <p className="text-[10px] text-slate-400">{loggedInUser.email}</p>
-                        </div>
-                      </div>
-                      <a href="student.html" className="block px-3 py-2 text-xs font-bold bg-white/10 hover:bg-white/20 rounded-lg text-center">
-                        Member Dashboard
-                      </a>
-                      <button onClick={handleLogoutUser} className="w-full text-left px-3 py-2 text-xs text-rose-400 hover:bg-white/5 rounded-lg flex items-center gap-2">
-                        <LogOut className="w-3.5 h-3.5" /> Log Out
-                      </button>
-                    </>
-                  ) : isAdminLoggedIn ? (
-                    <>
-                      <p className="text-xs font-bold px-2 py-1 text-emerald-400">Authenticated Admin</p>
-                      <a href="admin.html" className="block px-3 py-2 text-xs font-bold bg-emerald-500/20 rounded-lg text-center text-emerald-300">
-                        Admin Control Center
-                      </a>
-                      <button onClick={handleLogoutAdmin} className="w-full text-left px-3 py-2 text-xs text-rose-400 hover:bg-white/5 rounded-lg flex items-center gap-2">
-                        <LogOut className="w-3.5 h-3.5" /> Logout Admin
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <a href="student.html" className="block px-3 py-2 text-xs font-bold bg-white/10 hover:bg-white/20 rounded-lg text-center">
-                        Member / Student Login
-                      </a>
-                      <a href="admin.html" className="block px-3 py-2 text-xs font-bold border border-white/20 hover:bg-white/10 rounded-lg text-center">
-                        Studio Admin Login
-                      </a>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* MINIMAL "MENU ☰" BUTTON */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-white px-3.5 py-2 hover:opacity-80 transition-opacity cursor-pointer shrink-0"
+              className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-white px-4 py-2 hover:bg-white/10 rounded-full transition-all cursor-pointer shrink-0"
               aria-label="Toggle Navigation Menu"
             >
               <span>{menuOpen ? 'CLOSE' : 'MENU'}</span>
@@ -194,7 +118,7 @@ export default function Navbar({ onQuickBook }) {
         </div>
       </header>
 
-      {/* FULL OVERLAY MENU DRAWER (CLEAN MONOCHROME OVERLAY) */}
+      {/* FULL OVERLAY MENU DRAWER WITH "WANT TO REGISTER AS TRAINER?" */}
       {menuOpen && (
         <div className="fixed inset-0 z-[190] bg-[#090A0F]/95 backdrop-blur-2xl flex items-center justify-center p-6 animate-fadeIn">
           <div className="max-w-2xl w-full text-center space-y-6 pt-12">
@@ -215,7 +139,7 @@ export default function Navbar({ onQuickBook }) {
                   onClick={() => setMenuOpen(false)}
                   className="block py-2.5 hover:text-slate-300 transition-colors border-b border-white/10"
                 >
-                  Gallery & Lookbook
+                  Gallery &amp; Lookbook
                 </a>
               </li>
               <li>
@@ -233,34 +157,49 @@ export default function Navbar({ onQuickBook }) {
                   onClick={() => setMenuOpen(false)}
                   className="block py-2.5 hover:text-slate-300 transition-colors border-b border-white/10"
                 >
-                  Passes & Pricing
+                  Passes &amp; Pricing
                 </a>
               </li>
               <li>
                 <a
                   href="location.html"
                   onClick={() => setMenuOpen(false)}
-                  className="block py-2.5 hover:text-slate-300 transition-colors"
+                  className="block py-2.5 hover:text-slate-300 transition-colors border-b border-white/10"
                 >
                   Studio Location
                 </a>
               </li>
+
+              {/* 🕺 PROMINENT "WANT TO REGISTER AS TRAINER?" OPTION */}
+              <li>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenTrainers();
+                  }}
+                  className="w-full py-3.5 my-2 bg-[#0088FF] hover:bg-[#0077EE] text-white rounded-2xl transition-all font-black text-lg tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-[#0088FF]/30 cursor-pointer"
+                >
+                  <Sparkles className="w-5 h-5" />
+                  <span>Want to register as Trainer? 🕺</span>
+                </button>
+              </li>
             </ul>
 
-            <div className="pt-6 border-t border-white/15 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="pt-4 border-t border-white/15 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <a
                 href="student.html"
                 onClick={() => setMenuOpen(false)}
-                className="py-4 px-6 bg-white text-slate-950 font-extrabold uppercase rounded-2xl text-xs tracking-wider transition-all shadow-lg block"
+                className="py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl text-white font-bold tracking-wider uppercase border border-white/10 flex items-center justify-center gap-2"
               >
-                Student / Member Portal
+                <UserCheck className="w-4 h-4 text-[#0088FF]" /> Member / Student Login
               </a>
+
               <a
                 href="admin.html"
                 onClick={() => setMenuOpen(false)}
-                className="py-4 px-6 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold uppercase rounded-2xl text-xs tracking-wider transition-all block"
+                className="py-3 px-4 bg-white/5 hover:bg-white/10 rounded-xl text-slate-300 font-bold tracking-wider uppercase border border-white/10 flex items-center justify-center gap-2"
               >
-                Studio Management (Admin)
+                <ShieldCheck className="w-4 h-4 text-emerald-400" /> Studio Admin Portal
               </a>
             </div>
 

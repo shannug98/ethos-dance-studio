@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using DanceStudio.API.Controllers;
 using DanceStudio.API.Data;
+using DanceStudio.API.Models;
 using DanceStudio.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,23 +14,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 2. Configure Database Connection (Supabase PostgreSQL with fallback)
-// 2. Configure Supabase PostgreSQL
-var supabaseConn = builder.Configuration.GetConnectionString("SupabaseConnection");
-
-if (string.IsNullOrWhiteSpace(supabaseConn))
-{
-    throw new InvalidOperationException(
-        "SupabaseConnection is missing from the connection string configuration.");
-}
+// 2. Configure Database Connection (SQLite primary with fallback)
+var defaultConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=dancestudio.db";
 
 builder.Services.AddDbContext<DanceStudioDbContext>(options =>
 {
-    options.UseNpgsql(supabaseConn);
+    options.UseSqlite(defaultConn);
 });
 
 // 3. Register JWT Bearer Authentication & Role-Based Access Control (RBAC)
-var key = Encoding.UTF8.GetBytes(AuthController.JwtSecretKey);
+var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "EthosDanceStudioSecretKey_2026_SuperSecureJWT_9981";
+var key = Encoding.UTF8.GetBytes(jwtSecret);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -55,8 +50,13 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // 4. Register Application Services
+builder.Services.Configure<BrevoSettings>(builder.Configuration.GetSection("Brevo"));
+builder.Services.Configure<WhatsAppSettings>(builder.Configuration.GetSection("WhatsApp"));
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddHttpClient<IEmailService, BrevoEmailService>();
+builder.Services.AddHttpClient<IWhatsAppService, WhatsAppService>();
+builder.Services.AddScoped<IPassPdfService, PassPdfService>();
 
 // 5. Enable CORS for React Frontend
 builder.Services.AddCors(options =>
@@ -71,7 +71,12 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// 6. Database Initialization handled via EF Core Migrations (Add-Migration & Update-Database)
+// Auto-create SQLite database tables and seed data
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DanceStudioDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 // 7. HTTP Pipeline
 if (app.Environment.IsDevelopment())

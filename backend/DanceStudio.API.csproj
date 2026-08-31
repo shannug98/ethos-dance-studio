@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>51883e86-18df-40c6-951d-80a497d40297</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,9 +14,21 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
     
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    
+    <PackageReference Include="QRCoder" Version="1.8.0" />
+    
+    <PackageReference Include="QuestPDF" Version="2026.7.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+    <PackageReference Include="Twilio" Version="7.14.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ethos_logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
